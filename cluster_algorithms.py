@@ -2,6 +2,7 @@ import random
 import numpy as np
 from collections import Counter
 from itertools import permutations
+from collections import deque
 
 
 def compute_centroid(data_set, data_type):
