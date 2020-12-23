@@ -11,11 +11,9 @@ def load_user(user_id):
 class User(db.Model, UserMixin):
 	__tablename__ = 'user'
 	id = db.Column(db.Integer, primary_key=True)
-	'''
 	name = db.Column(db.String(20), nullable=False)
 	email = db.Column(db.String(120), unique=True, nullable=False)
 	password = db.Column(db.String(60), nullable=False)
-	'''
 	features = db.Column(db.PickleType, nullable=False)
 	is_dormant = db.Column(db.Boolean, default=True)
 	cluster_id = db.Column(db.Integer, db.ForeignKey('cluster.id'))
@@ -125,5 +123,4 @@ class Cluster(db.Model):
 	businesses = db.relationship('Business', backref='cluster', lazy=True)
 
 	def __repr__(self):
-		return f'Cluster(id: {self.id}, applicant_pop: {self.applicant_pop}, \n' \
-		       f'\tbusiness_pop: {self.business_pop})'
+		return f'Cluster(id: {self.id}, applicant_pop: {self.applicant_pop}, business_pop: {self.business_pop})'
