@@ -4,6 +4,7 @@ from collections import Counter
 from itertools import permutations
 
 
+# comment
 def compute_centroid(data_set, data_type):
 	centroid_data = {
 		'type': data_type,
