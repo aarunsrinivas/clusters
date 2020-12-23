@@ -1,8 +1,6 @@
 from flaskapp import db
-from flaskapp.models import Cluster, Applicant, Business
+from flaskapp.models import Cluster, Applicant
 import cluster_algorithms as alg
-from sklearn.cluster import KMeans
-import numpy as np
 
 
 def add_applicant(applicant):
