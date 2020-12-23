@@ -2,7 +2,6 @@ import random
 import numpy as np
 from collections import Counter
 from itertools import permutations
-from test import create_business_data_set, create_applicant_data_set
 
 
 def compute_centroid(data_set, data_type):
@@ -355,4 +354,3 @@ def find_clusters(data_set, n_clusters, max_iter=300, n_init=15):
 		centroids.append((dual_centroid[0][0], dual_centroid[1][0]))
 		centroids_data.append((dual_centroid[0][1], dual_centroid[1][1]))
 	return labels, centroids, centroids_data
-
