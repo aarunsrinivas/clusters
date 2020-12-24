@@ -6,12 +6,13 @@ from itertools import permutations
 
 def compute_centroid(data_set, data_type):
 	"""
-	Takes in a list of data and computes the centroid
-	:param data_set: applicant or business data present in a cluster
+	Takes in a list of data and computes the centroid, the mean value of the data_set,
+	and a centroid_data object which summarizes the data_set
+	:param data_set: list of applicant or business features
 	:type: list of dictionaries
 	:param data_type: type of data inside of data_set
 	:type: string
-	:return: centroid, or mean value of data_set, and centroid_data which summarizes the data in data_set
+	:return: centroid, centroid_data
 	"""
 
 	centroid_data = {
@@ -25,6 +26,7 @@ def compute_centroid(data_set, data_type):
 		'skills_len_sum': 0
 	}
 
+	# iterates through the data_set and computes the frequency/sum of certain qualities
 	for data in data_set:
 		for major in data['major']:
 			if major in centroid_data['major_dict']:
@@ -46,6 +48,7 @@ def compute_centroid(data_set, data_type):
 		centroid_data['skills_len_sum'] += len(data['skills'])
 		centroid_data['gpa_sum'] += data['gpa']
 
+	# utilizes data collected in centroid_data to compute average value
 	centroid = {
 		'type': data_type,
 		'major': sorted(centroid_data['major_dict'].keys(), key=lambda x: centroid_data['major_dict'][x], reverse=True)[
@@ -66,10 +69,12 @@ def inflate_centroid(centroid_data, data, size):
 	Updates the centroid after a new applicant or business is added
 	:param centroid_data: summary of the cluster data
 	:type: dictionary
-	:param data: applicant
-	:param size:
-	:return:
+	:param data: applicant or business feature
+	:type: dictionary
+	:param size: number of applicants and business in cluster before arrival
+	:return: updated_centroid, updated_centroid_data
 	"""
+
 	centroid_data = centroid_data.copy()
 	for major in data['major']:
 		if major in centroid_data['major_dict']:
@@ -108,6 +113,16 @@ def inflate_centroid(centroid_data, data, size):
 
 
 def deflate_centroid(centroid_data, data, size):
+	"""
+	Updates the centroid after an applicant or business leaves the cluster
+	:param centroid_data: summary of the cluster data
+	:type: dictionary
+	:param data: applicant or business feature
+	:type: dictionary
+	:param size: number of applicants and business in cluster before departure
+	:return: updated_centroid, updated_centroid_data
+	"""
+
 	centroid_data = centroid_data.copy()
 	for major in data['major']:
 		if major in centroid_data['major_dict']:
@@ -140,6 +155,19 @@ def deflate_centroid(centroid_data, data, size):
 
 
 def merge_centroid(centroid_data, new_centroid_data, size, new_size):
+	"""
+	Updates the centroid after a cluster is merged
+	:param centroid_data: summary of the cluster data
+	:type: dictionary
+	:param new_centroid_data: summary of the incoming cluster data
+	:type: dictionary
+	:param size: number of applicants and business in cluster
+	:type: int
+	:param new_size: number of applicants and business in cluster
+	:type: int
+	:return: updated_centroid, updated_centroid_data
+	"""
+
 	centroid_data = centroid_data.copy()
 	new_centroid_data = new_centroid_data.copy()
 	centroid_data['major_dict'].update(new_centroid_data['major_dict'])
@@ -292,7 +320,8 @@ def find_clusters(data_set, n_clusters, max_iter=300, n_init=15):
 			applicant_data_set) >= n_clusters else None
 		business_centers = random.sample(business_data_set, n_clusters) if len(
 			business_data_set) >= n_clusters else None
-		couple_centers = random.sample(couple_data_set, n_clusters) if len(couple_data_set) >= n_clusters else None
+		couple_centers = random.sample(couple_data_set, n_clusters) if len(
+			couple_data_set) >= n_clusters else None
 		if not (applicant_centers or business_centers or couple_centers):
 			return
 		elif applicant_centers and business_centers:
