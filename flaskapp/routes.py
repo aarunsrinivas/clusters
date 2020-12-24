@@ -18,6 +18,8 @@ def applicant_serializer(applicant):
 			'applied': f'/applicants/{applicant.id}/applied',
 			'reviewed': f'/applicants/{applicant.id}/reviewed',
 			'rejected': f'/applicants/{applicant.id}/rejected'
+		} if applicant.cluster_id else {
+			'self': f'/applicants/{applicant.id}'
 		}
 	}
 
@@ -116,6 +118,8 @@ def business_serializer(business):
 			'received': f'/businesses/{business.id}/received',
 			'offered': f'/businesses/{business.id}/offered',
 			'rejected': f'/businesses/{business.id}/rejected'
+		} if business.cluster_id else {
+			'self': f'/businesses/{business.id}'
 		}
 	}
 
