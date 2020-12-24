@@ -4,8 +4,16 @@ from collections import Counter
 from itertools import permutations
 
 
-# comment
 def compute_centroid(data_set, data_type):
+	"""
+	Takes in a list of data and computes the centroid
+	:param data_set: applicant or business data present in a cluster
+	:type: list of dictionaries
+	:param data_type: type of data inside of data_set
+	:type: string
+	:return: centroid, or mean value of data_set, and centroid_data which summarizes the data in data_set
+	"""
+
 	centroid_data = {
 		'type': data_type,
 		'major_dict': Counter(),
@@ -54,6 +62,14 @@ def compute_centroid(data_set, data_type):
 
 
 def inflate_centroid(centroid_data, data, size):
+	"""
+	Updates the centroid after a new applicant or business is added
+	:param centroid_data: summary of the cluster data
+	:type: dictionary
+	:param data: applicant
+	:param size:
+	:return:
+	"""
 	centroid_data = centroid_data.copy()
 	for major in data['major']:
 		if major in centroid_data['major_dict']:
@@ -262,35 +278,45 @@ def find_clusters(data_set, n_clusters, max_iter=300, n_init=15):
 	dual_centroids_lst = []
 	applicant_data_set = []
 	business_data_set = []
+	couple_data_set = []
 	for data in data_set:
 		if type(data) == tuple:
-			continue
+			couple_data_set.append(data)
 		if data['type'] == 'applicant':
 			applicant_data_set.append(data)
 		else:
 			business_data_set.append(data)
 
 	for _ in range(n_init):
-		applicant_centers = random.sample(applicant_data_set, n_clusters)
-		business_centers = random.sample(business_data_set, n_clusters)
-		distances = []
-		for a_center in applicant_centers:
-			d = []
-			for b_center in business_centers:
-				d.append(compare_different_types(b_center, a_center))
-			distances.append(d)
-		perm = list(permutations([i for i in range(n_clusters)]))
-		variance = []
-		for p in perm:
-			t = []
-			for i in range(len(p)):
-				t.append(distances[i][p[i]])
-			variance.append(np.var(t))
-		assignment = perm[np.argmin(variance)]
-		dual_centroids = [((applicant_centers[i], compute_centroid([], 'applicant')[1]),
-		                   (business_centers[assignment[i]], compute_centroid([], 'business')[1]))
-		                  for i in range(n_clusters)]
-
+		applicant_centers = random.sample(applicant_data_set, n_clusters) if len(
+			applicant_data_set) >= n_clusters else None
+		business_centers = random.sample(business_data_set, n_clusters) if len(
+			business_data_set) >= n_clusters else None
+		couple_centers = random.sample(couple_data_set, n_clusters) if len(couple_data_set) >= n_clusters else None
+		if not (applicant_centers or business_centers or couple_centers):
+			return
+		elif applicant_centers and business_centers:
+			distances = []
+			for a_center in applicant_centers:
+				d = []
+				for b_center in business_centers:
+					d.append(compare_different_types(b_center, a_center))
+				distances.append(d)
+			perm = list(permutations([i for i in range(n_clusters)]))
+			variance = []
+			for p in perm:
+				t = []
+				for i in range(len(p)):
+					t.append(distances[i][p[i]])
+				variance.append(np.var(t))
+			assignment = perm[np.argmin(variance)]
+			dual_centroids = [((applicant_centers[i], compute_centroid([], 'applicant')[1]),
+			                   (business_centers[assignment[i]], compute_centroid([], 'business')[1]))
+			                  for i in range(n_clusters)]
+		else:
+			dual_centroids = [((couple_centers[i][0], compute_centroid([], 'applicant')[1]),
+			                   (couple_centers[i][1], compute_centroid([], 'business')[1]))
+			                  for i in range(n_clusters)]
 		iteration = 0
 		while iteration < max_iter:
 			clusters = {i: {'applicants': [], 'businesses': []} for i in range(n_clusters)}
@@ -346,6 +372,7 @@ def find_clusters(data_set, n_clusters, max_iter=300, n_init=15):
 				break
 			dual_centroids = new_dual_centroids
 			iteration += 1
+
 	index = np.argmin(sse_lst)
 	labels = labels_lst[index]
 	dual_centroids = dual_centroids_lst[index]
