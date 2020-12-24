@@ -53,18 +53,35 @@ def delete_applicant(applicant_id):
 	return {'204': 'Applicant Deleted Successfully'}
 
 
+@app.route('/applicants/<int:applicant_id>', methods=['POST'])
+def move_applicant(applicant_id):
+	request_data = json.loads(request.data)
+	action = request_data['action']
+	applicant = Applicant.query.get(applicant_id)
+	if action == 'join':
+		world.add_applicant(applicant)
+		return {'200': 'Applicant Joined Cluster Successfully'}
+	elif action == 'peel':
+		world.peel_applicant(applicant)
+		return {'200': 'Applicant Peeled Successfully'}
+	elif action == 'leave':
+		world.remove_applicant(applicant)
+		return {'200': 'Applicant Left Cluster Successfully'}
+	else:
+		return {'400': 'Invalid Action Passed'}
+
+
 @app.route('/applicants/<int:applicant_id>', methods=['PUT'])
 def update_applicant(applicant_id):
 	request_data = json.loads(request.data)
-	now_active = request_data['now_active']
+	name = request_data['name']
+	email = request_data['email']
+	features = request_data['features']
 	applicant = Applicant.query.get(applicant_id)
-	if applicant.is_dormant and now_active:
-		world.add_applicant(applicant)
-	elif not applicant.is_dormant and now_active:
-		world.peel_applicant(applicant)
-	elif not applicant.is_dormant and not now_active:
-		world.remove_applicant(applicant)
-	applicant.is_dormant = not now_active if applicant.is_dormant == now_active else applicant.is_dormant
+	applicant.name = name
+	applicant.email = email
+	applicant.features = features
+	db.session.commit()
 
 
 @app.route('/applicants/<int:applicant_id>/applied', methods=['GET'])
@@ -134,18 +151,35 @@ def delete_business(business_id):
 	return {'204': 'Applicant Deleted Successfully'}
 
 
+@app.route('/businesses/<int:business_id>', methods=['POST'])
+def move_business(business_id):
+	request_data = json.loads(request.data)
+	action = request_data['action']
+	business = Business.query.get(business_id)
+	if action == 'join':
+		world.add_business(business)
+		return {'200': 'Business Joined Cluster Successfully'}
+	elif action == 'peel':
+		world.peel_business(business)
+		return {'200': 'Business Peeled Successfully'}
+	elif action == 'leave':
+		world.remove_business(business)
+		return {'200': 'Business Left Cluster Successfully'}
+	else:
+		return {'400': 'Invalid Action Passed'}
+
+
 @app.route('/businesses/<int:business_id>', methods=['PUT'])
 def update_business(business_id):
 	request_data = json.loads(request.data)
-	now_active = request_data['now_active']
+	name = request_data['name']
+	email = request_data['email']
+	features = request_data['features']
 	business = Business.query.get(business_id)
-	if business.is_dormant and now_active:
-		world.add_business(business)
-	elif not business.is_dormant and now_active:
-		world.peel_business(business)
-	elif not business.is_dormant and not now_active:
-		world.remove_business(business)
-	business.is_dormant = not now_active if business.is_dormant == now_active else business.is_dormant
+	business.name = name
+	business.email = email
+	business.features = features
+	db.session.commit()
 
 
 @app.route('/businesses/<int:business_id>/received', methods=['GET'])
