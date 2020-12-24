@@ -161,9 +161,9 @@ def merge_centroid(centroid_data, new_centroid_data, size, new_size):
 	:type: dictionary
 	:param new_centroid_data: summary of the incoming cluster data
 	:type: dictionary
-	:param size: number of applicants and business in cluster
+	:param size: number of applicants or businesses in the cluster
 	:type: int
-	:param new_size: number of applicants and business in cluster
+	:param new_size: number of applicants or businesses in the incoming cluster
 	:type: int
 	:return: updated_centroid, updated_centroid_data
 	"""
@@ -194,8 +194,18 @@ def merge_centroid(centroid_data, new_centroid_data, size, new_size):
 	return centroid, centroid_data
 
 
-# compare everything relative to the first parameter
 def compare_different_types(first, second):
+	"""
+	The second features are compared with respect to the first. If both
+	features are equal then the method will output zero otherwise it will
+	output a positive number representing the disparity
+	:param first: features doing comparing
+	:type: dictionary
+	:param second: features getting compared
+	:type: dictionary
+	:return: zero or positive number
+	"""
+
 	zero = {
 		'type': first['type'],
 		'major': [],
@@ -241,6 +251,17 @@ def compare_different_types(first, second):
 
 
 def compare_same_types(first, second):
+	"""
+	The second features are compared with respect to the first. If both
+	features are equal then the method will output zero otherwise it will
+	output a positive number representing the disparity
+	:param first: features doing comparing
+	:type: dictionary
+	:param second: features getting compared
+	:type: dictionary
+	:return: zero or positive number
+	"""
+
 	zero = {
 		'type': first['type'],
 		'major': [],

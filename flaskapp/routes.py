@@ -40,11 +40,13 @@ def create_applicant():
 	                      features=request_data['features'])
 	db.session.add(applicant)
 	db.session.commit()
+	return jsonify(applicant_serializer(applicant))
 
 
 @app.route('/applicants/<int:applicant_id>', methods=['GET'])
 def get_applicant(applicant_id):
-	return jsonify(list(map(applicant_serializer, Applicant.query.filter_by(id=applicant_id))))
+	applicant = Applicant.query.get(applicant_id)
+	return jsonify(applicant_serializer(applicant))
 
 
 @app.route('/applicants/<int:applicant_id>', methods=['DELETE'])
@@ -67,6 +69,7 @@ def transition_applicant(applicant_id):
 		world.peel_applicant(applicant)
 	elif action == 'leave':
 		world.remove_applicant(applicant)
+	return jsonify(applicant_serializer(applicant))
 
 
 @app.route('/applicants/<int:applicant_id>', methods=['PUT'])
@@ -80,6 +83,7 @@ def update_applicant(applicant_id):
 	applicant.email = email
 	applicant.features = features
 	db.session.commit()
+	return jsonify(applicant_serializer(applicant))
 
 
 @app.route('/applicants/<int:applicant_id>/applied', methods=['GET'])
@@ -104,6 +108,7 @@ def update_applied(applicant_id):
 			return
 		applicant.applied.remove(business)
 	db.session.commit()
+	return jsonify(list(map(business_serializer, applicant.applied)))
 
 
 @app.route('/applicants/<int:applicant_id>/reviewed', methods=['GET'])
@@ -127,6 +132,7 @@ def update_reviewed(applicant_id):
 		applicant.reviewed.remove(business)
 		applicant.declined.append(business)
 	db.session.commit()
+	return jsonify(list(map(business_serializer, applicant.reviewed)))
 
 
 @app.route('/applicants/<int:applicant_id>/declined', methods=['GET'])
@@ -147,6 +153,7 @@ def updated_applicant_declined(applicant_id):
 		business = Business.query.get(business_id)
 		applicant.declined.remove(business)
 	db.session.commit()
+	return jsonify(list(map(business_serializer, applicant.declined)))
 
 
 @app.route('/applicants/<int:applicant_id>/rejected', methods=['GET'])
@@ -191,11 +198,13 @@ def create_business():
 	                    features=request_data['features'])
 	db.session.add(business)
 	db.session.commit()
+	return jsonify(business_serializer(business))
 
 
 @app.route('/businesses/<int:business_id>', methods=['GET'])
 def get_business(business_id):
-	return jsonify(list(map(business_serializer, Business.query.filter_by(id=business_id))))
+	business = Business.query.get(business_id)
+	return jsonify(business_serializer(business))
 
 
 @app.route('/businesses/<int:business_id>', methods=['DELETE'])
@@ -218,6 +227,7 @@ def transition_business(business_id):
 		world.peel_business(business)
 	elif action == 'leave':
 		world.remove_business(business)
+	return jsonify(business_serializer(business))
 
 
 @app.route('/businesses/<int:business_id>', methods=['PUT'])
@@ -231,6 +241,7 @@ def update_business(business_id):
 	business.email = email
 	business.features = features
 	db.session.commit()
+	return jsonify(business_serializer(business))
 
 
 @app.route('/businesses/<int:business_id>/received', methods=['GET'])
@@ -255,6 +266,7 @@ def update_received(business_id):
 		business.received.remove(applicant)
 		business.declined.append(applicant)
 	db.session.commit()
+	return jsonify(list(map(applicant_serializer, business.received)))
 
 
 @app.route('/businesses/<int:business_id>/offered', methods=['GET'])
@@ -276,6 +288,7 @@ def update_offered(business_id):
 		business.offered.remove(applicant)
 		business.declined.append(applicant)
 	db.session.commit()
+	return jsonify(list(map(applicant_serializer, business.offered)))
 
 
 @app.route('/businesses/<int:business_id>/declined', methods=['GET'])
@@ -296,6 +309,7 @@ def updated_business_declined(business_id):
 		applicant = Applicant.query.get(applicant_id)
 		business.declined.remove(applicant)
 	db.session.commit()
+	return jsonify(list(map(applicant_serializer, business.declined)))
 
 
 @app.route('/businesses/<int:business_id>/rejected', methods=['GET'])
@@ -320,7 +334,8 @@ def cluster_serializer(cluster):
 
 @app.route('/clusters/<int:cluster_id>', methods=['GET'])
 def get_cluster(cluster_id):
-	return jsonify(list(map(cluster_serializer, Cluster.query.filter_by(id=cluster_id))))
+	cluster = Cluster.query.get(cluster_id)
+	return jsonify(cluster_serializer(cluster))
 
 
 @app.route('clusters/<int:cluster_id>/applicants', methods=['GET'])
