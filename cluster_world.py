@@ -184,7 +184,7 @@ def split_cluster(cluster):
 			                 alg.compute_centroid(business_features, 'business')[0]))
 		elif applicant_features:
 			data_set.append(alg.compute_centroid(applicant_features, 'applicant')[0])
-		else:
+		elif business_features:
 			data_set.append(alg.compute_centroid(business_features, 'business')[0])
 
 	labels, _, _ = alg.find_clusters(data_set, 2)
