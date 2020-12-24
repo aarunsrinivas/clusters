@@ -45,8 +45,7 @@ def get_applicant(applicant_id):
 
 @app.route('/applicants/<int:applicant_id>', methods=['DELETE'])
 def delete_applicant(applicant_id):
-	request_data = json.loads(request.data)
-	applicant = Applicant.query.get(request_data['id'])
+	applicant = Applicant.query.get(applicant_id)
 	if not applicant.is_dormant:
 		world.remove_applicant(applicant)
 	db.session.delete(applicant)
@@ -56,7 +55,16 @@ def delete_applicant(applicant_id):
 
 @app.route('/applicants/<int:applicant_id>', methods=['PUT'])
 def update_applicant(applicant_id):
-	pass
+	request_data = json.loads(request.data)
+	now_active = request_data['now_active']
+	applicant = Applicant.query.get(applicant_id)
+	if applicant.is_dormant and now_active:
+		world.add_applicant(applicant)
+	elif not applicant.is_dormant and now_active:
+		world.peel_applicant(applicant)
+	elif not applicant.is_dormant and not now_active:
+		world.remove_applicant(applicant)
+	applicant.is_dormant = not now_active if applicant.is_dormant == now_active else applicant.is_dormant
 
 
 @app.route('/applicants/<int:applicant_id>/applied', methods=['GET'])
@@ -118,8 +126,7 @@ def get_business(business_id):
 
 @app.route('/businesses/<int:business_id>', methods=['DELETE'])
 def delete_business(business_id):
-	request_data = json.loads(request.data)
-	business = Business.query.get(request_data['id'])
+	business = Business.query.get(business_id)
 	if not business.is_dormant:
 		world.remove_business(business)
 	db.session.delete(business)
@@ -129,7 +136,16 @@ def delete_business(business_id):
 
 @app.route('/businesses/<int:business_id>', methods=['PUT'])
 def update_business(business_id):
-	pass
+	request_data = json.loads(request.data)
+	now_active = request_data['now_active']
+	business = Business.query.get(business_id)
+	if business.is_dormant and now_active:
+		world.add_business(business)
+	elif not business.is_dormant and now_active:
+		world.peel_business(business)
+	elif not business.is_dormant and not now_active:
+		world.remove_business(business)
+	business.is_dormant = not now_active if business.is_dormant == now_active else business.is_dormant
 
 
 @app.route('/businesses/<int:business_id>/received', methods=['GET'])

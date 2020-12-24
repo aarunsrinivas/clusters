@@ -19,7 +19,6 @@ def add_applicant(applicant):
 		cluster_id = alg.closest_cluster([applicant.features], dual_centroids, ids)
 		cluster = Cluster.query.get(cluster_id)
 	applicant.cluster_id = cluster_id
-	applicant.is_dormant = False
 	cluster.applicant_centroid, cluster.applicant_centroid_data = alg.inflate_centroid(
 		cluster.applicant_centroid_data, applicant.features, cluster.applicant_pop)
 	cluster.applicant_pop += 1
@@ -42,7 +41,6 @@ def add_business(business):
 		cluster_id = alg.closest_cluster([business.features], dual_centroids, ids)
 		cluster = Cluster.query.get(cluster_id)
 	business.cluster_id = cluster_id
-	business.is_dormant = False
 	cluster.business_centroid, cluster.business_centroid_data = alg.inflate_centroid(
 		cluster.business_centroid_data, business.features, cluster.business_pop)
 	cluster.business_pop += 1
@@ -116,7 +114,6 @@ def remove_applicant(applicant):
 		return
 	cluster = applicant.cluster
 	applicant.cluster_id = None
-	applicant.is_dormant = True
 	cluster.applicant_centroid, cluster.applicant_centroid_data = alg.deflate_centroid(
 		cluster.applicant_centroid_data, applicant.features, cluster.applicant_pop)
 	cluster.applicant_pop -= 1
@@ -135,7 +132,6 @@ def remove_business(business):
 		return
 	cluster = business.cluster
 	business.cluster_id = None
-	business.is_dormant = True
 	cluster.business_centroid, cluster.business_centroid_data = alg.deflate_centroid(
 		cluster.business_centroid_data, business.features, cluster.business_pop)
 	cluster.business_pop -= 1
