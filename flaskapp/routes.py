@@ -26,6 +26,9 @@ def applicant_serializer(applicant):
 
 @app.route('/applicants', methods=['GET'])
 def get_applicants():
+	args = request.args
+	if 'email' in args:
+		return jsonify(list(map(applicant_serializer, Applicant.query.filter_by(email=args['email']))))
 	return jsonify(list(map(applicant_serializer, Applicant.query.all())))
 
 
@@ -174,6 +177,9 @@ def business_serializer(business):
 
 @app.route('/businesses', methods=['GET'])
 def get_businesses():
+	args = request.args
+	if 'email' in args:
+		return jsonify(list(map(business_serializer, Business.query.filter_by(email=args['email']))))
 	return jsonify(list(map(business_serializer, Business.query.all())))
 
 
