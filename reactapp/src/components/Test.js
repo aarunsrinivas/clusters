@@ -6,16 +6,20 @@ export function Test() {
     useEffect(() => {
         fetch('/applicants').then(response => {
             if(response.ok){
-                console.log(response.json())
+                return response.json();
             }
         }).then(data => setApplicants(data));
     }, [])
 
-    console.log(applicants);
-
     return (
         <div>
-            HELLO
+            {applicants.map(a => {
+                return (
+                    <u1 key={a.id}>
+                        <l1>{a.id}</l1>
+                    </u1>
+                );
+            })}
         </div>
     )
 }
