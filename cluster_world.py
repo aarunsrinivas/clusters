@@ -48,7 +48,7 @@ def add_business(business):
 
 
 def peel_applicant(applicant):
-	if applicant.is_dormant:
+	if not applicant.cluster_id:
 		return
 	old_cluster = applicant.cluster
 	old_cluster.applicant_centroid, old_cluster.applicant_centroid_data = alg.deflate_centroid(
@@ -79,7 +79,7 @@ def peel_applicant(applicant):
 
 
 def peel_business(business):
-	if business.is_dormant:
+	if not business.cluster_id:
 		return
 	old_cluster = business.cluster
 	old_cluster.business_centroid, old_cluster.business_centroid_data = alg.deflate_centroid(
@@ -110,7 +110,7 @@ def peel_business(business):
 
 
 def remove_applicant(applicant):
-	if applicant.is_dormant:
+	if not applicant.cluster_id:
 		return
 	cluster = applicant.cluster
 	applicant.cluster_id = None
@@ -128,7 +128,7 @@ def remove_applicant(applicant):
 
 
 def remove_business(business):
-	if business.is_dormant:
+	if not business.cluster_id:
 		return
 	cluster = business.cluster
 	business.cluster_id = None
@@ -184,7 +184,7 @@ def split_cluster(cluster):
 			                 alg.compute_centroid(business_features, 'business')[0]))
 		elif applicant_features:
 			data_set.append(alg.compute_centroid(applicant_features, 'applicant')[0])
-		else:
+		elif business_features:
 			data_set.append(alg.compute_centroid(business_features, 'business')[0])
 
 	labels, _, _ = alg.find_clusters(data_set, 2)
