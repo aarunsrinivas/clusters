@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 
+// sample functional component
 export function Test() {
     const [applicants, setApplicants] = useState([])
 
