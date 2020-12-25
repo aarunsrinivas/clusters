@@ -338,13 +338,13 @@ def get_cluster(cluster_id):
 	return jsonify(cluster_serializer(cluster))
 
 
-@app.route('clusters/<int:cluster_id>/applicants', methods=['GET'])
+@app.route('/clusters/<int:cluster_id>/applicants', methods=['GET'])
 def get_active_applicants(cluster_id):
 	cluster = Cluster.query.get(cluster_id)
 	return jsonify(list(map(applicant_serializer, cluster.applicants)))
 
 
-@app.route('clusters/<int:cluster_id>/businesses', methods=['GET'])
+@app.route('/clusters/<int:cluster_id>/businesses', methods=['GET'])
 def get_active_businesses(cluster_id):
 	cluster = Cluster.query.get(cluster_id)
 	return jsonify(list(map(business_serializer, cluster.businesses)))

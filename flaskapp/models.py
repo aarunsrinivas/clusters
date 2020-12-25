@@ -11,10 +11,12 @@ def load_user(user_id):
 class User(db.Model, UserMixin):
 	__tablename__ = 'user'
 	id = db.Column(db.Integer, primary_key=True)
+	'''
 	name = db.Column(db.String(20), nullable=False)
 	email = db.Column(db.String(120), unique=True, nullable=False)
 	password = db.Column(db.String(60), nullable=False)
 	features = db.Column(db.PickleType, nullable=False)
+	'''
 	cluster_id = db.Column(db.Integer, db.ForeignKey('cluster.id'))
 	type = db.Column(db.String(50))
 
