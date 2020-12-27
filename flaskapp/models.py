@@ -1,6 +1,7 @@
 from flaskapp import db, login_manager
 from flask_login import UserMixin
 from collections import Counter
+import datetime
 
 
 @login_manager.user_loader
@@ -14,6 +15,7 @@ class User(db.Model, UserMixin):
 	name = db.Column(db.String(20), nullable=False)
 	email = db.Column(db.String(120), unique=True, nullable=False)
 	password = db.Column(db.String(60), nullable=False)
+	session_id = db.Column(db.String(120), unique=True, nullable=False)
 	features = db.Column(db.PickleType, nullable=False)
 	cluster_id = db.Column(db.Integer, db.ForeignKey('cluster.id'))
 	type = db.Column(db.String(50))
@@ -55,6 +57,7 @@ class Applicant(User):
 	declined = db.relationship('Business', secondary='declined1')
 	rejected = db.relationship('Business', secondary='declined2')
 	reviewed = db.relationship('Business', secondary='final')
+	chats = db.relationship('Chat', backref='applicant', lazy=True, cascade='all, delete-orphan')
 
 	__mapper_args__ = {
 		'polymorphic_identity': 'applicant'
@@ -72,6 +75,7 @@ class Business(User):
 	declined = db.relationship('Applicant', secondary='declined2')
 	rejected = db.relationship('Applicant', secondary='declined1')
 	offered = db.relationship('Applicant', secondary='final')
+	chats = db.relationship('Chat', backref='business', lazy=True, cascade='all, delete-orphan')
 
 	__mapper_args__ = {
 		'polymorphic_identity': 'business'
@@ -125,3 +129,19 @@ class Cluster(db.Model):
 
 	def __repr__(self):
 		return f'Cluster(id: {self.id}, applicant_pop: {self.applicant_pop}, business_pop: {self.business_pop})'
+
+
+class Chat(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	applicant_id = db.Column(db.Integer, db.ForeignKey('applicant.id'))
+	business_id = db.Column(db.Integer, db.ForeignKey('business.id'))
+	messages = db.relationship('Message', backref='chat', lazy=True, cascade='all, delete')
+
+
+class Message(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	type = db.Column(db.String(50), nullable=False)
+	message = db.Column(db.Text, nullable=False)
+	date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+	chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'), nullable=False)
+
