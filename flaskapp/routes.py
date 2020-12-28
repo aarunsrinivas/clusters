@@ -4,7 +4,7 @@ from flask import json, jsonify, request
 import cluster_world as world
 
 
-# TODO: need to create requests that the applicant sends to business when they first apply
+# TODO: need to create requests file that the applicant sends to business when they first apply
 
 def applicant_serializer(applicant):
 	return {
