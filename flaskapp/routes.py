@@ -5,6 +5,7 @@ import cluster_world as world
 
 
 # TODO: need to create requests file that the applicant sends to business when they first apply
+# updated aarun branch
 
 def applicant_serializer(applicant):
 	return {
