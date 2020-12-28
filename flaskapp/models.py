@@ -1,7 +1,7 @@
 from flaskapp import db, login_manager
 from flask_login import UserMixin
 from collections import Counter
-import datetime
+from datetime import datetime
 
 
 @login_manager.user_loader
