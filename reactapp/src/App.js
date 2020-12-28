@@ -1,12 +1,9 @@
-import logo from './logo.svg';
-import './App.css';
-import {Test} from './components/Test'
+import './styles/App.css';
 
 function App() {
   return (
-    <div>
-        <h1>Hello World</h1>
-        <Test/>
+    <div className="App">
+      <h1>Clusters</h1>
     </div>
   );
 }
