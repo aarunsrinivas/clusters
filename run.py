@@ -1,3 +1,3 @@
-from flaskapp import socket_io
+from flaskapp import app
 
-socket_io.run(debug=True)
+app.run(debug=True)
