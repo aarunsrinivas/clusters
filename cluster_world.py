@@ -54,12 +54,10 @@ def peel_applicant(applicant):
 	old_cluster.applicant_centroid, old_cluster.applicant_centroid_data = alg.deflate_centroid(
 		old_cluster.applicant_centroid_data, applicant.features, old_cluster.applicant_pop)
 	old_cluster.applicant_pop -= 1
-	for business in applicant.applied:
-		business.received.remove(applicant)
-	for business in applicant.reviewed:
-		business.offered.remove(applicant)
-	applicant.applied = []
-	applicant.reviewed = []
+	applicant.applied.clear()
+	applicant.reviewed.clear()
+	applicant.interested.clear()
+	applicant.chats.clear()
 	applicant.visited_clusters.append(old_cluster)
 	clusters = Cluster.query.all()
 	dual_centroids = []
@@ -85,12 +83,10 @@ def peel_business(business):
 	old_cluster.business_centroid, old_cluster.business_centroid_data = alg.deflate_centroid(
 		old_cluster.business_centroid_data, business.features, old_cluster.business_pop)
 	old_cluster.business_pop -= 1
-	for applicant in business.received:
-		applicant.applied.remove(business)
-	for applicant in business.offered:
-		applicant.reviewed.remove(business)
-	business.received = []
-	business.offered = []
+	business.received.clear()
+	business.offered.clear()
+	business.interested.clear()
+	business.chats.clear()
 	business.visited_clusters.append(old_cluster)
 	clusters = Cluster.query.all()
 	dual_centroids = []
@@ -117,12 +113,10 @@ def remove_applicant(applicant):
 	cluster.applicant_centroid, cluster.applicant_centroid_data = alg.deflate_centroid(
 		cluster.applicant_centroid_data, applicant.features, cluster.applicant_pop)
 	cluster.applicant_pop -= 1
-	for business in applicant.applied:
-		business.received.remove(applicant)
-	for business in applicant.reviewed:
-		business.offered.remove(applicant)
-	applicant.applied = []
-	applicant.reviewed = []
+	applicant.applied.clear()
+	applicant.reviewed.clear()
+	applicant.interested.clear()
+	applicant.chats.clear()
 	applicant.visited_clusters = []
 	db.session.commit()
 
@@ -135,12 +129,10 @@ def remove_business(business):
 	cluster.business_centroid, cluster.business_centroid_data = alg.deflate_centroid(
 		cluster.business_centroid_data, business.features, cluster.business_pop)
 	cluster.business_pop -= 1
-	for applicant in business.received:
-		applicant.applied.remove(business)
-	for applicant in business.offered:
-		applicant.reviewed.remove(business)
-	business.received = []
-	business.offered = []
+	business.received.clear()
+	business.offered.clear()
+	business.interested.clear()
+	business.chats.clear()
 	business.visited_clusters = []
 	db.session.commit()
 
