@@ -56,6 +56,7 @@ def peel_applicant(applicant):
 	old_cluster.applicant_pop -= 1
 	applicant.applied.clear()
 	applicant.reviewed.clear()
+	applicant.interested.clear()
 	applicant.chats.clear()
 	applicant.visited_clusters.append(old_cluster)
 	clusters = Cluster.query.all()
@@ -84,6 +85,7 @@ def peel_business(business):
 	old_cluster.business_pop -= 1
 	business.received.clear()
 	business.offered.clear()
+	business.interested.clear()
 	business.chats.clear()
 	business.visited_clusters.append(old_cluster)
 	clusters = Cluster.query.all()
@@ -113,6 +115,7 @@ def remove_applicant(applicant):
 	cluster.applicant_pop -= 1
 	applicant.applied.clear()
 	applicant.reviewed.clear()
+	applicant.interested.clear()
 	applicant.chats.clear()
 	applicant.visited_clusters = []
 	db.session.commit()
@@ -128,6 +131,7 @@ def remove_business(business):
 	cluster.business_pop -= 1
 	business.received.clear()
 	business.offered.clear()
+	business.interested.clear()
 	business.chats.clear()
 	business.visited_clusters = []
 	db.session.commit()

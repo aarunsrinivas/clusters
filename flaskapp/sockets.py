@@ -15,7 +15,7 @@ def send_message(payload):
 	sender = User.query.get(payload['sender_id'])
 	recipient = User.query.get(payload['recipient_id'])
 	chat = Chat.query.get(payload['chat_id'])
-	message = Message(type=sender.type, message=payload['message'], chat_id=chat.id)
+	message = Message(origin=sender.type, message=payload['message'], chat_id=chat.id)
 	recipient_session_id = recipient.session_id
 	emit('new_message', payload['message'], room=recipient_session_id)
 	db.session.add(message)

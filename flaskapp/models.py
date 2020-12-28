@@ -15,7 +15,7 @@ class User(db.Model, UserMixin):
 	name = db.Column(db.String(20), nullable=False)
 	email = db.Column(db.String(120), unique=True, nullable=False)
 	password = db.Column(db.String(60), nullable=False)
-	session_id = db.Column(db.String(120), unique=True, nullable=False)
+	session_id = db.Column(db.String(120), unique=True)
 	features = db.Column(db.PickleType, nullable=False)
 	cluster_id = db.Column(db.Integer, db.ForeignKey('cluster.id'))
 	type = db.Column(db.String(50))
@@ -29,6 +29,10 @@ class User(db.Model, UserMixin):
 initial = db.Table('initial',
                    db.Column('applicant_id', db.Integer, db.ForeignKey('applicant.id'), primary_key=True),
                    db.Column('business_id', db.Integer, db.ForeignKey('business.id'), primary_key=True))
+
+middle = db.Table('middle',
+                  db.Column('applicant_id', db.Integer, db.ForeignKey('applicant.id'), primary_key=True),
+                  db.Column('business_id', db.Integer, db.ForeignKey('business.id'), primary_key=True))
 
 final = db.Table('final',
                  db.Column('applicant_id', db.Integer, db.ForeignKey('applicant.id'), primary_key=True),
@@ -56,6 +60,7 @@ class Applicant(User):
 	applied = db.relationship('Business', secondary='initial')
 	declined = db.relationship('Business', secondary='declined1')
 	rejected = db.relationship('Business', secondary='declined2')
+	interested = db.relationship('Business', secondary='middle')
 	reviewed = db.relationship('Business', secondary='final')
 	chats = db.relationship('Chat', backref='applicant', lazy=True, cascade='all, delete-orphan')
 
@@ -74,6 +79,7 @@ class Business(User):
 	received = db.relationship('Applicant', secondary='initial')
 	declined = db.relationship('Applicant', secondary='declined2')
 	rejected = db.relationship('Applicant', secondary='declined1')
+	interested = db.relationship('Applicant', secondary='middle')
 	offered = db.relationship('Applicant', secondary='final')
 	chats = db.relationship('Chat', backref='business', lazy=True, cascade='all, delete-orphan')
 
@@ -133,15 +139,14 @@ class Cluster(db.Model):
 
 class Chat(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	applicant_id = db.Column(db.Integer, db.ForeignKey('applicant.id'))
-	business_id = db.Column(db.Integer, db.ForeignKey('business.id'))
+	applicant_id = db.Column(db.Integer, db.ForeignKey('applicant.id'), nullable=False)
+	business_id = db.Column(db.Integer, db.ForeignKey('business.id'), nullable=False)
 	messages = db.relationship('Message', backref='chat', lazy=True, cascade='all, delete')
 
 
 class Message(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	type = db.Column(db.String(50), nullable=False)
+	origin = db.Column(db.String(50), nullable=False)
 	message = db.Column(db.Text, nullable=False)
 	date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 	chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'), nullable=False)
-
