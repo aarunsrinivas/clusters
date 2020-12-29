@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import bcrypt from 'bcryptjs';
 import TagsInput from 'react-tagsinput';
 
-export function ApplicantRegistration() {
+export function RegisterApplicantForm() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

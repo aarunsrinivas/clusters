@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import bcrypt from 'bcryptjs';
 import TagsInput from 'react-tagsinput';
 
-export function BusinessRegistration() {
+export function RegisterBusinessForm() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

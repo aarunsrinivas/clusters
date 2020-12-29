@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import bcrypt from 'bcryptjs'
 
 
-export function BusinessLogin() {
+export function LoginBusinessForm() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -15,7 +15,9 @@ export function BusinessLogin() {
                 return response.json();
             }
         }).then(data => {
-            setUser(data[0]);
+            if(data.length > 0){
+                setUser(data[0]);
+            }
         });
     };
 
