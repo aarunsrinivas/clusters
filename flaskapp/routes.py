@@ -4,13 +4,12 @@ from flask import json, jsonify, request
 import cluster_world as world
 
 
-# TODO: need to create requests file that the applicant sends to business when they first apply
-
 def applicant_serializer(applicant):
 	return {
 		'id': applicant.id,
 		'name': applicant.name,
 		'email': applicant.email,
+		'password': applicant.password,
 		'features': applicant.features,
 		'links': {
 			'self': f'/applicants/{applicant.id}',
@@ -40,7 +39,7 @@ def find_applicant():
 def create_applicant():
 	request_data = json.loads(request.data)
 	applicant = Applicant(name=request_data['name'], email=request_data['email'],
-	                      password=bcrypt.generate_password_hash(request_data['password']),
+	                      password=request_data['password'],
 	                      features=request_data['features'])
 	db.session.add(applicant)
 	db.session.commit()
@@ -196,7 +195,9 @@ def get_applicant_rejected(applicant_id):
 def applicant_chat_serializer(chat):
 	return {
 		'id': chat.id,
-		'business_name': chat.business.name,
+		'sender_id': chat.applicant_id,
+		'recipient_id': chat.business_id,
+		'recipient_name': chat.business.name,
 		'links': {
 			'self': f'/applicants/{chat.applicant.id}/chats/{chat.id}',
 			'applicant': f'/applicants/{chat.applicant.id}',
@@ -244,6 +245,7 @@ def business_serializer(business):
 		'id': business.id,
 		'name': business.name,
 		'email': business.email,
+		'password': business.password,
 		'features': business.features,
 		'links': {
 			'self': f'/businesses/{business.id}',
@@ -273,7 +275,7 @@ def find_business():
 def create_business():
 	request_data = json.loads(request.data)
 	business = Business(name=request_data['name'], email=request_data['email'],
-	                    password=bcrypt.generate_password_hash(request_data['password']),
+	                    password=request_data['password'],
 	                    features=request_data['features'])
 	db.session.add(business)
 	db.session.commit()
@@ -431,7 +433,9 @@ def get_business_rejected(business_id):
 def business_chat_serializer(chat):
 	return {
 		'id': chat.id,
-		'applicant_name': chat.applicant.name,
+		'sender_id': chat.business_id,
+		'recipient_id': chat.applicant_id,
+		'recipient_name': chat.applicant.name,
 		'links': {
 			'self': f'/businesses/{chat.business.id}/chats/{chat.id}',
 			'business': f'/businesses/{chat.business.id}',
@@ -440,7 +444,7 @@ def business_chat_serializer(chat):
 	}
 
 
-@app.route('/businesses/<int:business_id/chats', methods=['GET'])
+@app.route('/businesses/<int:business_id>/chats', methods=['GET'])
 def get_business_chats(business_id):
 	business = Business.query.get(business_id)
 	return jsonify(list(map(business_chat_serializer, business.chats)))

@@ -1,9 +1,11 @@
-import './styles/App.css';
+import logo from './logo.svg';
+import './App.css';
+import {ApplicantRegistration} from './components/forms/ApplicantRegistration'
 
 function App() {
   return (
-    <div className="App">
-      <h1>Clusters</h1>
+    <div>
+        <ApplicantRegistration/>
     </div>
   );
 }
