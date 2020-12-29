@@ -5,6 +5,7 @@ import TagsInput from 'react-tagsinput';
 export function BusinessUpdate({selfLink}) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [oldEmail, setOldEmail] = useState('');
     const [password, setPassword] = useState('');
     const [major, setMajor] = useState([]);
     const [standing, setStanding] = useState([]);
@@ -19,6 +20,7 @@ export function BusinessUpdate({selfLink}) {
         }).then({id, name, email, password, features, links} => {
             setName(name);
             setEmail(email);
+            setOldEmail(email);
             setMajor(features.major);
             setStanding(features.standing);
             setGpa(features.gpa);
@@ -26,25 +28,39 @@ export function BusinessUpdate({selfLink}) {
         })
     }, []);
 
-    const handleClick = () => {
-        fetch(selfLink, {
-            method: 'PUT',
-            body: JSON.stringify({
-                name,
-                email,
-                password: bcrypt.hashSync(password, 10),
-                features: {
-                    major,
-                    standing,
-                    gpa: parseFloat(gpa),
-                    skills
+    const handleClick = async () => {
+        let temp = [];
+        if(email !== oldEmail){
+            temp = await fetch(`/businesses?email={email}`).then(response => {
+                if(response.ok){
+                    return response.json();
                 }
             })
-        }).then(response => {
-            if(response.ok){
-                return response.json();
-            }
-        }).then(data => console.log(data));
+        }
+
+        if(temp.length > 0){
+            console.log('This email is taken');
+            return;
+        } else {
+            fetch(selfLink, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    name,
+                    email,
+                    password: bcrypt.hashSync(password, 10),
+                    features: {
+                        major,
+                        standing,
+                        gpa: parseFloat(gpa),
+                        skills
+                    }
+                })
+            }).then(response => {
+                if(response.ok){
+                    return response.json();
+                }
+            }).then(data => console.log(data));
+        }
     }
 
     return (

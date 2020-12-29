@@ -11,25 +11,36 @@ export function ApplicantRegistration() {
     const [gpa, setGpa] = useState(0);
     const [skills, setSkills] = useState([]);
 
-    const handleClick = () => {
-        fetch('/applicants', {
-            method: 'POST',
-            body: JSON.stringify({
-                name,
-                email,
-                password: bcrypt.hashSync(password, 10),
-                features: {
-                    major,
-                    standing,
-                    gpa: parseFloat(gpa),
-                    skills
-                }
-            })
-        }).then(response => {
+    const handleClick = async () => {
+        const temp = await fetch(`/applicants?email=${email}`).then(response => {
             if(response.ok){
                 return response.json();
             }
-        }).then(data => console.log(data));
+        });
+
+        if(temp.length > 0){
+            console.log('This email is taken');
+            return;
+        } else {
+            fetch('/applicants', {
+                method: 'POST',
+                body: JSON.stringify({
+                    name,
+                    email,
+                    password: bcrypt.hashSync(password, 10),
+                    features: {
+                        major,
+                        standing,
+                        gpa: parseFloat(gpa),
+                        skills
+                    }
+                })
+            }).then(response => {
+                if(response.ok){
+                    return response.json();
+                }
+            }).then(data => console.log(data));
+        }
     }
 
     return (
