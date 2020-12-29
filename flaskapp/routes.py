@@ -39,7 +39,7 @@ def find_applicant():
 def create_applicant():
 	request_data = json.loads(request.data)
 	applicant = Applicant(name=request_data['name'], email=request_data['email'],
-	                      password=bcrypt.generate_password_hash(request_data['password']),
+	                      password=request_data['password'],
 	                      features=request_data['features'])
 	db.session.add(applicant)
 	db.session.commit()
@@ -275,7 +275,7 @@ def find_business():
 def create_business():
 	request_data = json.loads(request.data)
 	business = Business(name=request_data['name'], email=request_data['email'],
-	                    password=bcrypt.generate_password_hash(request_data['password']),
+	                    password=request_data['password'],
 	                    features=request_data['features'])
 	db.session.add(business)
 	db.session.commit()

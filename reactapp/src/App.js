@@ -1,11 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
-import {ApplicantLogin} from './components/forms/ApplicantLogin'
+import {ApplicantRegistration} from './components/forms/ApplicantRegistration'
 
 function App() {
   return (
     <div>
-        <ApplicantLogin/>
+        <ApplicantRegistration/>
     </div>
   );
 }
