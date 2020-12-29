@@ -5,13 +5,13 @@ import io from 'socket.io-client'
 const privateSocket = io.connect('http://127.0.0.1:5000/private')
 
 // does not work yet still many missing pieces
-export function Chat({chatLink, chatId}){
+export function Chat({chatId, senderId, recipientId, messagesLink}){
 
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
 
     useEffect(() => {
-        fetch(chatLink).then(response => {
+        fetch(messagesLink).then(response => {
             if(response.ok){
                 return response.json();
             }
@@ -25,6 +25,7 @@ export function Chat({chatLink, chatId}){
     const handleClick = () => {
         privateSocket.emit('message', {'chat_id': chatId, 'sender_id': senderId,
         'recipient_id': recipientId, 'message': message});
+        setMessages([...messages, message]);
         setMessage('');
     }
 
