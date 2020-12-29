@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import bcrypt from 'bcryptjs';
 import TagsInput from 'react-tagsinput';
+import {socket} from '../../App';
 
 export function RegisterApplicantForm() {
     const [name, setName] = useState('');
@@ -39,8 +40,14 @@ export function RegisterApplicantForm() {
                 if(response.ok){
                     return response.json();
                 }
-            }).then(data => console.log(data));
+            }).then(({id, name, email, password, features, links}) => {
+                console.log(id);
+                socket.emit('user', id);
+            });
         }
+        setName('');
+        setEmail('');
+        setPassword('');
     }
 
     return (

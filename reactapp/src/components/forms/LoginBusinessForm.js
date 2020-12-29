@@ -23,7 +23,7 @@ export function LoginBusinessForm() {
 
 
     useEffect(() => {
-        if(!user || !user.password || !bcrypt.compareSync(password, user.password)){
+        if(!user.password || !bcrypt.compareSync(password, user.password)){
             console.log('incorrect login');
         } else {
             console.log('logging in');

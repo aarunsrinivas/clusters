@@ -1,4 +1,4 @@
-from flaskapp import app, db, bcrypt
+from flaskapp import app, db
 from flaskapp.models import Applicant, Business, Cluster, Chat
 from flask import json, jsonify, request
 import cluster_world as world
