@@ -1,12 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
-import {Test} from './components/Test'
+import {ApplicantLogin} from './components/forms/ApplicantLogin'
 
 function App() {
   return (
     <div>
-        <h1>Hello World</h1>
-        <Test/>
+        <ApplicantLogin/>
     </div>
   );
 }
