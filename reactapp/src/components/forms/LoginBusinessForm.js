@@ -1,36 +1,31 @@
 import React, {useState, useEffect} from 'react';
+import {useAuth} from '../../contexts/AuthContext';
 import bcrypt from 'bcryptjs'
+import {Link, useHistory} from 'react-router-dom';
 
 
 export function LoginBusinessForm() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [user, setUser] = useState({});
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const {logInBusiness} = useAuth();
+    const history = useHistory();
 
-
-     const handleClick = () => {
-        fetch(`/businesses?email=${email}`).then(response => {
-            if(response.ok){
-                return response.json();
-            }
-        }).then(data => {
-            if(data.length > 0){
-                setUser(data[0]);
-            }
-        });
-    };
-
-
-    useEffect(() => {
-        if(!user || !user.password || !bcrypt.compareSync(password, user.password)){
-            console.log('incorrect login');
-        } else {
-            console.log('logging in');
+     async function handleClick() {
+        try {
+            setError('Logged In');
+            setLoading(true);
+            await logInBusiness(email, password);
+            history.push('/');
+        } catch(err) {
+            setError(err);
         }
+        setLoading(false);
         setEmail('');
         setPassword('');
-    }, [user]);
+    };
 
 
     return (
@@ -39,6 +34,9 @@ export function LoginBusinessForm() {
             <br/>
             <input type='password' value={password} onChange={e => setPassword(e.target.value)}/>
             <button onClick={() => handleClick()}>Submit</button>
+            <div>
+                Need an Account? <Link to='/register/business'>Register</Link>
+            </div>
         </div>
     )
 }
