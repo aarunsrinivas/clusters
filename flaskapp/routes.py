@@ -7,6 +7,7 @@ import cluster_world as world
 def applicant_serializer(applicant):
 	return {
 		'id': applicant.id,
+		'type': applicant.type,
 		'name': applicant.name,
 		'email': applicant.email,
 		'password': applicant.password,
@@ -243,6 +244,7 @@ def get_applicant_chat_messages(applicant_id, chat_id):
 def business_serializer(business):
 	return {
 		'id': business.id,
+		'type': business.type,
 		'name': business.name,
 		'email': business.email,
 		'password': business.password,

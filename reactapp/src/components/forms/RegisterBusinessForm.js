@@ -1,46 +1,43 @@
 import React, {useState, useEffect} from 'react';
-import bcrypt from 'bcryptjs';
+import {Link, useHistory} from 'react-router-dom';
 import TagsInput from 'react-tagsinput';
+import {useAuth} from '../../contexts/AuthContext';
+import {socket} from '../../App';
 
 export function RegisterBusinessForm() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [major, setMajor] = useState([]);
     const [standing, setStanding] = useState([]);
     const [gpa, setGpa] = useState(0);
     const [skills, setSkills] = useState([]);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const {registerBusiness} = useAuth();
+    const history = useHistory();
 
-    const handleClick = async () => {
-        const temp = await fetch(`/businesses?email=${email}`).then(response => {
-            if(response.ok){
-                return response.json();
-            }
-        });
 
-        if(temp.length > 0){
-            console.log('This email is taken');
-            return;
-        } else {
-            fetch('/businesses', {
-                method: 'POST',
-                body: JSON.stringify({
-                    name,
-                    email,
-                    password: bcrypt.hashSync(password, 10),
-                    features: {
-                        major,
-                        standing,
-                        gpa: parseFloat(gpa),
-                        skills
-                    }
-                })
-            }).then(response => {
-                if(response.ok){
-                    return response.json();
-                }
-            }).then(data => console.log(data));
+    async function handleClick() {
+        try {
+            setError('');
+            setLoading(true);
+            await registerBusiness(name, email, password,
+                confirmPassword, major, standing, gpa, skills);
+            history.push('/');
+        } catch(err) {
+            setError(err);
         }
+        setLoading(false);
+        setName('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        setMajor([]);
+        setStanding([]);
+        setGpa(0);
+        setSkills([]);
     }
 
     return (
@@ -51,6 +48,8 @@ export function RegisterBusinessForm() {
             <br/>
             Password: <input type='password' value={password} onChange={e => setPassword(e.target.value)}/>
             <br/>
+            Confirm Password: <input type='password' value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
+            <br/>
             Major: <TagsInput value={major} onChange={tags => setMajor(tags)}/>
             <br/>
             Standing: <TagsInput value={standing} onChange={tags => setStanding(tags)}/>
@@ -58,7 +57,10 @@ export function RegisterBusinessForm() {
             GPA: <input value={gpa} onChange={e => setGpa(e.target.value)}/>
             <br/>
             Skills: <TagsInput value={skills} onChange={tags => setSkills(tags)}/>
-            <button onClick={() => handleClick()}>Submit</button>
+            <button disabled={loading} onClick={() => handleClick()}>Submit</button>
+            <div>
+                Already Have an Account? <Link to='/login/business'>Log In</Link>
+            </div>
         </div>
     )
 }
