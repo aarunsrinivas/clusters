@@ -17,14 +17,16 @@ export function LoginBusinessForm() {
         try {
             setError('Logged In');
             setLoading(true);
+            if(!email || !password){
+                throw 'Fields are required';
+            }
             await logInBusiness(email, password);
-            history.push('/');
+            history.push('/dashboard');
         } catch(err) {
             setError(err);
         }
+        console.log(error);
         setLoading(false);
-        setEmail('');
-        setPassword('');
     };
 
 
@@ -35,7 +37,7 @@ export function LoginBusinessForm() {
             <input type='password' value={password} onChange={e => setPassword(e.target.value)}/>
             <button onClick={() => handleClick()}>Submit</button>
             <div>
-                Need an Account? <Link to='/register/business'>Register</Link>
+                Need an Account? <Link to='/register'>Register</Link>
             </div>
         </div>
     )

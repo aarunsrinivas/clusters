@@ -1,67 +1,38 @@
 import React, {useState, useEffect} from 'react';
+import {useAuth} from '../../contexts/AuthContext';
 import bcrypt from 'bcryptjs';
 import TagsInput from 'react-tagsinput';
 
-//not compatible
-export function UpdateApplicantForm({selfLink}) {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [oldEmail, setOldEmail] = useState('');
+export function UpdateApplicantForm() {
+
+    const {currentUser, updateApplicant} = useAuth();
+    const [name, setName] = useState(currentUser.name);
+    const [email, setEmail] = useState(currentUser.email);
     const [password, setPassword] = useState('');
-    const [major, setMajor] = useState([]);
-    const [standing, setStanding] = useState([]);
-    const [gpa, setGpa] = useState(0);
-    const [skills, setSkills] = useState([]);
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [major, setMajor] = useState(currentUser.features.major);
+    const [standing, setStanding] = useState(currentUser.features.standing);
+    const [gpa, setGpa] = useState(currentUser.features.gpa);
+    const [skills, setSkills] = useState(currentUser.features.skills);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        fetch(selfLink).then(response => {
-            if(response.ok){
-                return response.json();
+    async function handleClick() {
+        try {
+            setError('Updated');
+            setLoading(true);
+            if(!name || !email || !major.length
+               || !standing.length || !gpa || !skills.length) {
+               throw 'Fields not filled out';
+            } else if(password !== confirmPassword){
+                throw 'Passwords do not match';
             }
-        }).then({id, name, email, password, features, links} => {
-            setName(name);
-            setEmail(email);
-            setOldEmail(email);
-            setMajor(features.major);
-            setStanding(features.standing);
-            setGpa(features.gpa);
-            setSkills(features.skills);
-        })
-    }, []);
-
-    const handleClick = async () => {
-        let temp = [];
-        if(email !== oldEmail){
-            temp = await fetch(`/applicants?email={email}`).then(response => {
-                if(response.ok){
-                    return response.json();
-                }
-            })
+            await updateApplicant(name, email, password, major, standing, gpa, skills);
+        } catch(err) {
+            setError(err);
         }
-
-        if(temp.length > 0){
-            console.log('This email is taken');
-            return;
-        } else {
-            fetch(selfLink, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    name,
-                    email,
-                    password: bcrypt.hashSync(password, 10),
-                    features: {
-                        major,
-                        standing,
-                        gpa: parseFloat(gpa),
-                        skills
-                    }
-                })
-            }).then(response => {
-                if(response.ok){
-                    return response.json();
-                }
-            }).then(data => console.log(data));
-        }
+        console.log(error);
+        setLoading(false);
     }
 
     return (
@@ -70,7 +41,11 @@ export function UpdateApplicantForm({selfLink}) {
             <br/>
             Email: <input value={email} onChange={e => setEmail(e.target.value)}/>
             <br/>
-            Password: <input type='password' value={password} onChange={e => setPassword(e.target.value)}/>
+            Password: <input type='password' placeholder='Leave blank to keep the same'
+                value={password} onChange={e => setPassword(e.target.value)}/>
+            <br/>
+            Confirm Password: <input type='password' placeholder='Leave blank to keep the same'
+                value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
             <br/>
             Major: <TagsInput value={major} onChange={tags => setMajor(tags)}/>
             <br/>
