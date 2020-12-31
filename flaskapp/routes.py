@@ -11,6 +11,7 @@ def applicant_serializer(applicant):
 		'name': applicant.name,
 		'email': applicant.email,
 		'password': applicant.password,
+		'clusterId': applicant.cluster_id,
 		'features': applicant.features,
 		'links': {
 			'self': f'/applicants/{applicant.id}',
@@ -248,6 +249,7 @@ def business_serializer(business):
 		'name': business.name,
 		'email': business.email,
 		'password': business.password,
+		'clusterId': business.cluster_id,
 		'features': business.features,
 		'links': {
 			'self': f'/businesses/{business.id}',

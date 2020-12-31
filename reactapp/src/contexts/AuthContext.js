@@ -183,6 +183,79 @@ export function AuthProvider({children}) {
         setCurrentUser(null);
     }
 
+    async function deleteUser(){
+        if(!currentUser){
+            throw 'No user to be deleted'
+        }
+        fetch(currentUser.links.self, {
+            method: 'DELETE'
+        }).then(response => {
+            if(response.ok){
+                return response.json();
+            }
+        }).then(data => {
+            setCurrentUser(null);
+            setLoading(false);
+        })
+    }
+
+    async function joinCluster(){
+        if(!currentUser){
+            throw 'No user to be joined';
+        } else if(currentUser.clusterId){
+            throw 'Already in a cluster';
+        }
+        fetch(currentUser.links.self, {
+            method: 'POST',
+            body: JSON.stringify({action: 'join'})
+        }).then(response => {
+            if(response.ok){
+                return response.json();
+            }
+        }).then(data => {
+            setCurrentUser(data);
+            setLoading(false);
+        })
+    }
+
+    async function leaveCluster(){
+        if(!currentUser){
+            throw 'No user to be joined';
+        } else if(!currentUser.clusterId){
+            throw 'Already outside cluster';
+        }
+        fetch(currentUser.links.self, {
+            method: 'POST',
+            body: JSON.stringify({action: 'leave'})
+        }).then(response => {
+            if(response.ok){
+                return response.json();
+            }
+        }).then(data => {
+            setCurrentUser(data);
+            setLoading(false);
+        })
+    }
+
+    async function peelFromCluster(){
+        if(!currentUser){
+            throw 'No user to be joined';
+        } else if(!currentUser.clusterId){
+            throw 'Cannot peel from outside cluster';
+        }
+        fetch(currentUser.links.self, {
+            method: 'POST',
+            body: JSON.stringify({action: 'peel'})
+        }).then(response => {
+            if(response.ok){
+                return response.json();
+            }
+        }).then(data => {
+            setCurrentUser(data);
+            setLoading(false);
+        })
+    }
+
     useEffect(() => {
         setLoading(false)
     }, [currentUser]);
@@ -195,7 +268,11 @@ export function AuthProvider({children}) {
         logInBusiness,
         updateApplicant,
         updateBusiness,
-        logOut
+        logOut,
+        deleteUser,
+        joinCluster,
+        leaveCluster,
+        peelFromCluster
     };
 
     return (
