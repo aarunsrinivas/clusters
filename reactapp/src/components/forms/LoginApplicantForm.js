@@ -10,22 +10,23 @@ export function LoginApplicantForm() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const {logInApplicant, currentUser} = useAuth();
+    const {logInApplicant} = useAuth();
     const history = useHistory();
 
      async function handleClick() {
         try {
             setError('Logged In');
             setLoading(true);
+            if(!email || !password){
+                throw 'Fields are required';
+            }
             await logInApplicant(email, password);
-            history.push('/');
+            history.push('/dashboard');
         } catch(err) {
             setError(err);
         }
-        console.log(currentUser);
+        console.log(error);
         setLoading(false);
-        setEmail('');
-        setPassword('');
     };
 
 
@@ -36,7 +37,7 @@ export function LoginApplicantForm() {
             <input type='password' value={password} onChange={e => setPassword(e.target.value)}/>
             <button onClick={() => handleClick()}>Submit</button>
             <div>
-                Need an Account? <Link to='/register/applicant'>Register</Link>
+                Need an Account? <Link to='/register'>Register</Link>
             </div>
         </div>
     )

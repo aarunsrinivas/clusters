@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {Link, useHistory} from 'react-router-dom';
 import TagsInput from 'react-tagsinput';
 import {useAuth} from '../../contexts/AuthContext';
-import {socket} from '../../App';
 
 export function RegisterApplicantForm() {
     const [name, setName] = useState('');
@@ -21,23 +20,21 @@ export function RegisterApplicantForm() {
 
     async function handleClick() {
         try {
-            setError('');
+            setError('Registered');
             setLoading(true);
-            await registerApplicant(name, email, password,
-                confirmPassword, major, standing, gpa, skills);
-            history.push('/');
+            if(!name || !email || !password || !confirmPassword || !major.length
+               || !standing.length || !gpa || !skills.length) {
+               throw 'Fields not filled out';
+            } else if(password !== confirmPassword){
+                throw 'Passwords do not match';
+            }
+            await registerApplicant(name, email, password, major, standing, gpa, skills);
+            history.push('/dashboard');
         } catch(err) {
             setError(err);
         }
+        console.log(error);
         setLoading(false);
-        setName('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
-        setMajor([]);
-        setStanding([]);
-        setGpa(0);
-        setSkills([]);
     }
 
     return (
@@ -59,7 +56,7 @@ export function RegisterApplicantForm() {
             Skills: <TagsInput value={skills} onChange={tags => setSkills(tags)}/>
             <button disabled={loading} onClick={() => handleClick()}>Submit</button>
             <div>
-                Already Have an Account? <Link to='/login/applicant'>Log In</Link>
+                Already Have an Account? <Link to='/login'>Log In</Link>
             </div>
         </div>
     )

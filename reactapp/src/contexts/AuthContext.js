@@ -7,129 +7,176 @@ export function useAuth() {
     return useContext(AuthContext);
 }
 
-export function AuthProvider({children}){
+export function AuthProvider({children}) {
 
     const [currentUser, setCurrentUser] = useState();
     const [loading, setLoading] = useState(true);
 
-    async function registerApplicant(name, email, password, confirmPassword, major, standing, gpa, skills) {
-        if(!name || !email || !password || !confirmPassword || !major.length
-            || !standing.length || !gpa || !skills.length) {
-            throw 'Fields not filled out';
-        } else if(password !== confirmPassword){
-            throw 'Passwords do not match';
-        } else {
-            const temp = await fetch(`/applicants?email=${email}`).then(response => {
-                if(response.ok){
-                    return response.json();
+    async function registerApplicant(name, email, password, major, standing, gpa, skills) {
+        const temp = await fetch(`/applicants?email=${email}`).then(response => {
+            if(response.ok){
+                return response.json();
+            }
+        });
+        console.log(temp);
+        if(temp.length){
+            throw 'This email has already been taken';
+        }
+        fetch('/applicants', {
+            method: 'POST',
+            body: JSON.stringify({
+                name,
+                email,
+                password: bcrypt.hashSync(password, 10),
+                features: {
+                    major,
+                    standing,
+                    gpa: parseFloat(gpa),
+                    skills
                 }
-             });
-             if(temp.length > 0){
-                throw 'This email has already been taken';
-             } else {
-                return fetch('/applicants', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        name,
-                        email,
-                        password: bcrypt.hashSync(password, 10),
-                        features: {
-                            major,
-                            standing,
-                            gpa: parseFloat(gpa),
-                            skills
-                        }
-                    })
-                }).then(response => {
-                    if(response.ok){
-                        return response.json();
-                    }
-                }).then(data => {
-                    setCurrentUser(data);
-                    setLoading(false);
-                });
-             }
+            })
+        }).then(response => {
+            if(response.ok){
+                return response.json();
+            }
+        }).then(data => {
+            setCurrentUser(data);
+            setLoading(false);
+        });
+    }
+
+    async function logInApplicant(email, password){
+        const temp = await fetch(`/applicants?email=${email}`).then(response => {
+            if(response.ok){
+                return response.json();
+            }
+        });
+        if(!temp.length){
+            throw 'No email associated with account';
+        } else if(!(await bcrypt.compare(password, temp[0].password))){
+            throw 'Invalid password';
+        }
+        setCurrentUser(temp[0]);
+        setLoading(false);
+    }
+
+    async function registerBusiness(name, email, password, major, standing, gpa, skills){
+        const temp = await fetch(`/businesses?email=${email}`).then(response => {
+            if(response.ok){
+                return response.json();
+            }
+        });
+        if(temp.length){
+            throw 'This email has already been taken';
+        }
+        fetch('/businesses', {
+            method: 'POST',
+            body: JSON.stringify({
+                name,
+                email,
+                password: bcrypt.hashSync(password, 10),
+                features: {
+                    major,
+                    standing,
+                    gpa: parseFloat(gpa),
+                    skills
+                }
+            })
+        }).then(response => {
+            if(response.ok){
+                return response.json();
+            }
+        }).then(data => {
+            setCurrentUser(data);
+            setLoading(false);
+        });
+    }
+
+    async function logInBusiness(email, password){
+        const temp = await fetch(`/businesses?email=${email}`).then(response => {
+            if(response.ok){
+                return response.json();
+            }
+        });
+        if(!temp.length){
+            throw 'No email associated with account';
+        } else if(!(await bcrypt.compare(password, temp[0].password))){
+            throw 'Invalid password';
+        } else {
+            setCurrentUser(temp[0]);
+            setLoading(false);
         }
     }
 
-    async function logInApplicant(email, password) {
-        if(!email || !password){
-            throw 'Fields are required';
-        } else {
+    async function updateApplicant(name, email, password, major, standing, gpa, skills){
+        if(email !== currentUser.email){
             const temp = await fetch(`/applicants?email=${email}`).then(response => {
                 if(response.ok){
                     return response.json();
                 }
             });
-            if(!temp.length){
-                throw 'No email associated with account';
-            } else if(!(await bcrypt.compare(password, temp[0].password))){
-                throw 'Invalid password';
-            } else {
-                setCurrentUser(temp[0]);
-                setLoading(false);
+            console.log(temp);
+            if(temp.length){
+                throw 'This email has been taken';
             }
         }
-    }
-
-    async function registerBusiness(name, email, password, confirmPassword, major, standing, gpa, skills) {
-        if(!name || !email || !password || !confirmPassword || !major.length
-            || !standing.length || !gpa || !skills.length) {
-            throw 'Fields not filled out';
-        } else if(password !== confirmPassword){
-            throw 'Passwords do not match';
-        } else {
-            const temp = await fetch(`/businesses?email=${email}`).then(response => {
-                if(response.ok){
-                    return response.json();
+        fetch(currentUser.links.self, {
+            method: 'PUT',
+            body: JSON.stringify({
+                name,
+                email,
+                password: password ? bcrypt.hashSync(password, 10) : currentUser.password,
+                features: {
+                    major,
+                    standing,
+                    gpa: parseFloat(gpa),
+                    skills
                 }
-             });
-             if(temp.length > 0){
-                throw 'This email has already been taken';
-             } else {
-                return fetch('/businesses', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        name,
-                        email,
-                        password: bcrypt.hashSync(password, 10),
-                        features: {
-                            major,
-                            standing,
-                            gpa: parseFloat(gpa),
-                            skills
-                        }
-                    })
-                }).then(response => {
-                    if(response.ok){
-                        return response.json();
-                    }
-                }).then(data => {
-                    setCurrentUser(data);
-                    setLoading(false);
-                });
-             }
-        }
+            })
+        }).then(response => {
+            if(response.ok){
+                return response.json();
+            }
+        }).then(data => {
+            setCurrentUser(data);
+            setLoading(false);
+        });
+
     }
 
-    async function logInBusiness(email, password) {
-        if(!email || !password){
-            throw 'Fields are required';
-        } else {
+    async function updateBusiness(name, email, password, major, standing, gpa, skills){
+        if(email !== currentUser.email){
             const temp = await fetch(`/businesses?email=${email}`).then(response => {
                 if(response.ok){
                     return response.json();
                 }
             });
-            if(!temp.length){
-                throw 'No email associated with account';
-            } else if(!(await bcrypt.compare(password, temp[0].password))){
-                throw 'Invalid password';
-            } else {
-                setCurrentUser(temp[0]);
-                setLoading(false);
+            if(temp.length){
+                throw 'This email has been taken';
             }
         }
+        fetch(currentUser.links.self, {
+            method: 'PUT',
+            body: JSON.stringify({
+                name,
+                email,
+                password: password ? bcrypt.hashSync(password, 10) : currentUser.password,
+                features: {
+                    major,
+                    standing,
+                    gpa: parseFloat(gpa),
+                    skills
+                }
+            })
+        }).then(response => {
+            if(response.ok){
+                return response.json();
+            }
+        }).then(data => {
+            setCurrentUser(data);
+            setLoading(false);
+        });
+
     }
 
     async function logOut(){
@@ -146,6 +193,8 @@ export function AuthProvider({children}){
         registerBusiness,
         logInApplicant,
         logInBusiness,
+        updateApplicant,
+        updateBusiness,
         logOut
     };
 
