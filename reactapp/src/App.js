@@ -1,16 +1,18 @@
 import './App.css';
-import io from 'socket.io-client';
 import {HomePage} from './components/pages/HomePage';
 import {LoginPage} from './components/pages/LoginPage';
 import {RegistrationPage} from './components/pages/RegistrationPage';
-import {UpdatePage} from './components/pages/UpdatePage';
 import {AuthProvider} from './contexts/AuthContext';
 import {
     BrowserRouter as Router,
     Switch,
     Route
 } from 'react-router-dom';
-import {PrivateRoute} from './PrivateRoute';
+import {PrivateRoute} from './routes/PrivateRoute';
+import {ActivePrivateRoute} from './routes/ActivePrivateRoute';
+import {DormantPrivateRoute} from './routes/DormantPrivateRoute';
+import {ActiveDashboard} from './components/pages/ActiveDashboard';
+import {DormantDashboard} from './components/pages/DormantDashboard';
 
 
 function App() {
@@ -21,7 +23,8 @@ function App() {
                 <Route exact path='/' component={HomePage}/>
                 <Route path='/register' component={RegistrationPage}/>
                 <Route path='/login' component={LoginPage}/>
-                <PrivateRoute path='/dashboard' component={UpdatePage}/>
+                <DormantPrivateRoute path='/dormant-dashboard' component={DormantDashboard}/>
+                <ActivePrivateRoute path='/active-dashboard' component={ActiveDashboard}/>
             </Switch>
         </AuthProvider>
     </Router>

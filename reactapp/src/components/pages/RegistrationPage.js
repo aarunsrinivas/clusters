@@ -1,15 +1,11 @@
 import React from 'react';
-import {RegisterApplicantForm} from '../forms/RegisterApplicantForm';
-import {RegisterBusinessForm} from '../forms/RegisterBusinessForm';
+import {RegistrationForm} from '../forms/RegistrationForm';
 
 export function RegistrationPage() {
     return (
         <div>
-            <h1>Applicant Registration</h1>
-            <RegisterApplicantForm/>
-            <br/>
-            <h1>Business Registration</h1>
-            <RegisterBusinessForm/>
+            <h1>Register</h1>
+            <RegistrationForm/>
         </div>
     )
 }

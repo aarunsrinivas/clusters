@@ -1,15 +1,11 @@
 import React from 'react';
-import {LoginApplicantForm} from '../forms/LoginApplicantForm';
-import {LoginBusinessForm} from '../forms/LoginBusinessForm';
+import {LoginForm} from '../forms/LoginForm';
 
 export function LoginPage() {
     return (
         <div>
-            <h1>Applicant Login</h1>
-            <LoginApplicantForm/>
-            <br/>
-            <h1>Business Login</h1>
-            <LoginBusinessForm/>
+            <h1>Login</h1>
+            <LoginForm/>
         </div>
     )
 }

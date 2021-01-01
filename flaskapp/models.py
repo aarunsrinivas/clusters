@@ -91,14 +91,14 @@ class Cluster(db.Model):
 	business_pop = db.Column(db.Integer, default=0)
 	size = db.column_property(applicant_pop + business_pop)
 	applicant_centroid = db.Column(db.PickleType, default={
-		'type': Applicant.type,
+		'type': 'applicant',
 		'major': [],
 		'standing': [],
 		'gpa': 0,
 		'skills': []
 	})
 	applicant_centroid_data = db.Column(db.PickleType, default={
-		'type': Applicant.type,
+		'type': 'applicant',
 		'major_dict': Counter(),
 		'major_len_sum': 0,
 		'standing_dict': Counter(),
@@ -108,14 +108,14 @@ class Cluster(db.Model):
 		'skills_len_sum': 0
 	})
 	business_centroid = db.Column(db.PickleType, default={
-		'type': Business.type,
+		'type': 'business',
 		'major': [],
 		'standing': [],
 		'gpa': 0,
 		'skills': []
 	})
 	business_centroid_data = db.Column(db.PickleType, default={
-		'type': Business.type,
+		'type': 'business',
 		'major_dict': Counter(),
 		'major_len_sum': 0,
 		'standing_dict': Counter(),
@@ -142,7 +142,8 @@ class Message(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	origin = db.Column(db.String(50), nullable=False)
 	message = db.Column(db.Text, nullable=False)
-	date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+	# need to add default time
+	date_posted = db.Column(db.DateTime, nullable=False)
 	chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'), nullable=False)
 
 
