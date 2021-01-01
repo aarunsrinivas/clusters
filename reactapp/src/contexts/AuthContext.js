@@ -18,17 +18,17 @@ export function AuthProvider({children}) {
                 return response.json();
             }
         });
-        console.log(temp);
         if(temp.length){
             throw 'This email has already been taken';
         }
-        fetch('/applicants', {
+        const data = await fetch('/applicants', {
             method: 'POST',
             body: JSON.stringify({
                 name,
                 email,
                 password: bcrypt.hashSync(password, 10),
                 features: {
+                    type: 'applicant',
                     major,
                     standing,
                     gpa: parseFloat(gpa),
@@ -39,10 +39,9 @@ export function AuthProvider({children}) {
             if(response.ok){
                 return response.json();
             }
-        }).then(data => {
-            setCurrentUser(data);
-            setLoading(false);
         });
+        setCurrentUser(data);
+        setLoading(false);
     }
 
     async function logInApplicant(email, password){
@@ -69,13 +68,14 @@ export function AuthProvider({children}) {
         if(temp.length){
             throw 'This email has already been taken';
         }
-        fetch('/businesses', {
+        const data = await fetch('/businesses', {
             method: 'POST',
             body: JSON.stringify({
                 name,
                 email,
                 password: bcrypt.hashSync(password, 10),
                 features: {
+                    type: 'business',
                     major,
                     standing,
                     gpa: parseFloat(gpa),
@@ -86,10 +86,9 @@ export function AuthProvider({children}) {
             if(response.ok){
                 return response.json();
             }
-        }).then(data => {
-            setCurrentUser(data);
-            setLoading(false);
         });
+        setCurrentUser(data);
+        setLoading(false);
     }
 
     async function logInBusiness(email, password){
@@ -115,18 +114,18 @@ export function AuthProvider({children}) {
                     return response.json();
                 }
             });
-            console.log(temp);
             if(temp.length){
                 throw 'This email has been taken';
             }
         }
-        fetch(currentUser.links.self, {
+        const data = await fetch(currentUser.links.self, {
             method: 'PUT',
             body: JSON.stringify({
                 name,
                 email,
                 password: password ? bcrypt.hashSync(password, 10) : currentUser.password,
                 features: {
+                    type: 'applicant',
                     major,
                     standing,
                     gpa: parseFloat(gpa),
@@ -137,10 +136,9 @@ export function AuthProvider({children}) {
             if(response.ok){
                 return response.json();
             }
-        }).then(data => {
-            setCurrentUser(data);
-            setLoading(false);
         });
+        setCurrentUser(data);
+        setLoading(false);
 
     }
 
@@ -155,13 +153,14 @@ export function AuthProvider({children}) {
                 throw 'This email has been taken';
             }
         }
-        fetch(currentUser.links.self, {
+        const data = await fetch(currentUser.links.self, {
             method: 'PUT',
             body: JSON.stringify({
                 name,
                 email,
                 password: password ? bcrypt.hashSync(password, 10) : currentUser.password,
                 features: {
+                    type: 'business',
                     major,
                     standing,
                     gpa: parseFloat(gpa),
@@ -172,11 +171,9 @@ export function AuthProvider({children}) {
             if(response.ok){
                 return response.json();
             }
-        }).then(data => {
-            setCurrentUser(data);
-            setLoading(false);
         });
-
+        setCurrentUser(data);
+        setLoading(false);
     }
 
     async function logOut(){
@@ -187,16 +184,15 @@ export function AuthProvider({children}) {
         if(!currentUser){
             throw 'No user to be deleted'
         }
-        fetch(currentUser.links.self, {
+        const temp = await fetch(currentUser.links.self, {
             method: 'DELETE'
         }).then(response => {
             if(response.ok){
                 return response.json();
             }
-        }).then(data => {
-            setCurrentUser(null);
-            setLoading(false);
-        })
+        });
+        setCurrentUser(null);
+        setLoading(false);
     }
 
     async function joinCluster(){
@@ -205,17 +201,16 @@ export function AuthProvider({children}) {
         } else if(currentUser.clusterId){
             throw 'Already in a cluster';
         }
-        fetch(currentUser.links.self, {
+        const data = await fetch(currentUser.links.self, {
             method: 'POST',
             body: JSON.stringify({action: 'join'})
         }).then(response => {
             if(response.ok){
                 return response.json();
             }
-        }).then(data => {
-            setCurrentUser(data);
-            setLoading(false);
-        })
+        });
+        setCurrentUser(data);
+        setLoading(false);
     }
 
     async function leaveCluster(){
@@ -224,17 +219,16 @@ export function AuthProvider({children}) {
         } else if(!currentUser.clusterId){
             throw 'Already outside cluster';
         }
-        fetch(currentUser.links.self, {
+        const data = await fetch(currentUser.links.self, {
             method: 'POST',
             body: JSON.stringify({action: 'leave'})
         }).then(response => {
             if(response.ok){
                 return response.json();
             }
-        }).then(data => {
-            setCurrentUser(data);
-            setLoading(false);
-        })
+        });
+        setCurrentUser(data);
+        setLoading(false);
     }
 
     async function peelFromCluster(){
@@ -243,17 +237,16 @@ export function AuthProvider({children}) {
         } else if(!currentUser.clusterId){
             throw 'Cannot peel from outside cluster';
         }
-        fetch(currentUser.links.self, {
+        const data = await fetch(currentUser.links.self, {
             method: 'POST',
             body: JSON.stringify({action: 'peel'})
         }).then(response => {
             if(response.ok){
                 return response.json();
             }
-        }).then(data => {
-            setCurrentUser(data);
-            setLoading(false);
-        })
+        });
+        setCurrentUser(data);
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -272,7 +265,7 @@ export function AuthProvider({children}) {
         deleteUser,
         joinCluster,
         leaveCluster,
-        peelFromCluster
+        peelFromCluster,
     };
 
     return (

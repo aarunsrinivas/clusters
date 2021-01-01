@@ -19,6 +19,7 @@ def add_applicant(applicant):
 		cluster_id = alg.closest_cluster([applicant.features], dual_centroids, ids)
 		cluster = Cluster.query.get(cluster_id)
 	applicant.cluster_id = cluster_id
+	applicant.visited_clusters.append(cluster)
 	cluster.applicant_centroid, cluster.applicant_centroid_data = alg.inflate_centroid(
 		cluster.applicant_centroid_data, applicant.features, cluster.applicant_pop)
 	cluster.applicant_pop += 1
@@ -41,6 +42,7 @@ def add_business(business):
 		cluster_id = alg.closest_cluster([business.features], dual_centroids, ids)
 		cluster = Cluster.query.get(cluster_id)
 	business.cluster_id = cluster_id
+	business.visited_clusters.append(cluster)
 	cluster.business_centroid, cluster.business_centroid_data = alg.inflate_centroid(
 		cluster.business_centroid_data, business.features, cluster.business_pop)
 	cluster.business_pop += 1
@@ -50,6 +52,9 @@ def add_business(business):
 def peel_applicant(applicant):
 	if not applicant.cluster_id:
 		return
+	clusters = Cluster.query.all()
+	if len(clusters) == len(applicant.visited_clusters):
+		return
 	old_cluster = applicant.cluster
 	old_cluster.applicant_centroid, old_cluster.applicant_centroid_data = alg.deflate_centroid(
 		old_cluster.applicant_centroid_data, applicant.features, old_cluster.applicant_pop)
@@ -58,8 +63,6 @@ def peel_applicant(applicant):
 	applicant.reviewed.clear()
 	applicant.interested.clear()
 	applicant.chats.clear()
-	applicant.visited_clusters.append(old_cluster)
-	clusters = Cluster.query.all()
 	dual_centroids = []
 	ids = []
 	for cluster in clusters:
@@ -70,6 +73,7 @@ def peel_applicant(applicant):
 	new_cluster_id = alg.closest_cluster([applicant.features], dual_centroids, ids)
 	new_cluster = Cluster.query.get(new_cluster_id)
 	applicant.cluster_id = new_cluster.id
+	applicant.visited_clusters.append(new_cluster)
 	new_cluster.applicant_centroid, new_cluster.applicant_centroid_data = alg.inflate_centroid(
 		new_cluster.applicant_centroid_data, applicant.features, new_cluster.applicant_pop)
 	new_cluster.applicant_pop += 1
@@ -79,6 +83,9 @@ def peel_applicant(applicant):
 def peel_business(business):
 	if not business.cluster_id:
 		return
+	clusters = Cluster.query.all()
+	if len(clusters) == len(business.visited_clusters):
+		return
 	old_cluster = business.cluster
 	old_cluster.business_centroid, old_cluster.business_centroid_data = alg.deflate_centroid(
 		old_cluster.business_centroid_data, business.features, old_cluster.business_pop)
@@ -87,8 +94,6 @@ def peel_business(business):
 	business.offered.clear()
 	business.interested.clear()
 	business.chats.clear()
-	business.visited_clusters.append(old_cluster)
-	clusters = Cluster.query.all()
 	dual_centroids = []
 	ids = []
 	for cluster in clusters:
@@ -99,6 +104,7 @@ def peel_business(business):
 	new_cluster_id = alg.closest_cluster([business.features], dual_centroids, ids)
 	new_cluster = Cluster.query.get(new_cluster_id)
 	business.cluster_id = new_cluster.id
+	business.visited_clusters.append(new_cluster)
 	new_cluster.business_centroid, new_cluster.business_centroid_data = alg.inflate_centroid(
 		new_cluster.business_centroid_data, business.features, new_cluster.business_pop)
 	new_cluster.business_pop += 1
@@ -117,7 +123,7 @@ def remove_applicant(applicant):
 	applicant.reviewed.clear()
 	applicant.interested.clear()
 	applicant.chats.clear()
-	applicant.visited_clusters = []
+	applicant.visited_clusters.clear()
 	db.session.commit()
 
 
@@ -133,7 +139,7 @@ def remove_business(business):
 	business.offered.clear()
 	business.interested.clear()
 	business.chats.clear()
-	business.visited_clusters = []
+	business.visited_clusters.clear()
 	db.session.commit()
 
 

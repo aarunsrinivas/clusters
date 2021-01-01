@@ -1,5 +1,5 @@
 from flaskapp import app, db
-from flaskapp.models import Applicant, Business, Cluster, Chat
+from flaskapp.models import Applicant, Business, User, Cluster, Chat
 from flask import json, jsonify, request
 import cluster_world as world
 
@@ -7,7 +7,6 @@ import cluster_world as world
 def applicant_serializer(applicant):
 	return {
 		'id': applicant.id,
-		'type': applicant.type,
 		'name': applicant.name,
 		'email': applicant.email,
 		'password': applicant.password,
@@ -27,6 +26,116 @@ def applicant_serializer(applicant):
 			'self': f'/applicants/{applicant.id}'
 		}
 	}
+
+
+def business_serializer(business):
+	return {
+		'id': business.id,
+		'name': business.name,
+		'email': business.email,
+		'password': business.password,
+		'clusterId': business.cluster_id,
+		'features': business.features,
+		'links': {
+			'self': f'/businesses/{business.id}',
+			'cluster': f'/clusters/{business.cluster_id}',
+			'applicants': f'clusters/{business.cluster_id}/applicants',
+			'received': f'/businesses/{business.id}/received',
+			'interested': f'/businesses/{business.id}/interested',
+			'offered': f'/businesses/{business.id}/offered',
+			'declined': f'/businesses/{business.id}/declined',
+			'rejected': f'/businesses/{business.id}/rejected',
+			'chats': f'/businesses/{business.id}/chats'
+		} if business.cluster_id else {
+			'self': f'/businesses/{business.id}'
+		}
+	}
+
+
+def applicant_chat_serializer(chat):
+	return {
+		'id': chat.id,
+		'sender_id': chat.applicant_id,
+		'recipient_id': chat.business_id,
+		'recipient_name': chat.business.name,
+		'links': {
+			'self': f'/applicants/{chat.applicant.id}/chats/{chat.id}',
+			'applicant': f'/applicants/{chat.applicant.id}',
+			'messages': f'/applicants/{chat.applicant.id}/chats/{chat.id}/messages'
+		}
+	}
+
+
+def business_chat_serializer(chat):
+	return {
+		'id': chat.id,
+		'sender_id': chat.business_id,
+		'recipient_id': chat.applicant_id,
+		'recipient_name': chat.applicant.name,
+		'links': {
+			'self': f'/businesses/{chat.business.id}/chats/{chat.id}',
+			'business': f'/businesses/{chat.business.id}',
+			'messages': f'/businesses/{chat.business.id}/chats/{chat.id}/messages'
+		}
+	}
+
+
+def applicant_message_serializer(message):
+	return {
+		'id': message.id,
+		'origin': message.origin,
+		'date_posted': message.date_posted,
+		'message': message.message,
+		'links': {
+			'self': f'/applicants/{message.chat.applicant.id}/chats/{message.chat.id}/messages/{message.id}',
+			'messages': f'/applicants/{message.chat.applicant.id}/chats/{message.chat.id}/messages',
+			'chat': f'/applicants/{message.chat.applicant.id}/chats/{message.chat.id}',
+			'applicant': f'/applicants/{message.chat.applicant.id}'
+		}
+
+	}
+
+
+def cluster_serializer(cluster):
+	return {
+		'id': cluster.id,
+		'applicant_pop': cluster.applicant_pop,
+		'business_pop': cluster.business_pop,
+		'size': cluster.size,
+		'links': {
+			'self': f'/clusters/{cluster.id}',
+			'applicants': f'/clusters/{cluster.id}/applicants',
+			'businesses': f'/clusters/{cluster.id}/businesses'
+		}
+	}
+
+
+def business_message_serializer(message):
+	return {
+		'id': message.id,
+		'origin': message.origin,
+		'date_posted': message.date_posted,
+		'message': message.message,
+		'links': {
+			'self': f'/businesses/{message.chat.business.id}/chats/{message.chat.id}/messages/{message.id}',
+			'messages': f'/businesses/{message.chat.business.id}/chats/{message.chat.id}/messages',
+			'chat': f'/businesses/{message.chat.business.id}/chats/{message.chat.id}',
+			'business': f'/businesses/{message.chat.business.id}'
+		}
+
+	}
+
+
+@app.route('/users', methods=['GET'])
+def find_user():
+	args = request.args
+	if 'email' in args:
+		return jsonify([applicant_serializer(user) if isinstance(user, Applicant)
+		                else business_serializer(user) for user in
+		                User.query.filter_by(email=args['email']).all()])
+	return jsonify([applicant_serializer(user) if isinstance(user, Applicant)
+	                else business_serializer(user) for user in
+	                User.query.all()])
 
 
 @app.route('/applicants', methods=['GET'])
@@ -194,20 +303,6 @@ def get_applicant_rejected(applicant_id):
 	return jsonify(list(map(business_serializer, applicant.rejected)))
 
 
-def applicant_chat_serializer(chat):
-	return {
-		'id': chat.id,
-		'sender_id': chat.applicant_id,
-		'recipient_id': chat.business_id,
-		'recipient_name': chat.business.name,
-		'links': {
-			'self': f'/applicants/{chat.applicant.id}/chats/{chat.id}',
-			'applicant': f'/applicants/{chat.applicant.id}',
-			'messages': f'/applicants/{chat.applicant.id}/chats/{chat.id}/messages'
-		}
-	}
-
-
 @app.route('/applicants/<int:applicant_id>/chats', methods=['GET'])
 def get_applicant_chats(applicant_id):
 	applicant = Applicant.query.get(applicant_id)
@@ -220,51 +315,10 @@ def get_applicant_chat(applicant_id, chat_id):
 	return jsonify(applicant_chat_serializer(chat))
 
 
-def applicant_message_serializer(message):
-	return {
-		'id': message.id,
-		'origin': message.origin,
-		'date_posted': message.date_posted,
-		'message': message.message,
-		'links': {
-			'self': f'/applicants/{message.chat.applicant.id}/chats/{message.chat.id}/messages/{message.id}',
-			'messages': f'/applicants/{message.chat.applicant.id}/chats/{message.chat.id}/messages',
-			'chat': f'/applicants/{message.chat.applicant.id}/chats/{message.chat.id}',
-			'applicant': f'/applicants/{message.chat.applicant.id}'
-		}
-
-	}
-
-
 @app.route('/applicants/<int:applicant_id>/chats/<int:chat_id>/messages', methods=['GET'])
 def get_applicant_chat_messages(applicant_id, chat_id):
 	chat = Chat.query.get(chat_id)
 	return jsonify(list(map(applicant_message_serializer, chat.messages)))
-
-
-def business_serializer(business):
-	return {
-		'id': business.id,
-		'type': business.type,
-		'name': business.name,
-		'email': business.email,
-		'password': business.password,
-		'clusterId': business.cluster_id,
-		'features': business.features,
-		'links': {
-			'self': f'/businesses/{business.id}',
-			'cluster': f'/clusters/{business.cluster_id}',
-			'applicants': f'clusters/{business.cluster_id}/applicants',
-			'received': f'/businesses/{business.id}/received',
-			'interested': f'/businesses/{business.id}/interested',
-			'offered': f'/businesses/{business.id}/offered',
-			'declined': f'/businesses/{business.id}/declined',
-			'rejected': f'/businesses/{business.id}/rejected',
-			'chats': f'/businesses/{business.id}/chats'
-		} if business.cluster_id else {
-			'self': f'/businesses/{business.id}'
-		}
-	}
 
 
 @app.route('/businesses', methods=['GET'])
@@ -434,20 +488,6 @@ def get_business_rejected(business_id):
 	return jsonify(list(map(applicant_serializer, business.rejected)))
 
 
-def business_chat_serializer(chat):
-	return {
-		'id': chat.id,
-		'sender_id': chat.business_id,
-		'recipient_id': chat.applicant_id,
-		'recipient_name': chat.applicant.name,
-		'links': {
-			'self': f'/businesses/{chat.business.id}/chats/{chat.id}',
-			'business': f'/businesses/{chat.business.id}',
-			'messages': f'/businesses/{chat.business.id}/chats/{chat.id}/messages'
-		}
-	}
-
-
 @app.route('/businesses/<int:business_id>/chats', methods=['GET'])
 def get_business_chats(business_id):
 	business = Business.query.get(business_id)
@@ -460,40 +500,10 @@ def get_business_chat(business_id, chat_id):
 	return jsonify(business_chat_serializer(chat))
 
 
-def business_message_serializer(message):
-	return {
-		'id': message.id,
-		'origin': message.origin,
-		'date_posted': message.date_posted,
-		'message': message.message,
-		'links': {
-			'self': f'/businesses/{message.chat.business.id}/chats/{message.chat.id}/messages/{message.id}',
-			'messages': f'/businesses/{message.chat.business.id}/chats/{message.chat.id}/messages',
-			'chat': f'/businesses/{message.chat.business.id}/chats/{message.chat.id}',
-			'business': f'/businesses/{message.chat.business.id}'
-		}
-
-	}
-
-
 @app.route('/businesses/<int:business_id>/chats/<int:chat_id>/messages', methods=['GET'])
 def get_business_chat_messages(business_id, chat_id):
 	chat = Chat.query.get(chat_id)
 	return jsonify(list(map(business_message_serializer, chat.messages)))
-
-
-def cluster_serializer(cluster):
-	return {
-		'id': cluster.id,
-		'applicant_pop': cluster.applicant_pop,
-		'business_pop': cluster.business_pop,
-		'size': cluster.size,
-		'links': {
-			'self': f'/clusters/{cluster.id}',
-			'applicants': f'/clusters/{cluster.id}/applicants',
-			'businesses': f'/clusters/{cluster.id}/businesses'
-		}
-	}
 
 
 @app.route('/clusters/<int:cluster_id>', methods=['GET'])

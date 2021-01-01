@@ -56,7 +56,7 @@ class Applicant(User):
 	rejected = db.relationship('Business', secondary='declined2')
 	interested = db.relationship('Business', secondary='middle')
 	reviewed = db.relationship('Business', secondary='final')
-	chats = db.relationship('Chat', backref='applicant', lazy=True, cascade='all, delete-orphan')
+	# chats = db.relationship('Chat', backref='applicant', lazy=True, cascade='all, delete-orphan')
 
 	__mapper_args__ = {
 		'polymorphic_identity': 'applicant'
@@ -75,7 +75,7 @@ class Business(User):
 	rejected = db.relationship('Applicant', secondary='declined1')
 	interested = db.relationship('Applicant', secondary='middle')
 	offered = db.relationship('Applicant', secondary='final')
-	chats = db.relationship('Chat', backref='business', lazy=True, cascade='all, delete-orphan')
+	# chats = db.relationship('Chat', backref='business', lazy=True, cascade='all, delete-orphan')
 
 	__mapper_args__ = {
 		'polymorphic_identity': 'business'
@@ -91,14 +91,14 @@ class Cluster(db.Model):
 	business_pop = db.Column(db.Integer, default=0)
 	size = db.column_property(applicant_pop + business_pop)
 	applicant_centroid = db.Column(db.PickleType, default={
-		'type': Applicant.type,
+		'type': 'applicant',
 		'major': [],
 		'standing': [],
 		'gpa': 0,
 		'skills': []
 	})
 	applicant_centroid_data = db.Column(db.PickleType, default={
-		'type': Applicant.type,
+		'type': 'applicant',
 		'major_dict': Counter(),
 		'major_len_sum': 0,
 		'standing_dict': Counter(),
@@ -108,14 +108,14 @@ class Cluster(db.Model):
 		'skills_len_sum': 0
 	})
 	business_centroid = db.Column(db.PickleType, default={
-		'type': Business.type,
+		'type': 'business',
 		'major': [],
 		'standing': [],
 		'gpa': 0,
 		'skills': []
 	})
 	business_centroid_data = db.Column(db.PickleType, default={
-		'type': Business.type,
+		'type': 'business',
 		'major_dict': Counter(),
 		'major_len_sum': 0,
 		'standing_dict': Counter(),
@@ -142,7 +142,8 @@ class Message(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	origin = db.Column(db.String(50), nullable=False)
 	message = db.Column(db.Text, nullable=False)
-	date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+	# need to add default time
+	date_posted = db.Column(db.DateTime, nullable=False)
 	chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'), nullable=False)
 
 

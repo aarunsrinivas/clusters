@@ -3,6 +3,7 @@ import {Link, useHistory} from 'react-router-dom';
 import TagsInput from 'react-tagsinput';
 import {useAuth} from '../../contexts/AuthContext';
 
+
 export function RegisterApplicantForm() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
