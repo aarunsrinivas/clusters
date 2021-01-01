@@ -56,7 +56,7 @@ class Applicant(User):
 	rejected = db.relationship('Business', secondary='declined2')
 	interested = db.relationship('Business', secondary='middle')
 	reviewed = db.relationship('Business', secondary='final')
-	# chats = db.relationship('Chat', backref='applicant', lazy=True, cascade='all, delete-orphan')
+	chats = db.relationship('Chat', backref='applicant', lazy=True, cascade='all, delete-orphan')
 
 	__mapper_args__ = {
 		'polymorphic_identity': 'applicant'
@@ -75,7 +75,7 @@ class Business(User):
 	rejected = db.relationship('Applicant', secondary='declined1')
 	interested = db.relationship('Applicant', secondary='middle')
 	offered = db.relationship('Applicant', secondary='final')
-	# chats = db.relationship('Chat', backref='business', lazy=True, cascade='all, delete-orphan')
+	chats = db.relationship('Chat', backref='business', lazy=True, cascade='all, delete-orphan')
 
 	__mapper_args__ = {
 		'polymorphic_identity': 'business'

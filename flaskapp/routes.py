@@ -15,7 +15,7 @@ def applicant_serializer(applicant):
 		'links': {
 			'self': f'/applicants/{applicant.id}',
 			'cluster': f'/clusters/{applicant.cluster_id}',
-			'businesses': f'clusters/{applicant.cluster_id}/businesses',
+			'pool': f'clusters/{applicant.cluster_id}/businesses',
 			'applied': f'/applicants/{applicant.id}/applied',
 			'interested': f'/applicants/{applicant.id}/interested',
 			'reviewed': f'/applicants/{applicant.id}/reviewed',
@@ -39,7 +39,7 @@ def business_serializer(business):
 		'links': {
 			'self': f'/businesses/{business.id}',
 			'cluster': f'/clusters/{business.cluster_id}',
-			'applicants': f'clusters/{business.cluster_id}/applicants',
+			'pool': f'clusters/{business.cluster_id}/applicants',
 			'received': f'/businesses/{business.id}/received',
 			'interested': f'/businesses/{business.id}/interested',
 			'offered': f'/businesses/{business.id}/offered',

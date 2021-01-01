@@ -9,11 +9,11 @@ export function useAuth() {
 
 export function AuthProvider({children}) {
 
-    const [currentUser, setCurrentUser] = useState();
+    const [currentUser, setCurrentUser] = useState(JSON.parse(sessionStorage.getItem('currentUser')) || null);
     const [loading, setLoading] = useState(true);
 
-    async function registerApplicant(name, email, password, major, standing, gpa, skills) {
-        const temp = await fetch(`/applicants?email=${email}`).then(response => {
+    async function registerUser(name, email, password, type, major, standing, gpa, skills) {
+        const temp = await fetch(`/users?email=${email}`).then(response => {
             if(response.ok){
                 return response.json();
             }
@@ -21,14 +21,15 @@ export function AuthProvider({children}) {
         if(temp.length){
             throw 'This email has already been taken';
         }
-        const data = await fetch('/applicants', {
+        const destination = type === 'applicant' ? '/applicants' : '/businesses';
+        const data = await fetch(destination, {
             method: 'POST',
             body: JSON.stringify({
                 name,
                 email,
                 password: bcrypt.hashSync(password, 10),
                 features: {
-                    type: 'applicant',
+                    type,
                     major,
                     standing,
                     gpa: parseFloat(gpa),
@@ -41,11 +42,10 @@ export function AuthProvider({children}) {
             }
         });
         setCurrentUser(data);
-        setLoading(false);
     }
 
-    async function logInApplicant(email, password){
-        const temp = await fetch(`/applicants?email=${email}`).then(response => {
+    async function loginUser(email, password){
+        const temp = await fetch(`/users?email=${email}`).then(response => {
             if(response.ok){
                 return response.json();
             }
@@ -56,60 +56,12 @@ export function AuthProvider({children}) {
             throw 'Invalid password';
         }
         setCurrentUser(temp[0]);
-        setLoading(false);
+        return temp[0];
     }
 
-    async function registerBusiness(name, email, password, major, standing, gpa, skills){
-        const temp = await fetch(`/businesses?email=${email}`).then(response => {
-            if(response.ok){
-                return response.json();
-            }
-        });
-        if(temp.length){
-            throw 'This email has already been taken';
-        }
-        const data = await fetch('/businesses', {
-            method: 'POST',
-            body: JSON.stringify({
-                name,
-                email,
-                password: bcrypt.hashSync(password, 10),
-                features: {
-                    type: 'business',
-                    major,
-                    standing,
-                    gpa: parseFloat(gpa),
-                    skills
-                }
-            })
-        }).then(response => {
-            if(response.ok){
-                return response.json();
-            }
-        });
-        setCurrentUser(data);
-        setLoading(false);
-    }
-
-    async function logInBusiness(email, password){
-        const temp = await fetch(`/businesses?email=${email}`).then(response => {
-            if(response.ok){
-                return response.json();
-            }
-        });
-        if(!temp.length){
-            throw 'No email associated with account';
-        } else if(!(await bcrypt.compare(password, temp[0].password))){
-            throw 'Invalid password';
-        } else {
-            setCurrentUser(temp[0]);
-            setLoading(false);
-        }
-    }
-
-    async function updateApplicant(name, email, password, major, standing, gpa, skills){
+    async function updateUser(name, email, password, major, standing, gpa, skills){
         if(email !== currentUser.email){
-            const temp = await fetch(`/applicants?email=${email}`).then(response => {
+            const temp = await fetch(`/users?email=${email}`).then(response => {
                 if(response.ok){
                     return response.json();
                 }
@@ -138,45 +90,9 @@ export function AuthProvider({children}) {
             }
         });
         setCurrentUser(data);
-        setLoading(false);
-
     }
 
-    async function updateBusiness(name, email, password, major, standing, gpa, skills){
-        if(email !== currentUser.email){
-            const temp = await fetch(`/businesses?email=${email}`).then(response => {
-                if(response.ok){
-                    return response.json();
-                }
-            });
-            if(temp.length){
-                throw 'This email has been taken';
-            }
-        }
-        const data = await fetch(currentUser.links.self, {
-            method: 'PUT',
-            body: JSON.stringify({
-                name,
-                email,
-                password: password ? bcrypt.hashSync(password, 10) : currentUser.password,
-                features: {
-                    type: 'business',
-                    major,
-                    standing,
-                    gpa: parseFloat(gpa),
-                    skills
-                }
-            })
-        }).then(response => {
-            if(response.ok){
-                return response.json();
-            }
-        });
-        setCurrentUser(data);
-        setLoading(false);
-    }
-
-    async function logOut(){
+    async function logoutUser(){
         setCurrentUser(null);
     }
 
@@ -192,7 +108,6 @@ export function AuthProvider({children}) {
             }
         });
         setCurrentUser(null);
-        setLoading(false);
     }
 
     async function joinCluster(){
@@ -210,7 +125,6 @@ export function AuthProvider({children}) {
             }
         });
         setCurrentUser(data);
-        setLoading(false);
     }
 
     async function leaveCluster(){
@@ -228,7 +142,6 @@ export function AuthProvider({children}) {
             }
         });
         setCurrentUser(data);
-        setLoading(false);
     }
 
     async function peelFromCluster(){
@@ -246,26 +159,24 @@ export function AuthProvider({children}) {
             }
         });
         setCurrentUser(data);
-        setLoading(false);
     }
 
     useEffect(() => {
+        sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+        console.log(JSON.parse(sessionStorage.getItem('currentUser')))
         setLoading(false)
     }, [currentUser]);
 
     const value = {
         currentUser,
-        registerApplicant,
-        registerBusiness,
-        logInApplicant,
-        logInBusiness,
-        updateApplicant,
-        updateBusiness,
-        logOut,
+        registerUser,
+        loginUser,
+        updateUser,
+        logoutUser,
         deleteUser,
         joinCluster,
-        leaveCluster,
         peelFromCluster,
+        leaveCluster,
     };
 
     return (

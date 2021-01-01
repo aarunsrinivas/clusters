@@ -9,7 +9,7 @@ export function ActivePrivateRoute({component: Component, ...rest}){
                 if(!currentUser){
                     return <Redirect to='/login'/>;
                 } else if(!currentUser.clusterId){
-                    return <Redirect to='/dashboard?status=dormant'/>;
+                    return <Redirect to='/dormant-dashboard'/>;
                 } else {
                     return <Component {...props}/>;
                 }

@@ -9,7 +9,7 @@ export function HomePage() {
         <div>
             Home Page
             <br/>
-            {currentUser && <u1>JSON.stringify(currentUser)</u1>}
+            {currentUser && <u1>{JSON.stringify(currentUser)}</u1>}
         </div>
     )
 }
