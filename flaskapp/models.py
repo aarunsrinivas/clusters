@@ -20,9 +20,13 @@ class User(db.Model):
 	}
 
 
-initial = db.Table('initial',
-                   db.Column('applicant_id', db.Integer, db.ForeignKey('applicant.id'), primary_key=True),
-                   db.Column('business_id', db.Integer, db.ForeignKey('business.id'), primary_key=True))
+initial1 = db.Table('initial1',
+                    db.Column('applicant_id', db.Integer, db.ForeignKey('applicant.id'), primary_key=True),
+                    db.Column('business_id', db.Integer, db.ForeignKey('business.id'), primary_key=True))
+
+initial2 = db.Table('initial2',
+                    db.Column('applicant_id', db.Integer, db.ForeignKey('applicant.id'), primary_key=True),
+                    db.Column('business_id', db.Integer, db.ForeignKey('business.id'), primary_key=True))
 
 middle = db.Table('middle',
                   db.Column('applicant_id', db.Integer, db.ForeignKey('applicant.id'), primary_key=True),
@@ -51,7 +55,8 @@ class Applicant(User):
 	__tablename__ = 'applicant'
 	id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
 	visited_clusters = db.relationship('Cluster', secondary='visited')
-	applied = db.relationship('Business', secondary='initial')
+	applied = db.relationship('Business', secondary='initial1')
+	received = db.relationship('Business', secondary='initial2')
 	declined = db.relationship('Business', secondary='declined1')
 	rejected = db.relationship('Business', secondary='declined2')
 	interested = db.relationship('Business', secondary='middle')
@@ -70,7 +75,8 @@ class Business(User):
 	__tablename__ = 'business'
 	id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
 	visited_clusters = db.relationship('Cluster', secondary='visited')
-	received = db.relationship('Applicant', secondary='initial')
+	reached = db.relationship('Applicant', secondary='initial2')
+	received = db.relationship('Applicant', secondary='initial1')
 	declined = db.relationship('Applicant', secondary='declined2')
 	rejected = db.relationship('Applicant', secondary='declined1')
 	interested = db.relationship('Applicant', secondary='middle')

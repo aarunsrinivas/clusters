@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useAuth} from '../../contexts/AuthContext';
+import {ApplicantDashboard} from './ApplicantDashboard';
+import {BusinessDashboard} from './BusinessDashboard';
 import {useHistory} from 'react-router-dom';
 
 export function ActiveDashboard(){
@@ -70,21 +72,12 @@ export function ActiveDashboard(){
         console.log(error);
     }
 
-    function renderPool(){
-        return pool.map(user => {
-            return (
-                <div>
-                    <h2>{user.name}</h2>
-                    <li>{user.features.skills}</li>
-                </div>
-            )
-        })
-    }
 
     return (
         <div>
             <h1>Active Dashboard</h1>
-            {renderPool()}
+            {currentUser.features.type === 'applicant' && <ApplicantDashboard/>}
+            {currentUser.features.type === 'business' && <BusinessDashboard/>}
             <button disabled={loading} onClick={handleLogoutUser}>Logout</button>
             <button disabled={loading} onClick={handleDeleteUser}>Delete User</button>
             <button disabled={loading} onClick={handlePeelFromCluster}>Peel From Cluster</button>

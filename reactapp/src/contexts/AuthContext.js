@@ -162,8 +162,8 @@ export function AuthProvider({children}) {
     }
 
     useEffect(() => {
-        sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
-        console.log(JSON.parse(sessionStorage.getItem('currentUser')))
+        !currentUser ? sessionStorage.clear() :
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
         setLoading(false)
     }, [currentUser]);
 
