@@ -60,6 +60,7 @@ def peel_applicant(applicant):
 		old_cluster.applicant_centroid_data, applicant.features, old_cluster.applicant_pop)
 	old_cluster.applicant_pop -= 1
 	applicant.applied.clear()
+	applicant.received.clear()
 	applicant.reviewed.clear()
 	applicant.interested.clear()
 	applicant.chats.clear()
@@ -90,6 +91,7 @@ def peel_business(business):
 	old_cluster.business_centroid, old_cluster.business_centroid_data = alg.deflate_centroid(
 		old_cluster.business_centroid_data, business.features, old_cluster.business_pop)
 	old_cluster.business_pop -= 1
+	business.reached.clear()
 	business.received.clear()
 	business.offered.clear()
 	business.interested.clear()
@@ -120,6 +122,7 @@ def remove_applicant(applicant):
 		cluster.applicant_centroid_data, applicant.features, cluster.applicant_pop)
 	cluster.applicant_pop -= 1
 	applicant.applied.clear()
+	applicant.received.clear()
 	applicant.reviewed.clear()
 	applicant.interested.clear()
 	applicant.chats.clear()
@@ -135,6 +138,7 @@ def remove_business(business):
 	cluster.business_centroid, cluster.business_centroid_data = alg.deflate_centroid(
 		cluster.business_centroid_data, business.features, cluster.business_pop)
 	cluster.business_pop -= 1
+	business.reached.clear()
 	business.received.clear()
 	business.offered.clear()
 	business.interested.clear()
@@ -147,9 +151,9 @@ def split_cluster(cluster):
 	graph = dict()
 	visited = set()
 	for applicant in cluster.applicants:
-		graph[applicant] = applicant.applied + applicant.reviewed
+		graph[applicant] = applicant.applied + applicant.received + applicant.reviewed
 	for business in cluster.businesses:
-		graph[business] = business.received + business.offered
+		graph[business] = business.reached + business.received + business.offered
 
 	def explore(vertex, component):
 		component.append(vertex)
