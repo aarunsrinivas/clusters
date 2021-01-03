@@ -9,3 +9,4 @@ db = SQLAlchemy(app)
 socket_io = SocketIO(app, cors_allowed_origins='*')
 
 from flaskapp import routes
+from flaskapp import sockets

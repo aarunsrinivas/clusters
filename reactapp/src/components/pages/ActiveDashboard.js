@@ -7,19 +7,9 @@ import {useHistory} from 'react-router-dom';
 export function ActiveDashboard(){
 
     const {currentUser, logoutUser, deleteUser, peelFromCluster, leaveCluster} = useAuth();
-    const [pool, setPool] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState();
     const history = useHistory();
-
-    useEffect(async () => {
-        const data = await fetch(currentUser.links.pool).then(response => {
-            if(response.ok){
-                return response.json();
-            }
-        });
-        setPool(data);
-    }, [currentUser]);
 
     async function handleLogoutUser(){
         try {

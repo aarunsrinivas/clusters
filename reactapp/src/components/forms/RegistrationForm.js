@@ -30,7 +30,7 @@ export function RegistrationForm() {
             } else if(password !== confirmPassword){
                 throw 'Passwords do not match';
             }
-            await registerUser(name, email, password, type, major, standing, gpa, skills);
+            const data = await registerUser(name, email, password, type, major, standing, gpa, skills);
             history.push('/dormant-dashboard');
         } catch(err) {
             setError(err);

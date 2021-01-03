@@ -4,32 +4,51 @@ import {useHistory} from 'react-router-dom';
 
 export function BusinessDashboard(){
 
-    const {currentUser} = useAuth();
+    const {currentUser, leaveCluster} = useAuth();
+    const [change, setChange] = useState(false);
     const [pool, setPool] = useState([]);
-    const [reached, setReached] = useState(JSON.parse(sessionStorage.getItem('reached')) || []);
-    const [loading, setLoading] = useState(false);
+    const [reached, setReached] = useState([]);
+    const [received, setReceived] = useState([]);
+    const [interested, setInterested] = useState([]);
+    const [offered, setOffered] = useState([]);
+    const [declined, setDeclined] = useState([]);
+    const [rejected, setRejected] = useState([]);
+    const [accepted, setAccepted] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState();
     const history = useHistory();
 
-
-    // handle peel
     useEffect(async () => {
-        const data = await fetch(currentUser.links.pool).then(response => {
+        const data = await fetch(currentUser.links.all).then(response => {
             if(response.ok){
                 return response.json();
             }
         });
-        setPool(data);
-    }, [currentUser]);
-
+        setPool(data.pool);
+        setReached(data.reached);
+        setReceived(data.received);
+        setInterested(data.interested);
+        setOffered(data.offered);
+        setDeclined(data.declined);
+        setRejected(data.rejected);
+        setAccepted(data.accepted);
+        setLoading(false);
+    }, [currentUser, change]);
 
     useEffect(async () => {
-        sessionStorage.setItem('reached', JSON.stringify(reached));
-        setLoading(false);
-    }, [reached]);
+        if(accepted.length){
+            try {
+                setError('Left cluster');
+                setLoading(true);
+                await leaveCluster()
+                history.push('/dormant-dashboard');
+            } catch (err) {
+                setError('failed to leave cluster')
+            }
+        }
+    }, [accepted])
 
-
-    async function handleReach(applicantId){
+    async function handleSubmitReach(applicantId){
         try {
             setError('Successfully Reached');
             setLoading(true);
@@ -45,13 +64,13 @@ export function BusinessDashboard(){
                 }
             });
             setReached(data);
+            setChange(!change);
         } catch (err) {
-            setError('Failed to reach out');
+            setError('Failed to reach');
         }
     }
 
-
-    async function handleCancel(applicantId){
+    async function handleCancelReach(applicantId){
         try {
             setError('Successfully Canceled');
             setLoading(true);
@@ -67,8 +86,119 @@ export function BusinessDashboard(){
                 }
             });
             setReached(data);
+            setChange(!change);
         } catch (err) {
             setError('Failed to cancel');
+        }
+    }
+
+    async function handleAcceptApply(applicantId){
+        try {
+            setError('Successfully Accepted Apply');
+            setLoading(true);
+            const data = await fetch(currentUser.links.received, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    action: 'accept',
+                    applicantId
+                })
+            }).then(response => {
+                if(response.ok){
+                    return response.json();
+                }
+            });
+            setReceived(data);
+            setChange(!change);
+        } catch (err) {
+            setError('Failed to accept apply');
+        }
+    }
+
+    async function handleDeclineApply(applicantId){
+        try {
+            setError('Successfully declined apply');
+            setLoading(true);
+            const data = await fetch(currentUser.links.received, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    action: 'decline',
+                    applicantId
+                })
+            }).then(response => {
+                if(response.ok){
+                    return response.json();
+                }
+            });
+            setReceived(data);
+            setChange(!change);
+        } catch (err) {
+            setError('Failed to decline apply');
+        }
+    }
+
+    async function handleOfferInterest(applicantId){
+        try {
+            setError('Successfully offered');
+            setLoading(true);
+            const data = await fetch(currentUser.links.interested, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    action: 'offer',
+                    applicantId
+                })
+            }).then(response => {
+                if(response.ok){
+                    return response.json();
+                }
+            });
+            setInterested(data);
+            setChange(!change);
+        } catch (err) {
+            setError('Failed to offer');
+        }
+    }
+
+    async function handleDeclineInterest(applicantId){
+        try {
+            setError('Successfully declined communication');
+            setLoading(true);
+            const data = await fetch(currentUser.links.interested, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    action: 'decline',
+                    applicantId
+                })
+            }).then(response => {
+                if(response.ok){
+                    return response.json();
+                }
+            });
+            setInterested(data);
+            setChange(!change);
+        } catch (err) {
+            setError('Failed to decline communication');
+        }
+    }
+
+    async function handleRescindOffer(applicantId){
+        try {
+            setError('Successfully rescinded offer');
+            setLoading(true);
+            const data = await fetch(currentUser.links.offered, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    action: 'rescind',
+                    applicantId
+                })
+            }).then(response => {
+                if(response.ok){
+                    return response.json();
+                }
+            });
+            setOffered(data);
+            setChange(!change);
+        } catch (err) {
+            setError('Failed to accept reach');
         }
     }
 
@@ -79,12 +209,11 @@ export function BusinessDashboard(){
                 <div>
                     <h3>{applicant.name}</h3>
                     <li>{applicant.features.skills}</li>
-                    <button onClick={() => handleReach(applicant.id)}>Apply</button>
+                    <button onClick={() => handleSubmitReach(applicant.id)}>Reach</button>
                 </div>
             )
         })
     }
-
 
     function renderReached(){
         return reached.map(applicant => {
@@ -92,7 +221,45 @@ export function BusinessDashboard(){
                 <div>
                     <h3>{applicant.name}</h3>
                     <li>{applicant.features.skills}</li>
-                    <button onClick={() => handleCancel(applicant.id)}>Cancel</button>
+                    <button onClick={() => handleCancelReach(applicant.id)}>Reach</button>
+                </div>
+            )
+        })
+    }
+
+    function renderReceived(){
+        return received.map(applicant => {
+            return (
+                <div>
+                    <h3>{applicant.name}</h3>
+                    <li>{applicant.features.skills}</li>
+                    <button onClick={() => handleAcceptApply(applicant.id)}>Accept</button>
+                    <button onClick={() => handleDeclineApply(applicant.id)}>Decline</button>
+                </div>
+            )
+        })
+    }
+
+    function renderInterested(){
+        return interested.map(applicant => {
+            return (
+                <div>
+                    <h3>{applicant.name}</h3>
+                    <li>{applicant.features.skills}</li>
+                    <button onClick={() => handleOfferInterest(applicant.id)}>Offer</button>
+                    <button onClick={() => handleDeclineInterest(applicant.id)}>Decline</button>
+                </div>
+            )
+        })
+    }
+
+    function renderOffered(){
+        return offered.map(applicant => {
+            return (
+                <div>
+                    <h3>{applicant.name}</h3>
+                    <li>{applicant.features.skills}</li>
+                    <button onClick={() => handleRescindOffer(applicant.id)}>Rescind</button>
                 </div>
             )
         })
@@ -105,6 +272,12 @@ export function BusinessDashboard(){
             <br/>
             <h2>Reached</h2>
             {renderReached()}
+            <h2>Received</h2>
+            {renderReceived()}
+            <h2>Interested</h2>
+            {renderInterested()}
+            <h2>Offered</h2>
+            {renderOffered()}
         </div>
     );
 }

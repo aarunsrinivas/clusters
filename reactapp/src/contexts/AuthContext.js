@@ -42,6 +42,7 @@ export function AuthProvider({children}) {
             }
         });
         setCurrentUser(data);
+        return data;
     }
 
     async function loginUser(email, password){

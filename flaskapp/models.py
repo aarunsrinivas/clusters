@@ -36,6 +36,10 @@ final = db.Table('final',
                  db.Column('applicant_id', db.Integer, db.ForeignKey('applicant.id'), primary_key=True),
                  db.Column('business_id', db.Integer, db.ForeignKey('business.id'), primary_key=True))
 
+checkout = db.Table('checkout',
+                    db.Column('applicant_id', db.Integer, db.ForeignKey('applicant.id'), primary_key=True),
+                    db.Column('business_id', db.Integer, db.ForeignKey('business.id'), primary_key=True))
+
 declined1 = db.Table('declined1',
                      db.Column('applicant_id', db.Integer, db.ForeignKey('applicant.id'), primary_key=True),
                      db.Column('business_id', db.Integer, db.ForeignKey('business.id'), primary_key=True))
@@ -61,6 +65,7 @@ class Applicant(User):
 	rejected = db.relationship('Business', secondary='declined2')
 	interested = db.relationship('Business', secondary='middle')
 	reviewed = db.relationship('Business', secondary='final')
+	accepted = db.relationship('Business', secondary='checkout')
 	chats = db.relationship('Chat', backref='applicant', lazy=True, cascade='all, delete-orphan')
 
 	__mapper_args__ = {
@@ -81,6 +86,7 @@ class Business(User):
 	rejected = db.relationship('Applicant', secondary='declined1')
 	interested = db.relationship('Applicant', secondary='middle')
 	offered = db.relationship('Applicant', secondary='final')
+	accepted = db.relationship('Applicant', secondary='checkout')
 	chats = db.relationship('Chat', backref='business', lazy=True, cascade='all, delete-orphan')
 
 	__mapper_args__ = {
@@ -157,3 +163,4 @@ class Description(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	keyword = db.Column(db.String(20), nullable=False)
 	description = db.Column(db.Text, nullable=False)
+
