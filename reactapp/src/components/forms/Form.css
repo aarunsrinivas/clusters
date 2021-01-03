@@ -1,0 +1,37 @@
+/* Login Styling */
+.form-container {
+    width: 15%;
+    margin-left: 40%;
+    margin-top: 10%;
+}
+
+.form-header {
+    margin-left: auto;
+    margin-bottom: 10%;
+}
+
+.form-register-redirect {
+    margin-top: 1%;
+    margin-left: 40%;
+}
+/* End Login Styling */
+
+/* Registration Styling */
+.register-container {
+    width: 15%;
+    margin-left: 40%;
+    margin-top: 2%;
+}
+
+.register-header {
+    margin-top: 0%;
+}
+
+.register-radio {
+    margin: 5px;
+}
+
+.register-button{
+    margin-top: 5%;
+}
+/* End Registration Styling */

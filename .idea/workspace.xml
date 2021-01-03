@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="529807ad-25c3-452b-8521-38663f4c1963" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trail.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cluster_algorithms.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cluster_world.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flaskapp/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flaskapp/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flaskapp/routes.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flaskapp/site.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flaskapp/sockets.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/.eslintcache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/.cache/babel-loader/1535f3a52f6d2ed52d690057a8c0b77e.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/.cache/babel-loader/8a44e9a738db7e420d4ec56fd1d074c5.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/@babel/runtime/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/node_modules/@babel/runtime/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/arrify/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/node_modules/arrify/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/base64-js/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/node_modules/base64-js/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/debug/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/node_modules/debug/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/extend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/node_modules/extend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/loose-envify/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/node_modules/loose-envify/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/lru-cache/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/node_modules/lru-cache/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/node-forge/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/node_modules/node-forge/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/prop-types/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/node_modules/prop-types/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/react-is/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/node_modules/react-is/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/safe-buffer/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/node_modules/safe-buffer/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/tslib/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/node_modules/tslib/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/node_modules/websocket-driver/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/node_modules/websocket-driver/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/public/logo192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/public/logo512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/public/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/public/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/App.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/components/buttons/Delete.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/components/buttons/Join.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/components/buttons/Leave.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/components/buttons/Peel.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/components/forms/ApplicantLogin.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/components/forms/ApplicantRegistration.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/components/forms/BusinessLogin.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/components/forms/BusinessRegistration.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/setupTests.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1mXG4zlmGe2w7NhGWZ7E6UW9ngU" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunManager">
+    <configuration name="run" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="clusters" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/run.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.run" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="529807ad-25c3-452b-8521-38663f4c1963" name="Default Changelist" comment="" />
+      <created>1609632336866</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1609632336866</updated>
+    </task>
+    <servers />
+  </component>
+</project>
