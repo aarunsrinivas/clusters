@@ -16,10 +16,12 @@ def applicant_serializer(applicant):
 			'self': f'/applicants/{applicant.id}',
 			'cluster': f'/clusters/{applicant.cluster_id}',
 			'pool': f'clusters/{applicant.cluster_id}/businesses',
+			'all': f'applicants/{applicant.id}/all',
 			'applied': f'/applicants/{applicant.id}/applied',
 			'received': f'/applicants/{applicant.id}/received',
 			'interested': f'/applicants/{applicant.id}/interested',
 			'reviewed': f'/applicants/{applicant.id}/reviewed',
+			'accepted': f'/applicants/{applicant.id}/accepted',
 			'declined': f'/applicants/{applicant.id}/declined',
 			'rejected': f'/applicants/{applicant.id}/rejected',
 			'chats': f'/applicants/{applicant.id}/chats'
@@ -41,10 +43,12 @@ def business_serializer(business):
 			'self': f'/businesses/{business.id}',
 			'cluster': f'/clusters/{business.cluster_id}',
 			'pool': f'clusters/{business.cluster_id}/applicants',
+			'all': f'businesses/{business.id}/all',
 			'reached': f'businesses/{business.id}/reached',
 			'received': f'/businesses/{business.id}/received',
 			'interested': f'/businesses/{business.id}/interested',
 			'offered': f'/businesses/{business.id}/offered',
+			'accepted': f'/businesses/{business.id}/accepted',
 			'declined': f'/businesses/{business.id}/declined',
 			'rejected': f'/businesses/{business.id}/rejected',
 			'chats': f'/businesses/{business.id}/chats'
@@ -202,6 +206,21 @@ def update_applicant(applicant_id):
 	return jsonify(applicant_serializer(applicant))
 
 
+@app.route('/applicants/<int:applicant_id>/all', methods=['GET'])
+def get_applicant_all(applicant_id):
+	applicant = Applicant.query.get(applicant_id)
+	pool = list(map(business_serializer, applicant.cluster.businesses))
+	applied = list(map(business_serializer, applicant.applied))
+	received = list(map(business_serializer, applicant.received))
+	interested = list(map(business_serializer, applicant.interested))
+	reviewed = list(map(business_serializer, applicant.reviewed))
+	accepted = list(map(business_serializer, applicant.accepted))
+	declined = list(map(business_serializer, applicant.declined))
+	rejected = list(map(business_serializer, applicant.rejected))
+	return jsonify({'pool': pool, 'applied': applied, 'received': received, 'interested': interested,
+	                'reviewed': reviewed, 'accepted': accepted, 'declined': declined, 'rejected': rejected})
+
+
 @app.route('/applicants/<int:applicant_id>/applied', methods=['GET'])
 def get_applied(applicant_id):
 	applicant = Applicant.query.get(applicant_id)
@@ -214,7 +233,6 @@ def update_applied(applicant_id):
 	action = request_data['action']
 	business_id = request_data['businessId']
 	business = Business.query.get(business_id)
-	print(business.name)
 	applicant = Applicant.query.get(applicant_id)
 	if action == 'apply':
 		if business not in applicant.applied:
@@ -265,7 +283,7 @@ def update_applicant_interested(applicant_id):
 	business_id = request_data['businessId']
 	business = Business.query.get(business_id)
 	applicant = Applicant.query.get(applicant_id)
-	chat = Chat.query.filter_by(applicant_id=applicant.id, business_id=business.id)
+	chat = Chat.query.filter_by(applicant_id=applicant.id, business_id=business.id).first()
 	if business in applicant.interested and action == 'decline':
 		applicant.interested.remove(business)
 		applicant.declined.append(business)
@@ -287,10 +305,11 @@ def update_reviewed(applicant_id):
 	business_id = request_data['businessId']
 	business = Business.query.get(business_id)
 	applicant = Applicant.query.get(applicant_id)
-	chat = Chat.query.filter_by(applicant_id=applicant.id, business_id=business.id)
+	chat = Chat.query.filter_by(applicant_id=applicant.id, business_id=business.id).first()
 	if business in applicant.reviewed:
 		if action == 'accept':
 			applicant.reviewed.remove(business)
+			applicant.accepted.append(business)
 			db.session.delete(chat)
 		elif action == 'decline':
 			applicant.reviewed.remove(business)
@@ -298,6 +317,12 @@ def update_reviewed(applicant_id):
 			db.session.delete(chat)
 	db.session.commit()
 	return jsonify(list(map(business_serializer, applicant.reviewed)))
+
+
+@app.route('/applicants/<int:applicant_id>/accepted', methods=['GET'])
+def get_applicant_accepted(applicant_id):
+	applicant = Applicant.query.get(applicant_id)
+	return jsonify(list(map(business_serializer, applicant.accepted)))
 
 
 @app.route('/applicants/<int:applicant_id>/declined', methods=['GET'])
@@ -316,7 +341,8 @@ def updated_applicant_declined(applicant_id):
 	elif action == 'remove':
 		business_id = request_data['businessId']
 		business = Business.query.get(business_id)
-		applicant.declined.remove(business)
+		if business in applicant.declined:
+			applicant.declined.remove(business)
 	db.session.commit()
 	return jsonify(list(map(business_serializer, applicant.declined)))
 
@@ -407,6 +433,21 @@ def update_business(business_id):
 	return jsonify(business_serializer(business))
 
 
+@app.route('/businesses/<int:business_id>/all', methods=['GET'])
+def get_business_all(business_id):
+	business = Business.query.get(business_id)
+	pool = list(map(applicant_serializer, business.cluster.applicants))
+	reached = list(map(applicant_serializer, business.reached))
+	received = list(map(applicant_serializer, business.received))
+	interested = list(map(applicant_serializer, business.interested))
+	offered = list(map(applicant_serializer, business.offered))
+	accepted = list(map(applicant_serializer, business.accepted))
+	declined = list(map(applicant_serializer, business.declined))
+	rejected = list(map(applicant_serializer, business.rejected))
+	return jsonify({'pool': pool, 'reached': reached, 'received': received, 'interested': interested,
+	                'offered': offered, 'accepted': accepted, 'declined': declined, 'rejected': rejected})
+
+
 @app.route('/businesses/<int:business_id>/reached', methods=['GET'])
 def get_reached(business_id):
 	business = Business.query.get(business_id)
@@ -470,7 +511,7 @@ def update_business_interested(business_id):
 	applicant = Applicant.query.get(applicant_id)
 	business = Business.query.get(business_id)
 	chat = Chat.query.filter_by(applicant_id=applicant.id, business_id=business.id).first()
-	if applicant in business.received:
+	if applicant in business.interested:
 		if action == 'offer':
 			business.interested.remove(applicant)
 			business.offered.append(applicant)
@@ -479,7 +520,7 @@ def update_business_interested(business_id):
 			business.interested.remove(applicant)
 			business.declined.append(applicant)
 	db.session.commit()
-	return jsonify(list(map(applicant_serializer, business.received)))
+	return jsonify(list(map(applicant_serializer, business.interested)))
 
 
 @app.route('/businesses/<int:business_id>/offered', methods=['GET'])
@@ -496,12 +537,18 @@ def update_offered(business_id):
 	applicant = Applicant.query.get(applicant_id)
 	business = Business.query.get(business_id)
 	chat = Chat.query.filter_by(applicant_id=applicant.id, business_id=business.id).first()
-	if applicant in business.offered and action == 'decline':
+	if applicant in business.offered and action == 'rescind':
 		db.session.delete(chat)
 		business.offered.remove(applicant)
 		business.declined.append(applicant)
 	db.session.commit()
 	return jsonify(list(map(applicant_serializer, business.offered)))
+
+
+@app.route('/businesses/<int:business_id>/accepted', methods=['GET'])
+def get_business_accepted(business_id):
+	business = Business.query.get(business_id)
+	return jsonify(list(map(applicant_serializer, business.accepted)))
 
 
 @app.route('/businesses/<int:business_id>/declined', methods=['GET'])

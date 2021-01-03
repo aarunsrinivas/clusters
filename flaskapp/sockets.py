@@ -4,13 +4,15 @@ from flaskapp import socket_io, db
 from flaskapp.models import User, Chat, Message
 
 
-@socket_io.on('user', namespace='/private')
+@socket_io.on('user', namespace='/initialize')
 def receive_user(user_id):
 	user = User.query.get(user_id)
 	user.session_id = request.sid
+	print(request.sid)
+	db.session.commit()
 
 
-@socket_io.on('message', namespace='/private')
+@socket_io.on('message', namespace='/messaging')
 def send_message(payload):
 	sender = User.query.get(payload['sender_id'])
 	recipient = User.query.get(payload['recipient_id'])
