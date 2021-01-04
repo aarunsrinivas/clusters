@@ -152,10 +152,10 @@ class Chat(db.Model):
 
 class Message(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	origin = db.Column(db.String(50), nullable=False)
+	origin = db.Column(db.Integer, nullable=False)
 	message = db.Column(db.Text, nullable=False)
 	# need to add default time
-	date_posted = db.Column(db.DateTime, nullable=False)
+	# date_posted = db.Column(db.DateTime, nullable=False)
 	chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'), nullable=False)
 
 

@@ -13,6 +13,7 @@ import {ActivePrivateRoute} from './routes/ActivePrivateRoute';
 import {DormantPrivateRoute} from './routes/DormantPrivateRoute';
 import {ActiveDashboard} from './components/pages/ActiveDashboard';
 import {DormantDashboard} from './components/pages/DormantDashboard';
+import {ChatRoom} from './components/pages/sub-pages/ChatRoom';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
                 <Route path='/login' component={LoginPage}/>
                 <DormantPrivateRoute path='/dormant-dashboard' component={DormantDashboard}/>
                 <ActivePrivateRoute path='/active-dashboard' component={ActiveDashboard}/>
+                <ActivePrivateRoute path='/chats' component={ChatRoom}/>
             </Switch>
         </AuthProvider>
     </Router>
