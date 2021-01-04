@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from pprint import pprint
-from docsim import DocSim
+from nlpsomething import DocSim
 
 def scrape():
     url = 'https://catalog.gatech.edu/coursesaz'
@@ -59,7 +59,7 @@ def scrape():
 docsim = DocSim(verbose=True)
 coursesInfo = scrape()
 similarities = docsim.similarity_query(
-    "An introduction to the measurement and financial reporting of organizations and the interpretation of the resulting financial statements.",
+    "Small group discussions with first year students are led by one or more faculty members and include a variety of foundational, motivational, and topical subjects for computationalist.",
     coursesInfo[1])
 print(similarities)
 #
