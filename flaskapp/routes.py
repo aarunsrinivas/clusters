@@ -61,12 +61,11 @@ def business_serializer(business):
 def applicant_chat_serializer(chat):
 	return {
 		'id': chat.id,
-		'sender_id': chat.applicant_id,
-		'recipient_id': chat.business_id,
-		'recipient_name': chat.business.name,
+		'senderId': chat.applicant_id,
+		'recipientId': chat.business_id,
+		'recipientName': chat.business.name,
 		'links': {
 			'self': f'/applicants/{chat.applicant.id}/chats/{chat.id}',
-			'applicant': f'/applicants/{chat.applicant.id}',
 			'messages': f'/applicants/{chat.applicant.id}/chats/{chat.id}/messages'
 		}
 	}
@@ -75,12 +74,11 @@ def applicant_chat_serializer(chat):
 def business_chat_serializer(chat):
 	return {
 		'id': chat.id,
-		'sender_id': chat.business_id,
-		'recipient_id': chat.applicant_id,
-		'recipient_name': chat.applicant.name,
+		'senderId': chat.business_id,
+		'recipientId': chat.applicant_id,
+		'recipientName': chat.applicant.name,
 		'links': {
 			'self': f'/businesses/{chat.business.id}/chats/{chat.id}',
-			'business': f'/businesses/{chat.business.id}',
 			'messages': f'/businesses/{chat.business.id}/chats/{chat.id}/messages'
 		}
 	}
@@ -90,13 +88,21 @@ def applicant_message_serializer(message):
 	return {
 		'id': message.id,
 		'origin': message.origin,
-		'date_posted': message.date_posted,
 		'message': message.message,
 		'links': {
-			'self': f'/applicants/{message.chat.applicant.id}/chats/{message.chat.id}/messages/{message.id}',
-			'messages': f'/applicants/{message.chat.applicant.id}/chats/{message.chat.id}/messages',
-			'chat': f'/applicants/{message.chat.applicant.id}/chats/{message.chat.id}',
-			'applicant': f'/applicants/{message.chat.applicant.id}'
+			'self': f'/applicants/{message.chat.applicant.id}/chats/{message.chat.id}/messages/{message.id}'
+		}
+
+	}
+
+
+def business_message_serializer(message):
+	return {
+		'id': message.id,
+		'origin': message.origin,
+		'message': message.message,
+		'links': {
+			'self': f'/businesses/{message.chat.business.id}/chats/{message.chat.id}/messages/{message.id}',
 		}
 
 	}
@@ -113,22 +119,6 @@ def cluster_serializer(cluster):
 			'applicants': f'/clusters/{cluster.id}/applicants',
 			'businesses': f'/clusters/{cluster.id}/businesses'
 		}
-	}
-
-
-def business_message_serializer(message):
-	return {
-		'id': message.id,
-		'origin': message.origin,
-		'date_posted': message.date_posted,
-		'message': message.message,
-		'links': {
-			'self': f'/businesses/{message.chat.business.id}/chats/{message.chat.id}/messages/{message.id}',
-			'messages': f'/businesses/{message.chat.business.id}/chats/{message.chat.id}/messages',
-			'chat': f'/businesses/{message.chat.business.id}/chats/{message.chat.id}',
-			'business': f'/businesses/{message.chat.business.id}'
-		}
-
 	}
 
 

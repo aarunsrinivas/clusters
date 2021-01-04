@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useAuth} from '../../contexts/AuthContext';
-import {ApplicantDashboard} from './ApplicantDashboard';
-import {BusinessDashboard} from './BusinessDashboard';
+import {ApplicantDashboard} from './sub-pages/ApplicantDashboard';
+import {BusinessDashboard} from './sub-pages/BusinessDashboard';
 import {useHistory} from 'react-router-dom';
 
 export function ActiveDashboard(){
