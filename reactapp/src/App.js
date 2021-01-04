@@ -1,4 +1,5 @@
 import './App.css';
+<<<<<<< HEAD
 import {HomePage} from './components/pages/HomePage';
 import {LoginPage} from './components/pages/LoginPage';
 import {RegistrationPage} from './components/pages/RegistrationPage';
@@ -29,6 +30,15 @@ function App() {
             </Switch>
         </AuthProvider>
     </Router>
+=======
+import {ApplicantRegistration} from './components/forms/ApplicantRegistration'
+
+function App() {
+  return (
+    <div>
+        <ApplicantRegistration/>
+    </div>
+>>>>>>> main
   );
 }
 
