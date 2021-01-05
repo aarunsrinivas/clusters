@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 from pprint import pprint
 from nlpsomething import DocSim
+from flaskapp.models import Description
+from flaskapp import db
 
 def scrape():
     url = 'https://catalog.gatech.edu/coursesaz'
@@ -44,6 +46,9 @@ def scrape():
                 try:
                     coursesDict[course][courseCode] = {'courseName': courseName, 'courseCredits': courseCredits,
                                                        'courseDesc': specificCourseDesc}
+                    courseDesc = Description(keyword = courseName, description = specificCourseDesc)
+                    db.session.add(courseDesc)
+                    db.session.commit()
                     coursesDescList.append(specificCourseDesc)
                 except:
                     pass

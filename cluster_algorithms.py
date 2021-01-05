@@ -2,6 +2,9 @@ import random
 import numpy as np
 from collections import Counter
 from itertools import permutations
+from WebScraping import scrape
+from nlpsomething import DocSim
+from flaskapp.models import Description
 
 
 def compute_centroid(data_set, data_type):
@@ -216,6 +219,7 @@ def compare_different_types(first, second):
 	if first == zero:
 		return 0
 	# compare majors
+	scrape()
 	major = 1
 	major_flag = False
 	for first_major in first['major']:
@@ -271,11 +275,24 @@ def compare_same_types(first, second):
 	}
 	if first == zero:
 		return 0
-	# compare majors
+	# compare courses
+	# docsim = DocSim(verbose=True)         this should be done earlier
+	# coursesInfo = scrape()                this should be done earlier
+
+	courses = len(first['course'])
+	for element in first['courses']:
+		someobj = Description.query.filter_by(keyword = element).first()
+		if element in second['courses']:
+			courses -= 1
+		else:
+			comparisonList = docsim.similarity_query(someobj.description, second['courses'])
+			courses -= max(comparisonList)
+	courses = courses / len(first['courses'])
+	#compare majors
 	major = 1
 	major_flag = False
-	for first_major in first['major']:
-		for second_major in second['major']:
+	for first_major in first['major']: #here first is the student's courses
+		for second_major in second['major']: #here second is the professor's courses
 			if first_major == second_major:
 				major = major - 1
 				major_flag = True
@@ -303,7 +320,7 @@ def compare_same_types(first, second):
 			if first_skills == second_skills:
 				skills = skills - 1
 	skills = skills / len(first['skills'])
-	dist = (major ** 2 + standing ** 2 + gpa ** 2 + skills ** 2) ** (1 / 2)
+	dist = (major ** 2 + standing ** 2 + gpa ** 2 + skills ** 2 + courses ** 2) ** (1 / 2)
 	return dist
 
 
