@@ -66,8 +66,8 @@ export function ActiveDashboard(){
     return (
         <div>
             <h1>Active Dashboard</h1>
-            {currentUser.features.type === 'applicant' && <ApplicantDashboard/>}
-            {currentUser.features.type === 'business' && <BusinessDashboard/>}
+            {currentUser.features.refType === 'applicant' && <ApplicantDashboard/>}
+            {currentUser.features.refType === 'business' && <BusinessDashboard/>}
             <button disabled={loading} onClick={handleLogoutUser}>Logout</button>
             <button disabled={loading} onClick={handleDeleteUser}>Delete User</button>
             <button disabled={loading} onClick={handlePeelFromCluster}>Peel From Cluster</button>

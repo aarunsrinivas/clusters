@@ -6,6 +6,7 @@ export function BusinessDashboard(){
 
     const {currentUser, leaveCluster} = useAuth();
     const [change, setChange] = useState(false);
+    const [cap, setCap] = useState(1);
     const [pool, setPool] = useState([]);
     const [reached, setReached] = useState([]);
     const [received, setReceived] = useState([]);
@@ -24,6 +25,7 @@ export function BusinessDashboard(){
                 return response.json();
             }
         });
+        setCap(data.cap);
         setPool(data.pool);
         setReached(data.reached);
         setReceived(data.received);
@@ -36,7 +38,7 @@ export function BusinessDashboard(){
     }, [currentUser, change]);
 
     useEffect(async () => {
-        if(accepted.length){
+        if(!cap){
             try {
                 setError('Left cluster');
                 setLoading(true);
@@ -46,7 +48,7 @@ export function BusinessDashboard(){
                 setError('failed to leave cluster')
             }
         }
-    }, [accepted])
+    }, [cap])
 
     async function handleSubmitReach(applicantId){
         try {
@@ -265,6 +267,17 @@ export function BusinessDashboard(){
         })
     }
 
+    function renderAccepted(){
+        return accepted.map(applicant => {
+            return (
+                <div>
+                    <h3>{applicant.name}</h3>
+                    <li>{applicant.features.skills}</li>
+                </div>
+            )
+        })
+    }
+
     return (
         <div>
             <h2>Pool</h2>
@@ -278,6 +291,8 @@ export function BusinessDashboard(){
             {renderInterested()}
             <h2>Offered</h2>
             {renderOffered()}
+            <h2>Accepted</h2>
+            {renderAccepted()}
         </div>
     );
 }

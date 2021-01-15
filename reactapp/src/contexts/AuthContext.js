@@ -12,7 +12,8 @@ export function AuthProvider({children}) {
     const [currentUser, setCurrentUser] = useState(JSON.parse(sessionStorage.getItem('currentUser')) || null);
     const [loading, setLoading] = useState(true);
 
-    async function registerUser(name, email, password, type, major, standing, gpa, skills) {
+
+    async function registerUser(name, email, password, type, worldId) {
         const temp = await fetch(`/users?email=${email}`).then(response => {
             if(response.ok){
                 return response.json();
@@ -21,20 +22,14 @@ export function AuthProvider({children}) {
         if(temp.length){
             throw 'This email has already been taken';
         }
-        const destination = type === 'applicant' ? '/applicants' : '/businesses';
+        const destination = type === 'applicant' ? `/worlds/${worldId}/applicants` : `/worlds/${worldId}/businesses`;
         const data = await fetch(destination, {
             method: 'POST',
             body: JSON.stringify({
                 name,
                 email,
                 password: bcrypt.hashSync(password, 10),
-                features: {
-                    type,
-                    major,
-                    standing,
-                    gpa: parseFloat(gpa),
-                    skills
-                }
+                worldId
             })
         }).then(response => {
             if(response.ok){
@@ -60,30 +55,44 @@ export function AuthProvider({children}) {
         return temp[0];
     }
 
-    async function updateUser(name, email, password, major, standing, gpa, skills){
-        if(email !== currentUser.email){
-            const temp = await fetch(`/users?email=${email}`).then(response => {
-                if(response.ok){
-                    return response.json();
-                }
-            });
-            if(temp.length){
-                throw 'This email has been taken';
+    async function updateAccount(name, email, password, worldId){
+        const temp = await fetch(`/users?email=${email}`).then(response => {
+            if(response.ok){
+                return response.json();
             }
+        });
+        if(temp.length){
+            throw 'This email has already been taken';
         }
         const data = await fetch(currentUser.links.self, {
             method: 'PUT',
             body: JSON.stringify({
+                action: 'account',
                 name,
                 email,
-                password: password ? bcrypt.hashSync(password, 10) : currentUser.password,
-                features: {
-                    type: 'applicant',
-                    major,
-                    standing,
-                    gpa: parseFloat(gpa),
-                    skills
-                }
+                password,
+                worldId
+            })
+        }).then(response => {
+            if(response.ok){
+                return response.json()
+            }
+        });
+        setCurrentUser(data);
+    }
+
+    async function updateFeatures(cap, gpa, majors, standings, skills, interests, courses){
+        const data = await fetch(currentUser.links.self, {
+            method: 'PUT',
+            body: JSON.stringify({
+                action: 'features',
+                cap: parseInt(cap),
+                gpa: parseFloat(gpa),
+                majors,
+                standings,
+                skills,
+                interests,
+                courses
             })
         }).then(response => {
             if(response.ok){
@@ -172,9 +181,10 @@ export function AuthProvider({children}) {
         currentUser,
         registerUser,
         loginUser,
-        updateUser,
         logoutUser,
         deleteUser,
+        updateAccount,
+        updateFeatures,
         joinCluster,
         peelFromCluster,
         leaveCluster,

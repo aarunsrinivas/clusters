@@ -6,11 +6,13 @@ export function ApplicantDashboard(){
 
     const {currentUser, leaveCluster} = useAuth();
     const [change, setChange] = useState(false);
+    const [cap, setCap] = useState(1);
     const [pool, setPool] = useState([]);
     const [applied, setApplied] = useState([]);
     const [received, setReceived] = useState([]);
     const [interested, setInterested] = useState([]);
     const [reviewed, setReviewed] = useState([]);
+    const [accepted, setAccepted] = useState([]);
     const [declined, setDeclined] = useState([]);
     const [rejected, setRejected] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -23,16 +25,31 @@ export function ApplicantDashboard(){
                 return response.json();
             }
         });
+        setCap(data.cap);
         setPool(data.pool);
         setApplied(data.applied);
         setReceived(data.received);
         setInterested(data.interested);
         setReviewed(data.reviewed);
+        setAccepted(data.accepted);
         setDeclined(data.declined);
         setRejected(data.rejected);
         setLoading(false);
     }, [currentUser, change]);
 
+
+    useEffect(async () => {
+        if(!cap){
+            try {
+                setError('Left Cluster');
+                setLoading(true);
+                await leaveCluster();
+                history.push('/dormant-dashboard');
+            } catch(err) {
+                setError('Failed to leave cluster')
+            }
+        }
+    }, [cap])
 
     async function handleSubmitApply(businessId){
         try {
@@ -256,6 +273,17 @@ export function ApplicantDashboard(){
         })
     }
 
+    function renderAccepted(){
+        return accepted.map(business => {
+            return (
+                <div>
+                    <h3>{business.name}</h3>
+                    <li>{business.features.skills}</li>
+                </div>
+            )
+        })
+    }
+
     return (
         <div>
             <h2>Pool</h2>
@@ -269,6 +297,8 @@ export function ApplicantDashboard(){
             {renderInterested()}
             <h2>Reviewed</h2>
             {renderReviewed()}
+            <h2>Accepted</h2>
+            {renderAccepted()}
         </div>
     );
 }

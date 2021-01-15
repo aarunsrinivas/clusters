@@ -4,30 +4,28 @@ import TagsInput from 'react-tagsinput';
 import {useAuth} from '../../contexts/AuthContext';
 
 
-export function RegistrationForm() {
+export function AccountForm() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [type, setType] = useState('');
     const [worldId, setWorldId] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const {registerUser} = useAuth();
+    const {updateAccount} = useAuth();
     const history = useHistory();
 
 
-    async function handleRegisterUser() {
+    async function handleUpdateAccount() {
         try {
-            setError('Registered');
+            setError('Updated Account');
             setLoading(true);
-            if(!name || !email || !password || !confirmPassword || !type || !worldId) {
+            if(!name || !email || !password || !confirmPassword || !worldId) {
                throw 'Fields not filled out';
             } else if(password !== confirmPassword){
                 throw 'Passwords do not match';
             }
-            const data = await registerUser(name, email, password, type, worldId);
-            history.push('/dormant-dashboard');
+            const data = await updateAccount(name, email, password, worldId);
         } catch(err) {
             setError(err);
         }
@@ -37,10 +35,6 @@ export function RegistrationForm() {
 
     return (
         <div>
-            Type:
-            <input type='radio' name='type' onClick={() => setType('applicant')}/> Applicant
-            <input type='radio' name='type' onClick={() => setType('business')}/> Business
-            <br/>
             College: <input value={worldId} onChange={e => setWorldId(e.target.value)}/>
             <br/>
             Name: <input value={name} onChange={e => setName(e.target.value)}/>
@@ -51,7 +45,7 @@ export function RegistrationForm() {
             <br/>
             Confirm Password: <input type='password' value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
             <br/>
-            <button disabled={loading} onClick={handleRegisterUser}>Submit</button>
+            <button disabled={loading} onClick={handleUpdateAccount}>Submit</button>
             <div>
                 Already Have an Account? <Link to='/login'>Log In</Link>
             </div>
