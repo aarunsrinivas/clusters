@@ -10,7 +10,7 @@ export function LoginForm() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const {loginUser} = useAuth();
+    const {loginUser, userData} = useAuth();
     const history = useHistory();
 
      async function handleLoginUser() {
@@ -20,8 +20,8 @@ export function LoginForm() {
             if(!email || !password){
                 throw 'Fields are required';
             }
-            const data = await loginUser(email, password);
-            const destination = data.clusterId ? '/active-dashboard' : '/dormant-dashboard';
+            await loginUser(email, password);
+            const destination = '/dormant-dashboard';
             history.push(destination);
         } catch(err) {
             setError(err);

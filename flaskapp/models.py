@@ -1,4 +1,5 @@
 from flaskapp import db
+from flaskapp.tasks import check, manage
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from datetime import datetime, timedelta
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -125,7 +126,6 @@ class User(db.Model):
 	world_id = db.Column(db.Integer, db.ForeignKey('world.id'), nullable=False)
 	name = db.Column(db.String(20), nullable=False)
 	email = db.Column(db.String(120), unique=True, nullable=False)
-	password = db.Column(db.String(60), nullable=False)
 	session_id = db.Column(db.String(120), unique=True)
 	type = db.Column(db.String(50))
 
@@ -206,12 +206,12 @@ class Applicant(User):
 		db.session.commit()
 
 	def cut_connections(self):
+		self.cap = 1
 		self.applied.clear()
 		self.received.clear()
 		self.reviewed.clear()
 		self.interested.clear()
 		self.chats.clear()
-		self.cap = 1
 		db.session.commit()
 
 
@@ -251,12 +251,12 @@ class Business(User):
 		db.session.commit()
 
 	def cut_connections(self):
+		self.cap = 1
 		self.reached.clear()
 		self.received.clear()
 		self.offered.clear()
 		self.interested.clear()
 		self.chats.clear()
-		self.cap = 1
 		db.session.commit()
 
 
@@ -436,8 +436,12 @@ class Cluster(db.Model):
 		return self.applicant_pop + self.business_pop
 
 	@hybrid_property
-	def index(self):
+	def top_index(self):
 		return self.pop / self.world.pop + self.ratio / self.world.ratio + self.inactivity / self.world.inactivity
+
+	@hybrid_property
+	def bottom_index(self):
+		return self.pop / self.world.pop + self.ratio / self.world.ratio + (1 - self.inactivity / self.world.inactivity)
 
 	def __init__(self, **kwargs):
 		super(Cluster, self).__init__(**kwargs)
@@ -447,7 +451,7 @@ class Cluster(db.Model):
 		'''
 		scheduler.schedule(
 			scheduled_time=datetime.utcnow(),
-			func=None,
+			func=check,
 			args=[self],
 			interval=(60 * 30),
 			repeat=None

@@ -1,6 +1,6 @@
 from flaskapp import app, db
-from flaskapp.models import Applicant, Business, User, Cluster, ClusterWorld, Chat, Major, Course, Standing, Skill, \
-	Interest
+from flaskapp.models import Applicant, Business, User, Cluster, ClusterWorld, \
+	Chat, Major, Course, Standing, Skill, Interest
 from flask import json, jsonify, request
 
 
@@ -9,9 +9,9 @@ def applicant_serializer(applicant):
 		'id': applicant.id,
 		'name': applicant.name,
 		'email': applicant.email,
-		'password': applicant.password,
 		'clusterId': applicant.cluster_id,
 		'worldId': applicant.world_id,
+		'type': applicant.type,
 		'cap': applicant.cap,
 		'features': applicant.features.serialized,
 		'links': {
@@ -38,10 +38,10 @@ def business_serializer(business):
 		'id': business.id,
 		'name': business.name,
 		'email': business.email,
-		'password': business.password,
 		'clusterId': business.cluster_id,
 		'worldId': business.world_id,
 		'cap': business.cap,
+		'type': business.type,
 		'features': business.features.serialized,
 		'links': {
 			'self': f'/worlds/{business.world_id}/businesses/{business.id}',
@@ -138,9 +138,8 @@ def find_world():
 def find_user():
 	args = request.args
 	if 'email' in args:
-		return jsonify([applicant_serializer(user) if user.type == 'applicant'
-		                else business_serializer(user) for user in
-		                User.query.filter_by(email=args['email']).all()])
+		user = User.query.filter_by(email=args['email']).first()
+		return jsonify(applicant_serializer(user) if user.type == 'applicant' else business_serializer(user))
 	return jsonify([applicant_serializer(user) if user.type == 'applicant'
 	                else business_serializer(user) for user in
 	                User.query.all()])
@@ -150,7 +149,6 @@ def find_user():
 def create_applicant(world_id):
 	request_data = json.loads(request.data)
 	applicant = Applicant(name=request_data['name'], email=request_data['email'],
-	                      password=request_data['password'],
 	                      world_id=world_id)
 	db.session.add(applicant)
 	db.session.commit()
@@ -207,7 +205,6 @@ def update_applicant(world_id, applicant_id):
 	elif action == 'account':
 		applicant.name = request_data['name']
 		applicant.email = request_data['email']
-		applicant.password = request_data['password']
 		applicant.set_world(request_data['worldId'])
 	db.session.commit()
 	return jsonify(applicant_serializer(applicant))
@@ -385,7 +382,6 @@ def get_applicant_chat_messages(world_id, applicant_id, chat_id):
 def create_business(world_id):
 	request_data = json.loads(request.data)
 	business = Business(name=request_data['name'], email=request_data['email'],
-	                    password=request_data['password'],
 	                    world_id=world_id)
 	db.session.add(business)
 	db.session.commit()
@@ -442,7 +438,6 @@ def update_business(world_id, business_id):
 	elif action == 'account':
 		business.name = request_data['name']
 		business.email = request_data['email']
-		business.password = request_data['password']
 		business.set_world(request_data['worldId'])
 	db.session.commit()
 	return jsonify(business_serializer(business))

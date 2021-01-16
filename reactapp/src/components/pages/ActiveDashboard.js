@@ -6,7 +6,7 @@ import {useHistory} from 'react-router-dom';
 
 export function ActiveDashboard(){
 
-    const {currentUser, logoutUser, deleteUser, peelFromCluster, leaveCluster} = useAuth();
+    const {userData, logoutUser, deleteUser, peelFromCluster, leaveCluster} = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState();
     const history = useHistory();
@@ -66,8 +66,8 @@ export function ActiveDashboard(){
     return (
         <div>
             <h1>Active Dashboard</h1>
-            {currentUser.features.refType === 'applicant' && <ApplicantDashboard/>}
-            {currentUser.features.refType === 'business' && <BusinessDashboard/>}
+            {userData.type === 'applicant' && <ApplicantDashboard/>}
+            {userData.type === 'business' && <BusinessDashboard/>}
             <button disabled={loading} onClick={handleLogoutUser}>Logout</button>
             <button disabled={loading} onClick={handleDeleteUser}>Delete User</button>
             <button disabled={loading} onClick={handlePeelFromCluster}>Peel From Cluster</button>

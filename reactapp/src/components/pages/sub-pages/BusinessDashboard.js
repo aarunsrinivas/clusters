@@ -4,7 +4,7 @@ import {useHistory} from 'react-router-dom';
 
 export function BusinessDashboard(){
 
-    const {currentUser, leaveCluster} = useAuth();
+    const {userData, leaveCluster} = useAuth();
     const [change, setChange] = useState(false);
     const [cap, setCap] = useState(1);
     const [pool, setPool] = useState([]);
@@ -20,7 +20,7 @@ export function BusinessDashboard(){
     const history = useHistory();
 
     useEffect(async () => {
-        const data = await fetch(currentUser.links.all).then(response => {
+        const data = await fetch(userData.links.all).then(response => {
             if(response.ok){
                 return response.json();
             }
@@ -35,7 +35,7 @@ export function BusinessDashboard(){
         setRejected(data.rejected);
         setAccepted(data.accepted);
         setLoading(false);
-    }, [currentUser, change]);
+    }, [userData, change]);
 
     useEffect(async () => {
         if(!cap){
@@ -54,7 +54,7 @@ export function BusinessDashboard(){
         try {
             setError('Successfully Reached');
             setLoading(true);
-            const data = await fetch(currentUser.links.reached, {
+            const data = await fetch(userData.links.reached, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'reach',
@@ -76,7 +76,7 @@ export function BusinessDashboard(){
         try {
             setError('Successfully Canceled');
             setLoading(true);
-            const data = await fetch(currentUser.links.reached, {
+            const data = await fetch(userData.links.reached, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'cancel',
@@ -98,7 +98,7 @@ export function BusinessDashboard(){
         try {
             setError('Successfully Accepted Apply');
             setLoading(true);
-            const data = await fetch(currentUser.links.received, {
+            const data = await fetch(userData.links.received, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'accept',
@@ -120,7 +120,7 @@ export function BusinessDashboard(){
         try {
             setError('Successfully declined apply');
             setLoading(true);
-            const data = await fetch(currentUser.links.received, {
+            const data = await fetch(userData.links.received, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'decline',
@@ -142,7 +142,7 @@ export function BusinessDashboard(){
         try {
             setError('Successfully offered');
             setLoading(true);
-            const data = await fetch(currentUser.links.interested, {
+            const data = await fetch(userData.links.interested, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'offer',
@@ -164,7 +164,7 @@ export function BusinessDashboard(){
         try {
             setError('Successfully declined communication');
             setLoading(true);
-            const data = await fetch(currentUser.links.interested, {
+            const data = await fetch(userData.links.interested, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'decline',
@@ -186,7 +186,7 @@ export function BusinessDashboard(){
         try {
             setError('Successfully rescinded offer');
             setLoading(true);
-            const data = await fetch(currentUser.links.offered, {
+            const data = await fetch(userData.links.offered, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'rescind',

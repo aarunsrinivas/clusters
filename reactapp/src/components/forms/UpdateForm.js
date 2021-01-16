@@ -5,19 +5,19 @@ import TagsInput from 'react-tagsinput';
 
 export function UpdateForm() {
 
-    const {currentUser, updateFeatures} = useAuth();
-    const [cap, setCap] = useState(currentUser.cap);
-    const [gpa, setGpa] = useState(currentUser.features.gpa);
-    const [majors, setMajors] = useState(currentUser.features.majors);
-    const [standings, setStandings] = useState(currentUser.features.standings);
-    const [skills, setSkills] = useState(currentUser.features.skills);
-    const [interests, setInterests] = useState(currentUser.features.interests)
-    const [courses, setCourses] = useState(currentUser.features.courses)
+    const {userData, updateFeatures} = useAuth();
+    const [cap, setCap] = useState(userData.cap);
+    const [gpa, setGpa] = useState(userData.features.gpa);
+    const [majors, setMajors] = useState(userData.features.majors);
+    const [standings, setStandings] = useState(userData.features.standings);
+    const [skills, setSkills] = useState(userData.features.skills);
+    const [interests, setInterests] = useState(userData.features.interests)
+    const [courses, setCourses] = useState(userData.features.courses)
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        console.log(majors);
+        console.log(userData);
     }, [])
 
     async function handleUpdateFeatures() {

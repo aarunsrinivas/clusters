@@ -1,5 +1,6 @@
 import React, {useContext, useState, useEffect} from 'react';
 import bcrypt from 'bcryptjs';
+import {auth} from '../firebase';
 
 const AuthContext = React.createContext();
 
@@ -10,25 +11,17 @@ export function useAuth() {
 export function AuthProvider({children}) {
 
     const [currentUser, setCurrentUser] = useState(JSON.parse(sessionStorage.getItem('currentUser')) || null);
+    const [userData, setUserData] = useState(JSON.parse(sessionStorage.getItem('userData')) || null);
     const [loading, setLoading] = useState(true);
 
-
     async function registerUser(name, email, password, type, worldId) {
-        const temp = await fetch(`/users?email=${email}`).then(response => {
-            if(response.ok){
-                return response.json();
-            }
-        });
-        if(temp.length){
-            throw 'This email has already been taken';
-        }
+        const fire = auth.createUserWithEmailAndPassword(email, password);
         const destination = type === 'applicant' ? `/worlds/${worldId}/applicants` : `/worlds/${worldId}/businesses`;
         const data = await fetch(destination, {
             method: 'POST',
             body: JSON.stringify({
                 name,
                 email,
-                password: bcrypt.hashSync(password, 10),
                 worldId
             })
         }).then(response => {
@@ -36,53 +29,38 @@ export function AuthProvider({children}) {
                 return response.json();
             }
         });
-        setCurrentUser(data);
-        return data;
+        setUserData(data);
+        return fire;
     }
 
     async function loginUser(email, password){
-        const temp = await fetch(`/users?email=${email}`).then(response => {
+        const fire = auth.signInWithEmailAndPassword(email, password);
+        const data = await fetch(`/users?email=${email}`).then(response => {
             if(response.ok){
                 return response.json();
             }
         });
-        if(!temp.length){
-            throw 'No email associated with account';
-        } else if(!(await bcrypt.compare(password, temp[0].password))){
-            throw 'Invalid password';
-        }
-        setCurrentUser(temp[0]);
-        return temp[0];
+        setUserData(data);
+        return fire;
     }
 
     async function updateAccount(name, email, password, worldId){
-        const temp = await fetch(`/users?email=${email}`).then(response => {
-            if(response.ok){
-                return response.json();
-            }
-        });
-        if(temp.length){
-            throw 'This email has already been taken';
-        }
-        const data = await fetch(currentUser.links.self, {
+        currentUser.updateEmail(email);
+        password && currentUser.updatePassword(password);
+        const data = await fetch(userData.links.self, {
             method: 'PUT',
             body: JSON.stringify({
                 action: 'account',
                 name,
                 email,
-                password,
                 worldId
             })
-        }).then(response => {
-            if(response.ok){
-                return response.json()
-            }
         });
-        setCurrentUser(data);
+        setUserData(data);
     }
 
     async function updateFeatures(cap, gpa, majors, standings, skills, interests, courses){
-        const data = await fetch(currentUser.links.self, {
+        const data = await fetch(userData.links.self, {
             method: 'PUT',
             body: JSON.stringify({
                 action: 'features',
@@ -99,34 +77,30 @@ export function AuthProvider({children}) {
                 return response.json();
             }
         });
-        setCurrentUser(data);
+        setUserData(data);
     }
 
     async function logoutUser(){
-        setCurrentUser(null);
+        const fire = auth.signOut();
+        setUserData(null);
+        return fire;
     }
 
     async function deleteUser(){
-        if(!currentUser){
-            throw 'No user to be deleted'
-        }
-        const temp = await fetch(currentUser.links.self, {
+        const fire = currentUser.delete();
+        const data = await fetch(userData.links.self, {
             method: 'DELETE'
         }).then(response => {
             if(response.ok){
                 return response.json();
             }
         });
-        setCurrentUser(null);
+        setUserData(null);
+        return fire;
     }
 
     async function joinCluster(){
-        if(!currentUser){
-            throw 'No user to be joined';
-        } else if(currentUser.clusterId){
-            throw 'Already in a cluster';
-        }
-        const data = await fetch(currentUser.links.self, {
+        const data = await fetch(userData.links.self, {
             method: 'POST',
             body: JSON.stringify({action: 'join'})
         }).then(response => {
@@ -134,16 +108,11 @@ export function AuthProvider({children}) {
                 return response.json();
             }
         });
-        setCurrentUser(data);
+        setUserData(data);
     }
 
     async function leaveCluster(){
-        if(!currentUser){
-            throw 'No user to be joined';
-        } else if(!currentUser.clusterId){
-            throw 'Already outside cluster';
-        }
-        const data = await fetch(currentUser.links.self, {
+        const data = await fetch(userData.links.self, {
             method: 'POST',
             body: JSON.stringify({action: 'leave'})
         }).then(response => {
@@ -151,16 +120,11 @@ export function AuthProvider({children}) {
                 return response.json();
             }
         });
-        setCurrentUser(data);
+        setUserData(data);
     }
 
     async function peelFromCluster(){
-        if(!currentUser){
-            throw 'No user to be joined';
-        } else if(!currentUser.clusterId){
-            throw 'Cannot peel from outside cluster';
-        }
-        const data = await fetch(currentUser.links.self, {
+        const data = await fetch(userData.links.self, {
             method: 'POST',
             body: JSON.stringify({action: 'peel'})
         }).then(response => {
@@ -168,17 +132,28 @@ export function AuthProvider({children}) {
                 return response.json();
             }
         });
-        setCurrentUser(data);
+        setUserData(data);
     }
 
     useEffect(() => {
-        !currentUser ? sessionStorage.clear() :
-            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            setCurrentUser(user);
+            !user ? sessionStorage.clear() :
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+        })
         setLoading(false)
-    }, [currentUser]);
+        return unsubscribe;
+    }, []);
+
+    useEffect(() => {
+        !currentUser ? sessionStorage.clear() :
+            sessionStorage.setItem('userData', JSON.stringify(userData));
+        setLoading(false)
+    }, [userData]);
 
     const value = {
         currentUser,
+        userData,
         registerUser,
         loginUser,
         logoutUser,

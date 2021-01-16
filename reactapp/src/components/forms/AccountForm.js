@@ -5,14 +5,14 @@ import {useAuth} from '../../contexts/AuthContext';
 
 
 export function AccountForm() {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
+    const {userData, updateAccount} = useAuth();
+    const [name, setName] = useState(userData.name);
+    const [email, setEmail] = useState(userData.email);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [worldId, setWorldId] = useState('');
+    const [worldId, setWorldId] = useState(userData.worldId);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const {updateAccount} = useAuth();
     const history = useHistory();
 
 
@@ -20,7 +20,7 @@ export function AccountForm() {
         try {
             setError('Updated Account');
             setLoading(true);
-            if(!name || !email || !password || !confirmPassword || !worldId) {
+            if(!name || !email || !worldId) {
                throw 'Fields not filled out';
             } else if(password !== confirmPassword){
                 throw 'Passwords do not match';

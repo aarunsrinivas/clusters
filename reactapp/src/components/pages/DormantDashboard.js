@@ -5,7 +5,7 @@ import {useHistory} from 'react-router-dom';
 
 export function DormantDashboard(){
 
-    const {currentUser, logoutUser, deleteUser, joinCluster} = useAuth();
+    const {userData, logoutUser, deleteUser, joinCluster} = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState();
     const history = useHistory();
@@ -40,6 +40,10 @@ export function DormantDashboard(){
         try {
             setError('Joined Cluster');
             setLoading(true);
+            const {gpa, majors, standings, skills, interests, courses} = userData.features;
+            if(!gpa || !majors.length || !standings.length || !skills.length || !interests.length || !courses.length) {
+               throw 'Fields not filled out';
+            }
             await joinCluster();
             history.push('/active-dashboard')
         } catch(err) {

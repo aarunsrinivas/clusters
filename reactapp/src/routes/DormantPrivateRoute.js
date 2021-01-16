@@ -3,12 +3,12 @@ import {Route, Redirect} from 'react-router-dom';
 import {useAuth} from '../contexts/AuthContext';
 
 export function DormantPrivateRoute({component: Component, ...rest}){
-    const {currentUser} = useAuth();
+    const {currentUser, userData} = useAuth();
     return (
         <Route {...rest} render={props => {
-                if(!currentUser){
+                if(!currentUser || !userData){
                     return <Redirect to='/login'/>;
-                } else if(currentUser.clusterId){
+                } else if(userData.clusterId){
                     return <Redirect to='/active-dashboard'/>;
                 } else {
                     return <Component {...props}/>;
