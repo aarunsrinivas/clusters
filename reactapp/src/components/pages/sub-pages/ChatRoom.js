@@ -6,7 +6,7 @@ const socket = io.connect('http://127.0.0.1:5000/messaging');
 
 export function ChatRoom(){
 
-    const {currentUser} = useAuth();
+    const {userData} = useAuth();
     const [chatsList, setChatsList] = useState([]);
     const [chat, setChat] = useState({});
     const [messages, setMessages] = useState([]);
@@ -18,18 +18,18 @@ export function ChatRoom(){
 
     useEffect(async () => {
         try {
-            const data = await fetch(currentUser.links.chats).then(response => {
+            const data = await fetch(userData.links.chats).then(response => {
                 if(response.ok){
                     return response.json();
                 }
             });
-            socket.emit('join', {userId: currentUser.id})
+            socket.emit('join', {userId: userData.id})
             setChatsList(data);
             setChat(data[0] || {});
         } catch(err) {
             setError('Failed to grab all chats')
         }
-    }, [currentUser]);
+    }, [userData]);
 
     async function handleChatClick(chat){
         try {

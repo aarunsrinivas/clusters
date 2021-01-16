@@ -4,13 +4,15 @@ import {useHistory} from 'react-router-dom';
 
 export function ApplicantDashboard(){
 
-    const {currentUser, leaveCluster} = useAuth();
+    const {userData, leaveCluster} = useAuth();
     const [change, setChange] = useState(false);
+    const [cap, setCap] = useState(1);
     const [pool, setPool] = useState([]);
     const [applied, setApplied] = useState([]);
     const [received, setReceived] = useState([]);
     const [interested, setInterested] = useState([]);
     const [reviewed, setReviewed] = useState([]);
+    const [accepted, setAccepted] = useState([]);
     const [declined, setDeclined] = useState([]);
     const [rejected, setRejected] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -18,27 +20,42 @@ export function ApplicantDashboard(){
     const history = useHistory();
 
     useEffect(async () => {
-        const data = await fetch(currentUser.links.all).then(response => {
+        const data = await fetch(userData.links.all).then(response => {
             if(response.ok){
                 return response.json();
             }
         });
+        setCap(data.cap);
         setPool(data.pool);
         setApplied(data.applied);
         setReceived(data.received);
         setInterested(data.interested);
         setReviewed(data.reviewed);
+        setAccepted(data.accepted);
         setDeclined(data.declined);
         setRejected(data.rejected);
         setLoading(false);
-    }, [currentUser, change]);
+    }, [userData, change]);
 
+
+    useEffect(async () => {
+        if(!cap){
+            try {
+                setError('Left Cluster');
+                setLoading(true);
+                await leaveCluster();
+                history.push('/dormant-dashboard');
+            } catch(err) {
+                setError('Failed to leave cluster')
+            }
+        }
+    }, [cap])
 
     async function handleSubmitApply(businessId){
         try {
             setError('Successfully Applied');
             setLoading(true);
-            const data = await fetch(currentUser.links.applied, {
+            const data = await fetch(userData.links.applied, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'apply',
@@ -60,7 +77,7 @@ export function ApplicantDashboard(){
         try {
             setError('Successfully Canceled');
             setLoading(true);
-            const data = await fetch(currentUser.links.applied, {
+            const data = await fetch(userData.links.applied, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'cancel',
@@ -82,7 +99,7 @@ export function ApplicantDashboard(){
         try {
             setError('Successfully Accepted Reach');
             setLoading(true);
-            const data = await fetch(currentUser.links.received, {
+            const data = await fetch(userData.links.received, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'accept',
@@ -104,7 +121,7 @@ export function ApplicantDashboard(){
         try {
             setError('Successfully declined reach');
             setLoading(true);
-            const data = await fetch(currentUser.links.received, {
+            const data = await fetch(userData.links.received, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'decline',
@@ -126,7 +143,7 @@ export function ApplicantDashboard(){
         try {
             setError('Successfully declined communication');
             setLoading(true);
-            const data = await fetch(currentUser.links.interested, {
+            const data = await fetch(userData.links.interested, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'decline',
@@ -148,7 +165,7 @@ export function ApplicantDashboard(){
         try {
             setError('Successfully Accepted offer');
             setLoading(true);
-            const data = await fetch(currentUser.links.reviewed, {
+            const data = await fetch(userData.links.reviewed, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'accept',
@@ -176,7 +193,7 @@ export function ApplicantDashboard(){
         try {
             setError('Successfully declined offer');
             setLoading(true);
-            const data = await fetch(currentUser.links.reviewed, {
+            const data = await fetch(userData.links.reviewed, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'decline',
@@ -256,6 +273,17 @@ export function ApplicantDashboard(){
         })
     }
 
+    function renderAccepted(){
+        return accepted.map(business => {
+            return (
+                <div>
+                    <h3>{business.name}</h3>
+                    <li>{business.features.skills}</li>
+                </div>
+            )
+        })
+    }
+
     return (
         <div>
             <h2>Pool</h2>
@@ -269,6 +297,8 @@ export function ApplicantDashboard(){
             {renderInterested()}
             <h2>Reviewed</h2>
             {renderReviewed()}
+            <h2>Accepted</h2>
+            {renderAccepted()}
         </div>
     );
 }

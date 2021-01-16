@@ -9,11 +9,8 @@ export function RegistrationForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [type, setType] = useState('')
-    const [major, setMajor] = useState([]);
-    const [standing, setStanding] = useState([]);
-    const [gpa, setGpa] = useState(0);
-    const [skills, setSkills] = useState([]);
+    const [type, setType] = useState('');
+    const [worldId, setWorldId] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const {registerUser} = useAuth();
@@ -24,13 +21,12 @@ export function RegistrationForm() {
         try {
             setError('Registered');
             setLoading(true);
-            if(!name || !email || !password || !confirmPassword || !type || !major.length
-               || !standing.length || !gpa || !skills.length) {
+            if(!name || !email || !password || !confirmPassword || !type || !worldId) {
                throw 'Fields not filled out';
             } else if(password !== confirmPassword){
                 throw 'Passwords do not match';
             }
-            const data = await registerUser(name, email, password, type, major, standing, gpa, skills);
+            await registerUser(name, email, password, type, worldId);
             history.push('/dormant-dashboard');
         } catch(err) {
             setError(err);
@@ -45,6 +41,8 @@ export function RegistrationForm() {
             <input type='radio' name='type' onClick={() => setType('applicant')}/> Applicant
             <input type='radio' name='type' onClick={() => setType('business')}/> Business
             <br/>
+            College: <input value={worldId} onChange={e => setWorldId(e.target.value)}/>
+            <br/>
             Name: <input value={name} onChange={e => setName(e.target.value)}/>
             <br/>
             Email: <input value={email} onChange={e => setEmail(e.target.value)}/>
@@ -53,13 +51,6 @@ export function RegistrationForm() {
             <br/>
             Confirm Password: <input type='password' value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
             <br/>
-            Major: <TagsInput value={major} onChange={tags => setMajor(tags)}/>
-            <br/>
-            Standing: <TagsInput value={standing} onChange={tags => setStanding(tags)}/>
-            <br/>
-            GPA: <input value={gpa} onChange={e => setGpa(e.target.value)}/>
-            <br/>
-            Skills: <TagsInput value={skills} onChange={tags => setSkills(tags)}/>
             <button disabled={loading} onClick={handleRegisterUser}>Submit</button>
             <div>
                 Already Have an Account? <Link to='/login'>Log In</Link>
