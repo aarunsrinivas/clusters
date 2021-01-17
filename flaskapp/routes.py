@@ -166,9 +166,10 @@ def delete_applicant(world_id, applicant_id):
 	applicant = Applicant.query.get(applicant_id)
 	world = applicant.world
 	if applicant.cluster_id:
-		world.remove_applicant(applicant)
+		world.remove(applicant)
 	db.session.delete(applicant)
 	db.session.commit()
+	return {'200': 'Successfully deleted'}
 
 
 @app.route('/worlds/<string:world_id>/applicants/<int:applicant_id>', methods=['POST'])
@@ -399,9 +400,10 @@ def delete_business(world_id, business_id):
 	business = Business.query.get(business_id)
 	world = business.world
 	if business.cluster_id:
-		world.remove_business(business)
+		world.remove(business)
 	db.session.delete(business)
 	db.session.commit()
+	return {'200': 'Successfully deleted'}
 
 
 @app.route('/worlds/<string:world_id>/businesses/<int:business_id>', methods=['POST'])

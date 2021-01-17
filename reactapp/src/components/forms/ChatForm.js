@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {useAuth} from '../../../contexts/AuthContext';
+import {useAuth} from '../../contexts/AuthContext';
 import io from 'socket.io-client';
 
 const socket = io.connect('http://127.0.0.1:5000/messaging');
 
-export function ChatRoom(){
+export function ChatForm(){
 
     const {userData} = useAuth();
     const [chatsList, setChatsList] = useState([]);

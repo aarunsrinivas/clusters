@@ -1,6 +1,6 @@
 import React, {useContext, useState, useEffect} from 'react';
-import bcrypt from 'bcryptjs';
 import {auth} from '../firebase';
+import firebase from 'firebase/app';
 
 const AuthContext = React.createContext();
 
@@ -13,6 +13,7 @@ export function AuthProvider({children}) {
     const [currentUser, setCurrentUser] = useState(JSON.parse(sessionStorage.getItem('currentUser')) || null);
     const [userData, setUserData] = useState(JSON.parse(sessionStorage.getItem('userData')) || null);
     const [loading, setLoading] = useState(true);
+
 
     async function registerUser(name, email, password, type, worldId) {
         const fire = auth.createUserWithEmailAndPassword(email, password);
@@ -28,7 +29,7 @@ export function AuthProvider({children}) {
             if(response.ok){
                 return response.json();
             }
-        });
+        })
         setUserData(data);
         return fire;
     }
@@ -55,11 +56,16 @@ export function AuthProvider({children}) {
                 email,
                 worldId
             })
+        }).then(response => {
+            if(response.ok){
+                return response.json();
+            }
         });
         setUserData(data);
     }
 
     async function updateFeatures(cap, gpa, majors, standings, skills, interests, courses){
+        console.log(firebase.auth().currentUser);
         const data = await fetch(userData.links.self, {
             method: 'PUT',
             body: JSON.stringify({
@@ -87,7 +93,6 @@ export function AuthProvider({children}) {
     }
 
     async function deleteUser(){
-        const fire = currentUser.delete();
         const data = await fetch(userData.links.self, {
             method: 'DELETE'
         }).then(response => {
@@ -95,7 +100,7 @@ export function AuthProvider({children}) {
                 return response.json();
             }
         });
-        setUserData(null);
+        const fire = currentUser.delete();
         return fire;
     }
 
@@ -136,10 +141,19 @@ export function AuthProvider({children}) {
     }
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
+        const unsubscribe = auth.onAuthStateChanged(async user => {
+            if(!user){
+                sessionStorage.clear();
+            } else {
+                const data = await fetch(`/users?email=${user.email}`).then(response => {
+                    if(response.ok){
+                        return response.json();
+                    }
+                });
+                setUserData(data);
+            }
             setCurrentUser(user);
-            !user ? sessionStorage.clear() :
-                sessionStorage.setItem('currentUser', JSON.stringify(user));
+            sessionStorage.setItem('currentUser', JSON.stringify(user));
         })
         setLoading(false)
         return unsubscribe;

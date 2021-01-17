@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {useAuth} from '../../contexts/AuthContext';
-import bcrypt from 'bcryptjs'
 import {Link, useHistory} from 'react-router-dom';
 
 
@@ -21,8 +20,7 @@ export function LoginForm() {
                 throw 'Fields are required';
             }
             await loginUser(email, password);
-            const destination = '/dormant-dashboard';
-            history.push(destination);
+            history.push('/dashboard');
         } catch(err) {
             setError(err);
         }

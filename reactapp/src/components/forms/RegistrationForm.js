@@ -27,7 +27,7 @@ export function RegistrationForm() {
                 throw 'Passwords do not match';
             }
             await registerUser(name, email, password, type, worldId);
-            history.push('/dormant-dashboard');
+            history.push('/dashboard');
         } catch(err) {
             setError(err);
         }

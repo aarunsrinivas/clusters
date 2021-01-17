@@ -183,6 +183,7 @@ class Applicant(User):
 	interested = db.relationship('Business', collection_class=set, secondary='middle', lazy=True)
 	reviewed = db.relationship('Business', collection_class=set, secondary='final', lazy=True)
 	accepted = db.relationship('Business', collection_class=set, secondary='checkout', lazy=True)
+	requests = db.relationship('Request', backref='applicant', lazy=True, cascade='all, delete-orphan')
 	chats = db.relationship('Chat', backref='applicant', lazy=True, cascade='all, delete-orphan')
 	features = db.relationship('ApplicantFeatures', backref='applicant', lazy=True, uselist=False,
 	                           cascade='all, delete')
@@ -228,6 +229,7 @@ class Business(User):
 	interested = db.relationship('Applicant', collection_class=set, secondary='middle', lazy=True)
 	offered = db.relationship('Applicant', collection_class=set, secondary='final', lazy=True)
 	accepted = db.relationship('Applicant', collection_class=set, secondary='checkout', lazy=True)
+	requests = db.relationship('Request', backref='business', lazy=True, cascade='all, delete-orphan')
 	chats = db.relationship('Chat', backref='business', lazy=True, cascade='all, delete-orphan')
 	features = db.relationship('BusinessFeatures', backref='business', lazy=True, uselist=False,
 	                           cascade='all, delete')
@@ -960,7 +962,16 @@ class Skill(Characteristic):
 	}
 
 
-# chat models
+# communication models
+
+class Request(db.Model):
+	__tablename__ = 'request'
+	id = db.Column(db.Integer, primary_key=True)
+	sender = db.Column(db.String(30), nullable=False)
+	applicant_id = db.Column(db.Integer, db.ForeignKey('applicant.id'), nullable=False)
+	business_id = db.Column(db.Integer, db.ForeignKey('business.id'), nullable=False)
+	text = db.Column(db.Text, nullable=False)
+
 
 class Chat(db.Model):
 	__tablename__ = 'chat'
