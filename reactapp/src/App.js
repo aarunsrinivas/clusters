@@ -13,7 +13,7 @@ import {PrivateRoute} from './routes/PrivateRoute';
 import {PublicRoute} from './routes/PublicRoute';
 import {Dashboard} from './components/pages/Dashboard';
 import {ActivePrivateRoute} from './routes/ActivePrivateRoute';
-import {ChatForm} from './components/forms/ChatForm';
+import {ChatPanel} from './components/panels/ChatPanel';
 
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
                 <PublicRoute path='/login' component={LoginPage}/>
                 <PrivateRoute path='/account' component={AccountPage}/>
                 <PrivateRoute path='/dashboard' component={Dashboard}/>
-                <ActivePrivateRoute path='/chats' component={ChatForm}/>
+                <ActivePrivateRoute path='/chats' component={ChatPanel}/>
             </Switch>
         </AuthProvider>
     </Router>

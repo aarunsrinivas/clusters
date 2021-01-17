@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 
 const socket = io.connect('http://127.0.0.1:5000/messaging');
 
-export function ChatForm(){
+export function ChatPanel(){
 
     const {userData} = useAuth();
     const [chatsList, setChatsList] = useState([]);

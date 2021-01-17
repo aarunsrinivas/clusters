@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useAuth} from '../../../contexts/AuthContext';
-import {ApplicantForm} from '../../forms/ApplicantForm';
-import {BusinessForm} from '../../forms/BusinessForm';
+import {ApplicantPanel} from '../../panels/ApplicantPanel';
+import {BusinessPanel} from '../../panels/BusinessPanel';
 import {useHistory} from 'react-router-dom';
 
 export function ActiveDashboard(){
@@ -39,8 +39,8 @@ export function ActiveDashboard(){
 
     return (
         <div>
-            {userData.type === 'applicant' && <ApplicantForm/>}
-            {userData.type === 'business' && <BusinessForm/>}
+            {userData.type === 'applicant' && <ApplicantPanel/>}
+            {userData.type === 'business' && <BusinessPanel/>}
             <button disabled={loading} onClick={handlePeelFromCluster}>Peel From Cluster</button>
             <button disabled={loading} onClick={handleLeaveCluster}>Leave Cluster</button>
 
