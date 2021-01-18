@@ -126,11 +126,6 @@ def world_serializer(world):
 	}
 
 
-@app.route('/', methods=['GET'])
-def check():
-	return 'Here'
-
-
 @app.route('/worlds', methods=['GET'])
 def find_world():
 	args = request.args
