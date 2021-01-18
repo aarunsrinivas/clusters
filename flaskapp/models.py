@@ -123,7 +123,7 @@ def find_clusters(data_set, n_clusters, max_iter=300, n_init=15):
 class User(db.Model):
 	__tablename__ = 'user'
 	id = db.Column(db.Integer, primary_key=True)
-	world_id = db.Column(db.Integer, db.ForeignKey('world.id'), nullable=False)
+	world_id = db.Column(db.String(50), db.ForeignKey('world.id'), nullable=False)
 	name = db.Column(db.String(20), nullable=False)
 	email = db.Column(db.String(120), unique=True, nullable=False)
 	session_id = db.Column(db.String(120), unique=True)
@@ -411,7 +411,7 @@ class Cluster(db.Model):
 	                                     lazy=True, uselist=False, cascade='all, delete')
 	business_centroid = db.relationship('BusinessCentroid', backref='cluster', lazy=True,
 	                                    uselist=False, cascade='all, delete')
-	world_id = db.Column(db.Integer, db.ForeignKey('world.id'), nullable=False)
+	world_id = db.Column(db.String(50), db.ForeignKey('world.id'), nullable=False)
 	top_id = db.Column(db.Integer, db.ForeignKey('world.id'))
 	bottom_id = db.Column(db.Integer, db.ForeignKey('world.id'))
 	applicants = db.relationship('Applicant', backref='cluster', lazy=True)
