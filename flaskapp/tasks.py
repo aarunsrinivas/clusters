@@ -1,6 +1,7 @@
 import numpy as np
 from flaskapp import db
 
+# need to do
 IDEAL_SIZE = 15
 IDEAL_RATIO = 2
 IDEAL_INACTIVITY = 0
