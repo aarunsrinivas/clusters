@@ -1,1 +1,1 @@
-web: gunicorn run: socket_io
+web: gunicorn flaskapp.app
