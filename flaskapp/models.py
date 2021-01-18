@@ -124,7 +124,7 @@ class User(db.Model):
 	__tablename__ = 'user'
 	id = db.Column(db.Integer, primary_key=True)
 	world_id = db.Column(db.String(50), db.ForeignKey('world.id'), nullable=False)
-	name = db.Column(db.String(20), nullable=False)
+	name = db.Column(db.String(50), nullable=False)
 	email = db.Column(db.String(120), unique=True, nullable=False)
 	session_id = db.Column(db.String(120), unique=True)
 	type = db.Column(db.String(50))
@@ -163,11 +163,14 @@ declined2 = db.Table('declined2',
                      db.Column('applicant_id', db.Integer, db.ForeignKey('applicant.id'), primary_key=True),
                      db.Column('business_id', db.Integer, db.ForeignKey('business.id'), primary_key=True))
 
-visited = db.Table('visited',
-                   db.Column('applicant_id', db.Integer, db.ForeignKey('applicant.id'), primary_key=True,
-                             nullable=True),
-                   db.Column('business_id', db.Integer, db.ForeignKey('business.id'), primary_key=True, nullable=True),
-                   db.Column('cluster_id', db.Integer, db.ForeignKey('cluster.id'), primary_key=True))
+visited_applicant_table = db.Table('visited_applicant_table',
+                                   db.Column('applicant_id', db.Integer, db.ForeignKey('applicant.id'),
+                                             primary_key=True),
+                                   db.Column('cluster_id', db.Integer, db.ForeignKey('cluster.id'), primary_key=True))
+
+visited_business_table = db.Table('visited_business_table',
+                                  db.Column('business_id', db.Integer, db.ForeignKey('business.id'), primary_key=True),
+                                  db.Column('cluster_id', db.Integer, db.ForeignKey('cluster.id'), primary_key=True))
 
 
 class Applicant(User):
@@ -175,7 +178,7 @@ class Applicant(User):
 	id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
 	cluster_id = db.Column(db.Integer, db.ForeignKey('cluster.id'))
 	cap = db.Column(db.Integer, default=1)
-	visited_clusters = db.relationship('Cluster', collection_class=set, secondary='visited', lazy=True)
+	visited_clusters = db.relationship('Cluster', collection_class=set, secondary='visited_applicant_table', lazy=True)
 	applied = db.relationship('Business', collection_class=set, secondary='initial1', lazy=True)
 	received = db.relationship('Business', collection_class=set, secondary='initial2', lazy=True)
 	declined = db.relationship('Business', collection_class=set, secondary='declined1', lazy=True)
@@ -221,7 +224,7 @@ class Business(User):
 	id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
 	cluster_id = db.Column(db.Integer, db.ForeignKey('cluster.id'))
 	cap = db.Column(db.Integer, default=1)
-	visited_clusters = db.relationship('Cluster', collection_class=set, secondary='visited', lazy=True)
+	visited_clusters = db.relationship('Cluster', collection_class=set, secondary='visited_business_table', lazy=True)
 	reached = db.relationship('Applicant', collection_class=set, secondary='initial2', lazy=True)
 	received = db.relationship('Applicant', collection_class=set, secondary='initial1', lazy=True)
 	declined = db.relationship('Applicant', collection_class=set, secondary='declined2', lazy=True)
@@ -482,20 +485,25 @@ class Cluster(db.Model):
 
 # features/centroid models
 
+major_table = db.Table('major_table',
+                       db.Column('data_id', db.Integer, db.ForeignKey('data.id'), primary_key=True),
+                       db.Column('major_id', db.String(50), db.ForeignKey('major.id'), primary_key=True))
 
-data_table = db.Table('data_table',
-                      db.Column('data_id', db.Integer, db.ForeignKey('data.id'), primary_key=True),
-                      db.Column('major_id', db.String(30), db.ForeignKey('major.id'), primary_key=True,
-                                nullable=True),
-                      db.Column('skill_id', db.String(30), db.ForeignKey('skill.id'), primary_key=True,
-                                nullable=True),
-                      db.Column('interest_id', db.String(30), db.ForeignKey('interest.id'), primary_key=True,
-                                nullable=True),
-                      db.Column('course_id', db.String(30), db.ForeignKey('course.id'), primary_key=True,
-                                nullable=True),
-                      db.Column('standing_id', db.String(30), db.ForeignKey('standing.id'), primary_key=True,
-                                nullable=True)
-                      )
+skill_table = db.Table('skill_table',
+                       db.Column('data_id', db.Integer, db.ForeignKey('data.id'), primary_key=True),
+                       db.Column('skill_id', db.String(50), db.ForeignKey('skill.id'), primary_key=True))
+
+interest_table = db.Table('interest_table',
+                          db.Column('data_id', db.Integer, db.ForeignKey('data.id'), primary_key=True),
+                          db.Column('interest_id', db.String(50), db.ForeignKey('interest.id'), primary_key=True))
+
+course_table = db.Table('course_table',
+                        db.Column('data_id', db.Integer, db.ForeignKey('data.id'), primary_key=True),
+                        db.Column('course_id', db.String(50), db.ForeignKey('course.id'), primary_key=True))
+
+standing_table = db.Table('standing_table',
+                          db.Column('data_id', db.Integer, db.ForeignKey('data.id'), primary_key=True),
+                          db.Column('standing_id', db.String(50), db.ForeignKey('standing.id'), primary_key=True))
 
 
 class Data(db.Model):
@@ -504,11 +512,11 @@ class Data(db.Model):
 	type = db.Column(db.String(30), nullable=False)
 	ref_type = db.Column(db.String(30))
 	gpa = db.Column(db.Integer, default=0)
-	majors = db.relationship('Major', collection_class=set, secondary='data_table')
-	standings = db.relationship('Standing', collection_class=set, secondary='data_table')
-	skills = db.relationship('Skill', collection_class=set, secondary='data_table')
-	interests = db.relationship('Interest', collection_class=set, secondary='data_table')
-	courses = db.relationship('Course', collection_class=set, secondary='data_table')
+	majors = db.relationship('Major', collection_class=set, secondary='major_table')
+	standings = db.relationship('Standing', collection_class=set, secondary='standing_table')
+	skills = db.relationship('Skill', collection_class=set, secondary='skill_table')
+	interests = db.relationship('Interest', collection_class=set, secondary='interest_table')
+	courses = db.relationship('Course', collection_class=set, secondary='course_table')
 
 	__mapper_args__ = {
 		'polymorphic_identity': 'data',
@@ -907,7 +915,7 @@ class Characteristic(db.Model):
 class Major(Characteristic):
 	__tablename__ = 'major'
 	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
-	data = db.relationship('Data', secondary='data_table')
+	data = db.relationship('Data', secondary='major_table')
 	major_counters = db.relationship('MajorCounter', lazy=True, backref='major')
 
 	__mapper_args__ = {
@@ -918,7 +926,7 @@ class Major(Characteristic):
 class Course(Characteristic):
 	__tablename__ = 'course'
 	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
-	data = db.relationship('Data', secondary='data_table')
+	data = db.relationship('Data', secondary='course_table')
 	course_counters = db.relationship('CourseCounter', lazy=True, backref='course')
 	description = db.Column(db.Text)
 
@@ -930,7 +938,7 @@ class Course(Characteristic):
 class Standing(Characteristic):
 	__tablename__ = 'standing'
 	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
-	data = db.relationship('Data', secondary='data_table')
+	data = db.relationship('Data', secondary='standing_table')
 	standing_counters = db.relationship('StandingCounter', lazy=True, backref='standing')
 
 	__mapper_args__ = {
@@ -941,7 +949,7 @@ class Standing(Characteristic):
 class Interest(Characteristic):
 	__tablename__ = 'interest'
 	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
-	data = db.relationship('Data', secondary='data_table')
+	data = db.relationship('Data', secondary='interest_table')
 	interest_counters = db.relationship('InterestCounter', lazy=True, backref='interest')
 	description = db.Column(db.Text)
 
@@ -953,7 +961,7 @@ class Interest(Characteristic):
 class Skill(Characteristic):
 	__tablename__ = 'skill'
 	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
-	data = db.relationship('Data', secondary='data_table')
+	data = db.relationship('Data', secondary='skill_table')
 	skill_counters = db.relationship('SkillCounter', lazy=True, backref='skill')
 	description = db.Column(db.Text)
 
