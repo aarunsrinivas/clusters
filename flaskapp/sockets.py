@@ -21,7 +21,6 @@ def leave(user_id):
 
 @socket_io.on('message', namespace='/messaging')
 def message(payload):
-	print(payload)
 	sender = User.query.get(payload['senderId'])
 	recipient = User.query.get(payload['recipientId'])
 	msg = Message(origin=payload['senderId'], message=payload['message'], chat_id=payload['chatId'])
