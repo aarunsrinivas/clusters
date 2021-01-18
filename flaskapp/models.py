@@ -846,7 +846,7 @@ class Counter(db.Model):
 class MajorCounter(Counter):
 	__tablename__ = 'major_counter'
 	id = db.Column(db.Integer, db.ForeignKey('counter.id'), primary_key=True)
-	major_id = db.Column(db.Integer, db.ForeignKey('major.id'), nullable=False)
+	major_id = db.Column(db.String(50), db.ForeignKey('major.id'), nullable=False)
 
 	__mapper_args__ = {
 		'polymorphic_identity': 'major_counter'
@@ -856,7 +856,7 @@ class MajorCounter(Counter):
 class CourseCounter(Counter):
 	__tablename__ = 'course_counter'
 	id = db.Column(db.Integer, db.ForeignKey('counter.id'), primary_key=True)
-	course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
+	course_id = db.Column(db.String(50), db.ForeignKey('course.id'), nullable=False)
 
 	__mapper_args__ = {
 		'polymorphic_identity': 'course_counter'
@@ -866,7 +866,7 @@ class CourseCounter(Counter):
 class StandingCounter(Counter):
 	__tablename__ = 'standing_counter'
 	id = db.Column(db.Integer, db.ForeignKey('counter.id'), primary_key=True)
-	standing_id = db.Column(db.Integer, db.ForeignKey('standing.id'), nullable=False)
+	standing_id = db.Column(db.String(50), db.ForeignKey('standing.id'), nullable=False)
 
 	__mapper_args__ = {
 		'polymorphic_identity': 'standing_counter'
@@ -876,7 +876,7 @@ class StandingCounter(Counter):
 class InterestCounter(Counter):
 	__tablename__ = 'interest_counter'
 	id = db.Column(db.Integer, db.ForeignKey('counter.id'), primary_key=True)
-	interest_id = db.Column(db.Integer, db.ForeignKey('interest.id'), nullable=False)
+	interest_id = db.Column(db.String(50), db.ForeignKey('interest.id'), nullable=False)
 
 	__mapper_args__ = {
 		'polymorphic_identity': 'interest_counter'
@@ -886,7 +886,7 @@ class InterestCounter(Counter):
 class SkillCounter(Counter):
 	__tablename__ = 'skill_counter'
 	id = db.Column(db.Integer, db.ForeignKey('counter.id'), primary_key=True)
-	skill_id = db.Column(db.Integer, db.ForeignKey('skill.id'), nullable=False)
+	skill_id = db.Column(db.String(50), db.ForeignKey('skill.id'), nullable=False)
 
 	__mapper_args__ = {
 		'polymorphic_identity': 'skill_counter'
@@ -895,7 +895,7 @@ class SkillCounter(Counter):
 
 class Characteristic(db.Model):
 	__tablename__ = 'characteristic'
-	id = db.Column(db.String(30), primary_key=True)
+	id = db.Column(db.String(50), primary_key=True)
 	type = db.Column(db.String(50))
 
 	__mapper_args__ = {
@@ -906,7 +906,7 @@ class Characteristic(db.Model):
 
 class Major(Characteristic):
 	__tablename__ = 'major'
-	id = db.Column(db.String(30), db.ForeignKey('characteristic.id'), primary_key=True)
+	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
 	data = db.relationship('Data', secondary='data_table')
 	major_counters = db.relationship('MajorCounter', lazy=True, backref='major')
 
@@ -917,7 +917,7 @@ class Major(Characteristic):
 
 class Course(Characteristic):
 	__tablename__ = 'course'
-	id = db.Column(db.String(30), db.ForeignKey('characteristic.id'), primary_key=True)
+	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
 	data = db.relationship('Data', secondary='data_table')
 	course_counters = db.relationship('CourseCounter', lazy=True, backref='course')
 	description = db.Column(db.Text)
@@ -929,7 +929,7 @@ class Course(Characteristic):
 
 class Standing(Characteristic):
 	__tablename__ = 'standing'
-	id = db.Column(db.String(30), db.ForeignKey('characteristic.id'), primary_key=True)
+	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
 	data = db.relationship('Data', secondary='data_table')
 	standing_counters = db.relationship('StandingCounter', lazy=True, backref='standing')
 
@@ -940,7 +940,7 @@ class Standing(Characteristic):
 
 class Interest(Characteristic):
 	__tablename__ = 'interest'
-	id = db.Column(db.String(30), db.ForeignKey('characteristic.id'), primary_key=True)
+	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
 	data = db.relationship('Data', secondary='data_table')
 	interest_counters = db.relationship('InterestCounter', lazy=True, backref='interest')
 	description = db.Column(db.Text)
@@ -952,7 +952,7 @@ class Interest(Characteristic):
 
 class Skill(Characteristic):
 	__tablename__ = 'skill'
-	id = db.Column(db.String(30), db.ForeignKey('characteristic.id'), primary_key=True)
+	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
 	data = db.relationship('Data', secondary='data_table')
 	skill_counters = db.relationship('SkillCounter', lazy=True, backref='skill')
 	description = db.Column(db.Text)
@@ -967,7 +967,7 @@ class Skill(Characteristic):
 class Request(db.Model):
 	__tablename__ = 'request'
 	id = db.Column(db.Integer, primary_key=True)
-	sender = db.Column(db.String(30), nullable=False)
+	sender = db.Column(db.String(50), nullable=False)
 	applicant_id = db.Column(db.Integer, db.ForeignKey('applicant.id'), nullable=False)
 	business_id = db.Column(db.Integer, db.ForeignKey('business.id'), nullable=False)
 	text = db.Column(db.Text, nullable=False)
