@@ -412,8 +412,8 @@ class Cluster(db.Model):
 	business_centroid = db.relationship('BusinessCentroid', backref='cluster', lazy=True,
 	                                    uselist=False, cascade='all, delete')
 	world_id = db.Column(db.String(50), db.ForeignKey('world.id'), nullable=False)
-	top_id = db.Column(db.Integer, db.ForeignKey('world.id'))
-	bottom_id = db.Column(db.Integer, db.ForeignKey('world.id'))
+	top_id = db.Column(db.String(50), db.ForeignKey('world.id'))
+	bottom_id = db.Column(db.String(50), db.ForeignKey('world.id'))
 	applicants = db.relationship('Applicant', backref='cluster', lazy=True)
 	businesses = db.relationship('Business', backref='cluster', lazy=True)
 
