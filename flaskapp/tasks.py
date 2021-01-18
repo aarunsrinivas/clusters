@@ -1,7 +1,6 @@
 import numpy as np
 from flaskapp import db
 
-# need to do
 IDEAL_SIZE = 15
 IDEAL_RATIO = 2
 IDEAL_INACTIVITY = 0
@@ -20,7 +19,7 @@ def check(cluster):
 
 def manage(world):
 	for cluster in world.top:
-		# calc prob of split
+		# calc prob of merge
 		pass
 	for cluster in world.bottom:
 		# calc prob of merge
