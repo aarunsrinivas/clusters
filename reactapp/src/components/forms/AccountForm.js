@@ -46,9 +46,6 @@ export function AccountForm() {
             Confirm Password: <input type='password' value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
             <br/>
             <button disabled={loading} onClick={handleUpdateAccount}>Submit</button>
-            <div>
-                Already Have an Account? <Link to='/login'>Log In</Link>
-            </div>
         </div>
     )
 }

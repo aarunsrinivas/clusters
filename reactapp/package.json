@@ -15,6 +15,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "react-tagsinput": "^3.19.0",
+    "rm": "^0.1.8",
     "socket.io-client": "^3.0.4",
     "web-vitals": "^0.2.4"
   },
