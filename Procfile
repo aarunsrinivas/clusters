@@ -1,1 +1,1 @@
-web: gunicorn flaskapp:app
+web: gunicorn --worker-class socketio.sgunicorn.GeventSocketIOWorker flaskapp:app
