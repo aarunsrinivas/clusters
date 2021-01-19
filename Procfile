@@ -1,1 +1,1 @@
-web: gunicorn --worker-class geventwebsocket.gunicorn.workers.GeventWebSocketWorker flaskapp:app
+web: gunicorn --worker-class eventlet -w 1 flaskapp:app
