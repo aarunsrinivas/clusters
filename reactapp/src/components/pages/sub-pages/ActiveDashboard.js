@@ -21,7 +21,6 @@ export function ActiveDashboard(){
             setError(err);
         }
         setLoading(false);
-        console.log(error);
     }
 
     async function handleLeaveCluster(){
@@ -33,7 +32,6 @@ export function ActiveDashboard(){
             setError(err);
         }
         setLoading(false);
-        console.log(error);
     }
 
 

@@ -24,7 +24,6 @@ export function DormantDashboard(){
             setError(err);
         }
         setLoading(false);
-        console.log(error);
     }
 
     return (

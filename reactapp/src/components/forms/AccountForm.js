@@ -29,7 +29,6 @@ export function AccountForm() {
         } catch(err) {
             setError(err);
         }
-        console.log(error);
         setLoading(false);
     }
 

@@ -65,7 +65,6 @@ export function AuthProvider({children}) {
     }
 
     async function updateFeatures(cap, gpa, majors, standings, skills, interests, courses){
-        console.log(firebase.auth().currentUser);
         const data = await fetch(userData.links.self, {
             method: 'PUT',
             body: JSON.stringify({
