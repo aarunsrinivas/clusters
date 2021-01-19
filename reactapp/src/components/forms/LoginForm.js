@@ -24,7 +24,6 @@ export function LoginForm() {
         } catch(err) {
             setError(err);
         }
-        console.log(error);
         setLoading(false);
     };
 

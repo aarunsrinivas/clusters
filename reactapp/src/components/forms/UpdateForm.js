@@ -16,9 +16,6 @@ export function UpdateForm() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        console.log(userData);
-    }, [])
 
     async function handleUpdateFeatures() {
         try {
@@ -31,7 +28,6 @@ export function UpdateForm() {
         } catch(err) {
             setError(err);
         }
-        console.log(error);
         setLoading(false);
     }
 
