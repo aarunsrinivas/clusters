@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useAuth} from '../../contexts/AuthContext';
 import io from 'socket.io-client';
 
-const socket = io.connect('https://clusters-development.herokuapp.com/messaging');
+const socket = io.connect(`${process.env.REACT_APP_BACKEND_URL}/messaging`)
 
 export function ChatPanel(){
 
@@ -18,7 +18,7 @@ export function ChatPanel(){
 
     useEffect(async () => {
         try {
-            const data = await fetch(userData.links.chats).then(response => {
+            const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.chats}`).then(response => {
                 if(response.ok){
                     return response.json();
                 }
@@ -33,7 +33,7 @@ export function ChatPanel(){
 
     async function handleChatClick(chat){
         try {
-            const data = await fetch(chat.links.messages).then(response => {
+            const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${chat.links.messages}`).then(response => {
                 if(response.ok){
                     return response.json();
                 }

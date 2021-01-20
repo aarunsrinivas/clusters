@@ -18,7 +18,7 @@ export function BusinessPanel(){
     const [error, setError] = useState();
 
     useEffect(async () => {
-        const data = await fetch(userData.links.all).then(response => {
+        const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.all}`).then(response => {
             if(response.ok){
                 return response.json();
             }
@@ -51,7 +51,7 @@ export function BusinessPanel(){
         try {
             setError('Successfully Reached');
             setLoading(true);
-            const data = await fetch(userData.links.reached, {
+            const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.reached}`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'reach',
@@ -73,7 +73,7 @@ export function BusinessPanel(){
         try {
             setError('Successfully Canceled');
             setLoading(true);
-            const data = await fetch(userData.links.reached, {
+            const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.reached}`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'cancel',
@@ -95,7 +95,7 @@ export function BusinessPanel(){
         try {
             setError('Successfully Accepted Apply');
             setLoading(true);
-            const data = await fetch(userData.links.received, {
+            const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.received}`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'accept',
@@ -117,7 +117,7 @@ export function BusinessPanel(){
         try {
             setError('Successfully declined apply');
             setLoading(true);
-            const data = await fetch(userData.links.received, {
+            const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.received}`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'decline',
@@ -139,7 +139,7 @@ export function BusinessPanel(){
         try {
             setError('Successfully offered');
             setLoading(true);
-            const data = await fetch(userData.links.interested, {
+            const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.interested}`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'offer',
@@ -161,7 +161,7 @@ export function BusinessPanel(){
         try {
             setError('Successfully declined communication');
             setLoading(true);
-            const data = await fetch(userData.links.interested, {
+            const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.interested}`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'decline',
@@ -183,7 +183,7 @@ export function BusinessPanel(){
         try {
             setError('Successfully rescinded offer');
             setLoading(true);
-            const data = await fetch(userData.links.offered, {
+            const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.offered}`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'rescind',

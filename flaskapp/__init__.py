@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO
+from flask_cors import CORS
 import redis
 from rq import Queue
 from rq_scheduler import Scheduler
@@ -17,6 +18,7 @@ scheduler = Scheduler(queue=queue, connection=redis)
 '''
 db = SQLAlchemy(app)
 socket_io = SocketIO(app, cors_allowed_origins='*')
+CORS(app, origins='https://clusters-development.web.app/')
 
 from flaskapp import routes
 from flaskapp import sockets

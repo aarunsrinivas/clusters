@@ -3,7 +3,7 @@ from flaskapp import db
 
 IDEAL_SIZE = 15
 IDEAL_RATIO = 2
-IDEAL_INACTIVITY = 0
+WORST_INACTIVITY = 2
 
 
 def check(cluster):
@@ -19,8 +19,11 @@ def check(cluster):
 
 def manage(world):
 	for cluster in world.top:
-		# calc prob of merge
-		pass
+		size_prob = abs(cluster.size - IDEAL_SIZE) / IDEAL_SIZE
+		ratio_prob = abs(cluster.ratio - IDEAL_RATIO) / IDEAL_RATIO
+		time_prob = 1 - abs(cluster.inactivity - WORST_INACTIVITY) / WORST_INACTIVITY
+		# normalize and cap at 1 then divide by three to obtain probability
+
 	for cluster in world.bottom:
 		# calc prob of merge
 		pass
