@@ -138,8 +138,9 @@ def find_world():
 def find_user():
 	args = request.args
 	if 'email' in args:
-		user = User.query.filter_by(email=args['email']).first()
-		return jsonify(applicant_serializer(user) if user.type == 'applicant' else business_serializer(user))
+		return jsonify([applicant_serializer(user) if user.type == 'applicant'
+		                else business_serializer(user) for user in
+		                User.query.filter_by(email=args['email']).all()])
 	return jsonify([applicant_serializer(user) if user.type == 'applicant'
 	                else business_serializer(user) for user in
 	                User.query.all()])

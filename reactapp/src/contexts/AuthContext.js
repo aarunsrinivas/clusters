@@ -42,7 +42,7 @@ export function AuthProvider({children}) {
                 return response.json();
             }
         });
-        setUserData(data);
+        setUserData(data[0]);
         return fire;
     }
 
