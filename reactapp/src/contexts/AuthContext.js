@@ -14,10 +14,12 @@ export function AuthProvider({children}) {
     const [userData, setUserData] = useState(JSON.parse(sessionStorage.getItem('userData')) || null);
     const [loading, setLoading] = useState(true);
 
+    `${process.env.REACT_APP_BACKEND_URL}${userData.links.all}`
 
     async function registerUser(name, email, password, type, worldId) {
         const fire = auth.createUserWithEmailAndPassword(email, password);
-        const destination = type === 'applicant' ? `/worlds/${worldId}/applicants` : `/worlds/${worldId}/businesses`;
+        const destination = type === 'applicant' ? `${process.env.REACT_APP_BACKEND_URL}/worlds/${worldId}/applicants`
+            : `${process.env.REACT_APP_BACKEND_URL}/worlds/${worldId}/businesses`;
         const data = await fetch(destination, {
             method: 'POST',
             body: JSON.stringify({
@@ -36,7 +38,7 @@ export function AuthProvider({children}) {
 
     async function loginUser(email, password){
         const fire = auth.signInWithEmailAndPassword(email, password);
-        const data = await fetch(`/users?email=${email}`).then(response => {
+        const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users?email=${email}`).then(response => {
             if(response.ok){
                 return response.json();
             }
@@ -48,7 +50,7 @@ export function AuthProvider({children}) {
     async function updateAccount(name, email, password, worldId){
         currentUser.updateEmail(email);
         password && currentUser.updatePassword(password);
-        const data = await fetch(userData.links.self, {
+        const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.self}`, {
             method: 'PUT',
             body: JSON.stringify({
                 action: 'account',
@@ -65,7 +67,7 @@ export function AuthProvider({children}) {
     }
 
     async function updateFeatures(cap, gpa, majors, standings, skills, interests, courses){
-        const data = await fetch(userData.links.self, {
+        const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.self}`, {
             method: 'PUT',
             body: JSON.stringify({
                 action: 'features',
@@ -92,7 +94,7 @@ export function AuthProvider({children}) {
     }
 
     async function deleteUser(){
-        const data = await fetch(userData.links.self, {
+        const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.self}`, {
             method: 'DELETE'
         }).then(response => {
             if(response.ok){
@@ -104,7 +106,7 @@ export function AuthProvider({children}) {
     }
 
     async function joinCluster(){
-        const data = await fetch(userData.links.self, {
+        const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.self}`, {
             method: 'POST',
             body: JSON.stringify({action: 'join'})
         }).then(response => {
@@ -116,7 +118,7 @@ export function AuthProvider({children}) {
     }
 
     async function leaveCluster(){
-        const data = await fetch(userData.links.self, {
+        const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.self}`, {
             method: 'POST',
             body: JSON.stringify({action: 'leave'})
         }).then(response => {
@@ -128,7 +130,7 @@ export function AuthProvider({children}) {
     }
 
     async function peelFromCluster(){
-        const data = await fetch(userData.links.self, {
+        const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}${userData.links.self}`, {
             method: 'POST',
             body: JSON.stringify({action: 'peel'})
         }).then(response => {
@@ -144,7 +146,7 @@ export function AuthProvider({children}) {
             if(!user){
                 sessionStorage.clear();
             } else {
-                const data = await fetch(`/users?email=${user.email}`).then(response => {
+                const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users?email=${user.email}`).then(response => {
                     if(response.ok){
                         return response.json();
                     }
