@@ -16,7 +16,6 @@ export function UpdateForm() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-
     async function handleUpdateFeatures() {
         try {
             setError('Updated Features');

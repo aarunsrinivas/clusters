@@ -30,7 +30,7 @@ export function AuthProvider({children}) {
             if(response.ok){
                 return response.json();
             }
-        })
+        });
         setUserData(data);
         return fire;
     }
@@ -101,6 +101,7 @@ export function AuthProvider({children}) {
             }
         });
         const fire = currentUser.delete();
+        setUserData(null);
         return fire;
     }
 
@@ -144,25 +145,24 @@ export function AuthProvider({children}) {
         const unsubscribe = auth.onAuthStateChanged(async user => {
             if(!user){
                 sessionStorage.clear();
-            } else {
+            } else if(user && !userData){
                 const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users?email=${user.email}`).then(response => {
                     if(response.ok){
                         return response.json();
                     }
                 });
-                setUserData(data);
+                setUserData(data[0]);
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
             }
             setCurrentUser(user);
-            sessionStorage.setItem('currentUser', JSON.stringify(user));
         })
         setLoading(false)
         return unsubscribe;
     }, []);
 
     useEffect(() => {
-        !currentUser ? sessionStorage.clear() :
-            sessionStorage.setItem('userData', JSON.stringify(userData));
-        setLoading(false)
+        userData ? sessionStorage.setItem('userData', JSON.stringify(userData))
+            : sessionStorage.clear();
     }, [userData]);
 
     const value = {
