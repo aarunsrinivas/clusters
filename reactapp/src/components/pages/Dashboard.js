@@ -23,7 +23,6 @@ export function Dashboard(){
             setError('Failed to log out');
         }
         setLoading(false);
-        console.log(error);
     }
 
     async function handleDeleteUser(){
@@ -36,7 +35,6 @@ export function Dashboard(){
             setError(err);
         }
         setLoading(false);
-        console.log(error);
     }
 
 
