@@ -14,7 +14,6 @@ export function AuthProvider({children}) {
     const [userData, setUserData] = useState(JSON.parse(sessionStorage.getItem('userData')) || null);
     const [loading, setLoading] = useState(true);
 
-    `${process.env.REACT_APP_BACKEND_URL}${userData.links.all}`
 
     async function registerUser(name, email, password, type, worldId) {
         const fire = auth.createUserWithEmailAndPassword(email, password);
