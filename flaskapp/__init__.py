@@ -18,7 +18,7 @@ scheduler = Scheduler(queue=queue, connection=redis)
 '''
 db = SQLAlchemy(app)
 socket_io = SocketIO(app, cors_allowed_origins='*')
-cors = CORS(app, origins='https://clusters-development.web.app')
+cors = CORS(app)
 
 from flaskapp import routes
 from flaskapp import sockets
