@@ -145,7 +145,7 @@ export function AuthProvider({children}) {
         const unsubscribe = auth.onAuthStateChanged(async user => {
             if(!user){
                 sessionStorage.clear();
-            } else if(user && !userData){
+            } else if(!userData){
                 const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users?email=${user.email}`).then(response => {
                     if(response.ok){
                         return response.json();
