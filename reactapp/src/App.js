@@ -1,8 +1,8 @@
-import './App.css';
-<<<<<<< HEAD
+import './styles/App.css';
 import {HomePage} from './components/pages/HomePage';
 import {LoginPage} from './components/pages/LoginPage';
 import {RegistrationPage} from './components/pages/RegistrationPage';
+import {AccountPage} from './components/pages/AccountPage';
 import {AuthProvider} from './contexts/AuthContext';
 import {
     BrowserRouter as Router,
@@ -10,10 +10,10 @@ import {
     Route
 } from 'react-router-dom';
 import {PrivateRoute} from './routes/PrivateRoute';
+import {PublicRoute} from './routes/PublicRoute';
+import {Dashboard} from './components/pages/Dashboard';
 import {ActivePrivateRoute} from './routes/ActivePrivateRoute';
-import {DormantPrivateRoute} from './routes/DormantPrivateRoute';
-import {ActiveDashboard} from './components/pages/ActiveDashboard';
-import {DormantDashboard} from './components/pages/DormantDashboard';
+import {ChatPanel} from './components/panels/ChatPanel';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -23,22 +23,14 @@ function App() {
         <AuthProvider>
             <Switch>
                 <Route exact path='/' component={HomePage}/>
-                <Route path='/register' component={RegistrationPage}/>
-                <Route path='/login' component={LoginPage}/>
-                <DormantPrivateRoute path='/dormant-dashboard' component={DormantDashboard}/>
-                <ActivePrivateRoute path='/active-dashboard' component={ActiveDashboard}/>
+                <PublicRoute path='/register' component={RegistrationPage}/>
+                <PublicRoute path='/login' component={LoginPage}/>
+                <PrivateRoute path='/account' component={AccountPage}/>
+                <PrivateRoute path='/dashboard' component={Dashboard}/>
+                <ActivePrivateRoute path='/chats' component={ChatPanel}/>
             </Switch>
         </AuthProvider>
     </Router>
-=======
-import {ApplicantRegistration} from './components/forms/ApplicantRegistration'
-
-function App() {
-  return (
-    <div>
-        <ApplicantRegistration/>
-    </div>
->>>>>>> main
   );
 }
 

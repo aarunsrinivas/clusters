@@ -1,17 +1,16 @@
 import React from 'react'
-import {useAuth} from '../../contexts/AuthContext'
-import {NavBar} from '../NavBar';
+import {NavBar} from '../modules/NavBar';
+import '../../styles/HomePage.css';
 
 export function HomePage() {
-
-    const {currentUser} = useAuth();
 
     return (
         <div>
             <NavBar />
-            <h1>Clusters</h1>
-            <br/>
-            {currentUser && <u1>{JSON.stringify(currentUser)}</u1>}
+            <div className="home-container">
+                <h1 className="home-header">Clusters</h1>
+                <h3 className="home-description">An easier way to find the best fit for both students and researchers alike.</h3>
+            </div>
         </div>
     )
 }

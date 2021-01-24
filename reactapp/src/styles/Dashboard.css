@@ -1,0 +1,21 @@
+.active-header {
+    background-color: white;
+    border-radius: 10px;
+    margin: auto;
+    text-align: center;
+    margin-top: 3%;
+    width: fit-content;
+    margin-bottom: 20px;
+    padding: 1px 80px;
+}
+
+.single-card-container {
+    display: inline-block;
+    margin-left: 10px;
+    width: fit-content;
+}
+
+.all-cards-container {
+    margin: auto;
+    width: fit-content;
+}
