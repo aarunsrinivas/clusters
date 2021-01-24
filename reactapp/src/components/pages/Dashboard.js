@@ -12,7 +12,6 @@ export function Dashboard(){
     const [error, setError] = useState();
     const history = useHistory();
 
-
     async function handleLogoutUser(){
         try {
             setError('Logged Out');
@@ -41,14 +40,10 @@ export function Dashboard(){
     return (
         <div>
             <h1>Dashboard</h1>
-            {userData &&
-                <div>
-                    {!userData.clusterId && <DormantDashboard/>}
-                    {userData.clusterId && <ActiveDashboard/>}
-                    <button disabled={loading} onClick={handleLogoutUser}>Logout</button>
-                    <button disabled={loading} onClick={handleDeleteUser}>Delete User</button>
-                </div>
-            }
+            {!userData.clusterId && <DormantDashboard/>}
+            {userData.clusterId && <ActiveDashboard/>}
+            <button disabled={loading} onClick={handleLogoutUser}>Logout</button>
+            <button disabled={loading} onClick={handleDeleteUser}>Delete User</button>
         </div>
     );
 }
