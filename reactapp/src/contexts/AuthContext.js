@@ -155,14 +155,13 @@ export function AuthProvider({children}) {
                 sessionStorage.setItem('currentUser', JSON.stringify(user));
             }
             setCurrentUser(user);
-        })
+        });
         setLoading(false)
         return unsubscribe;
     }, []);
 
     useEffect(() => {
-        userData ? sessionStorage.setItem('userData', JSON.stringify(userData))
-            : sessionStorage.clear();
+        sessionStorage.setItem('userData', JSON.stringify(userData))
     }, [userData]);
 
     const value = {

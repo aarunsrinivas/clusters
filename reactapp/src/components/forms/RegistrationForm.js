@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Link, useHistory} from 'react-router-dom';
 import TagsInput from 'react-tagsinput';
 import {useAuth} from '../../contexts/AuthContext';
@@ -16,7 +16,6 @@ export function RegistrationForm() {
     const {registerUser} = useAuth();
     const history = useHistory();
 
-
     async function handleRegisterUser() {
         try {
             setError('Registered');
@@ -26,7 +25,7 @@ export function RegistrationForm() {
             } else if(password !== confirmPassword){
                 throw 'Passwords do not match';
             }
-            await registerUser(name, email, password, type, worldId);
+            await registerUser(name, email, password, type, worldId)
             history.push('/dashboard');
         } catch(err) {
             setError(err);
