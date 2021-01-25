@@ -14,6 +14,7 @@ import {PublicRoute} from './routes/PublicRoute';
 import {Dashboard} from './components/pages/Dashboard';
 import {ActivePrivateRoute} from './routes/ActivePrivateRoute';
 import {ChatPanel} from './components/panels/ChatPanel';
+import 'bootstrap/dist/css/bootstrap.css';
 
 
 function App() {
