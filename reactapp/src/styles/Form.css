@@ -1,0 +1,26 @@
+/* Login Styling */
+.form-container {
+    margin: auto;
+    margin-top: 10%;
+    background-color: white;
+    border-radius: 15px;
+    padding: 50px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    width: 30%;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 7%;
+}
+
+.form-register-redirect {
+    padding-top: 5%;
+}
+
+.form-button {
+    margin: auto;
+    margin-top: 10%;
+}
+/* End Login Styling */
