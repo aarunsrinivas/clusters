@@ -13,24 +13,12 @@ export function Dashboard(){
     const [error, setError] = useState();
     const history = useHistory();
 
-    async function handleLogoutUser(){
-        try {
-            setError('Logged Out');
-            setLoading(true);
-            await logoutUser();
-            history.push('/');
-        } catch {
-            setError('Failed to log out');
-        }
-        setLoading(false);
-    }
 
     return (
         <div>
             <NavBar />
             {!userData.clusterId && <DormantDashboard/>}
             {userData.clusterId && <ActiveDashboard/>}
-            <button disabled={loading} onClick={handleLogoutUser}>Logout</button>
         </div>
     );
 }

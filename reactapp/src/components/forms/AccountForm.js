@@ -8,7 +8,7 @@ import {
 
 
 export function AccountForm() {
-    const {userData, updateAccount, deleteUser} = useAuth();
+    const {userData, updateAccount, deleteUser, logoutUser} = useAuth();
     const [name, setName] = useState(userData.name);
     const [email, setEmail] = useState(userData.email);
     const [password, setPassword] = useState('');
@@ -43,6 +43,18 @@ export function AccountForm() {
             history.push('/');
         } catch(err) {
             setError(err);
+        }
+        setLoading(false);
+    }
+
+    async function handleLogoutUser(){
+        try {
+            setError('Logged Out');
+            setLoading(true);
+            await logoutUser();
+            history.push('/');
+        } catch {
+            setError('Failed to log out');
         }
         setLoading(false);
     }
@@ -88,16 +100,18 @@ export function AccountForm() {
                     <div className="register-button">
                         <Button variant="primary" disabled={loading} onClick={handleUpdateAccount} block>Update Info</Button>
                     </div>
-                    <br/>
+                    <hr/>
                     <div>
+                        <Button variant="warning" disabled={loading} onClick={handleLogoutUser} block>Logout</Button>
                         <Button variant="danger" disabled={loading} onClick={handleDeleteUser} block>Delete Account</Button>
                     </div>
-
                 </Form>
 
             </div>
 
         </div>
+        
+        //<button disabled={loading} onClick={handleLogoutUser}>Logout</button>
 
         // <div>
         //     College: <input value={worldId} onChange={e => setWorldId(e.target.value)}/>
