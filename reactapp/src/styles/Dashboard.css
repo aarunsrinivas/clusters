@@ -1,3 +1,23 @@
+/* Dormant Dashboard Styling */
+.dormant-container {
+    margin: auto;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    background-color: white;
+    border-radius: 15px;
+    padding: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 32%;
+}
+
+
+
+
+
+
+
+/* Active Dashboard Styling */
 .dashboard-container {
     margin: auto;
     margin-top: 5%;

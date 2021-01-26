@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {useAuth} from '../../../contexts/AuthContext';
 import {UpdateForm} from '../../forms/UpdateForm';
 import {useHistory} from 'react-router-dom';
+import {Button} from 'react-bootstrap';
+import '../../../styles/Dashboard.css'
 
 export function DormantDashboard(){
 
@@ -9,7 +11,6 @@ export function DormantDashboard(){
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState();
     const history = useHistory();
-
 
     async function handleJoinCluster(){
         try {
@@ -27,9 +28,10 @@ export function DormantDashboard(){
     }
 
     return (
-        <div>
+        <div className="dormant-container">
             <UpdateForm/>
-            <button disabled={loading} onClick={handleJoinCluster}>Join Cluster</button>
+            <hr/>
+            <Button variant="primary" disabled={loading} onClick={handleJoinCluster} block>Join Cluster</Button>
         </div>
     );
 }
