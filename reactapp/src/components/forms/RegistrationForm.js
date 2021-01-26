@@ -4,7 +4,9 @@ import {useAuth} from '../../contexts/AuthContext';
 import '../../styles/Form.css';
 import {
     Form,
-    Button
+    Button,
+    ToggleButtonGroup,
+    ToggleButton
 } from 'react-bootstrap';
 
 
@@ -44,11 +46,17 @@ export function RegistrationForm() {
             <h1 className="register-header">Create Account</h1>
 
             <Form>
-
                 <div className="radio-container">
+                    <ToggleButtonGroup type="radio" name="type">
+                        <ToggleButton value={1} onClick={() => setType('applicant')}>Student</ToggleButton>
+                        <ToggleButton value={2} variant="secondary" onClick={() => setType('business')}>Faculty </ToggleButton> 
+                    </ToggleButtonGroup>
+                </div>
+
+                {/* <div className="radio-container">
                     <input type='radio' name='type' onClick={() => setType('applicant')}/> Student {' '}
                     <input type='radio' name='type' onClick={() => setType('business')}/> Faculty
-                </div>
+                </div> */}
 
                 <Form.Group controlId="name">
                     <Form.Label>Name</Form.Label>

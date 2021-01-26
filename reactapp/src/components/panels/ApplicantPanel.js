@@ -401,7 +401,9 @@ export function ApplicantPanel(){
             <h2>Accepted</h2>
             <div className="all-cards-container"></div>
             {renderAccepted()}
+            
         </div>
+
     );
 }
 
