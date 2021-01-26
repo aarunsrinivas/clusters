@@ -12,16 +12,16 @@ export function ActiveDashboard(){
     const history = useHistory();
 
 
-    async function handlePeelFromCluster(){
-        try {
-            setError('Peeled From Cluster');
-            setLoading(true);
-            await peelFromCluster();
-        } catch(err) {
-            setError(err);
-        }
-        setLoading(false);
-    }
+    // async function handlePeelFromCluster(){
+    //     try {
+    //         setError('Peeled From Cluster');
+    //         setLoading(true);
+    //         await peelFromCluster();
+    //     } catch(err) {
+    //         setError(err);
+    //     }
+    //     setLoading(false);
+    // }
 
     async function handleLeaveCluster(){
         try {
@@ -39,7 +39,7 @@ export function ActiveDashboard(){
         <div>
             {userData.type === 'applicant' && <ApplicantPanel/>}
             {userData.type === 'business' && <BusinessPanel/>}
-            <button disabled={loading} onClick={handlePeelFromCluster}>Peel From Cluster</button>
+            {/* <button disabled={loading} onClick={handlePeelFromCluster}>Peel From Cluster</button> */}
             <button disabled={loading} onClick={handleLeaveCluster}>Leave Cluster</button>
 
         </div>
