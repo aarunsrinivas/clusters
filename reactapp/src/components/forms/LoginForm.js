@@ -57,8 +57,7 @@ export function LoginForm() {
                     
                     <div className="form-button">
                         <Button variant="primary" onClick={handleLoginUser} block>
-                            Sign in
-                        </Button>
+                            Sign in </Button>
                     </div>
 
                 </Form>
