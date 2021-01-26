@@ -2,22 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="529807ad-25c3-452b-8521-38663f4c1963" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reactapp/.env.local" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/.env.local" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reactapp/.firebaserc" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/.firebaserc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reactapp/build/asset-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/build/asset-manifest.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reactapp/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/build/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reactapp/build/static/css/main.73efbf52.chunk.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reactapp/build/static/css/main.73efbf52.chunk.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/2.d5939ed1.chunk.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/2.d5939ed1.chunk.js.LICENSE.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/2.d5939ed1.chunk.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/3.d3b45773.chunk.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/3.d3b45773.chunk.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/main.d43067f7.chunk.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/main.d43067f7.chunk.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/runtime-main.b1574705.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/runtime-main.b1574705.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reactapp/src/components/forms/LoginForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/src/components/forms/LoginForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/build/static/css/main.136f47a1.chunk.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/build/static/css/main.136f47a1.chunk.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/2.a0310737.chunk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/2.a0310737.chunk.js.LICENSE.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/2.a0310737.chunk.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/3.6cc040f7.chunk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/3.6cc040f7.chunk.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/main.56fa4632.chunk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/main.56fa4632.chunk.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/runtime-main.3f4b7aa0.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/build/static/js/runtime-main.3f4b7aa0.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/components/forms/RegistrationForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/src/components/forms/RegistrationForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reactapp/src/styles/Form.css" beforeDir="false" afterPath="$PROJECT_DIR$/reactapp/src/styles/Form.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,9 +49,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="/usr/local/bin/python3.8" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
