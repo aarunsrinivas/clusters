@@ -1,11 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import {Link, useHistory} from 'react-router-dom';
-import TagsInput from 'react-tagsinput';
 import {useAuth} from '../../contexts/AuthContext';
+import {
+    Form,
+    Button
+} from 'react-bootstrap';
 
 
 export function AccountForm() {
-    const {userData, updateAccount} = useAuth();
+    const {userData, updateAccount, deleteUser} = useAuth();
     const [name, setName] = useState(userData.name);
     const [email, setEmail] = useState(userData.email);
     const [password, setPassword] = useState('');
@@ -32,22 +35,85 @@ export function AccountForm() {
         setLoading(false);
     }
 
+    async function handleDeleteUser(){
+        try {
+            setError('Successfully deleted');
+            setLoading(true);
+            await deleteUser();
+            history.push('/');
+        } catch(err) {
+            setError(err);
+        }
+        setLoading(false);
+    }
+
     return (
         <div>
-            College: <input value={worldId} onChange={e => setWorldId(e.target.value)}/>
-            <br/>
-            Name: <input value={name} onChange={e => setName(e.target.value)}/>
-            <br/>
-            Email: <input value={email} onChange={e => setEmail(e.target.value)}/>
-            <br/>
-            Password: <input type='password' value={password} onChange={e => setPassword(e.target.value)}/>
-            <br/>
-            Confirm Password: <input type='password' value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
-            <br/>
-            <button disabled={loading} onClick={handleUpdateAccount}>Submit</button>
-            <div>
-                Back to Dashboard? <Link to='/dashboard'>Dashboard</Link>
+        
+            <div className="register-container">
+
+                <h2 className="register-header">Update Account Details</h2>
+
+                <Form>
+                    <Form.Group controlId="name">
+                        <Form.Label>Name</Form.Label>
+                        <Form.Control placeholder="Enter name" 
+                        value={name} onChange={e => setName(e.target.value)} />
+                    </Form.Group>
+
+                    <Form.Group controlId="worldId">
+                        <Form.Label>College</Form.Label>
+                        <Form.Control placeholder="Enter college"
+                        value={worldId} onChange={e => setWorldId(e.target.value)} />
+                    </Form.Group>
+
+                    <Form.Group controlId="email">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control type="email" placeholder="Enter email" 
+                        value={email} onChange={e => setEmail(e.target.value)} />
+                    </Form.Group>
+
+                    <Form.Group controlId="password">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control type="password" placeholder="Enter password" 
+                        value={password} onChange={e => setPassword(e.target.value)} />
+                    </Form.Group>
+
+                    <Form.Group controlId="confirmPassword">
+                        <Form.Label>Confirm Password</Form.Label>
+                        <Form.Control type="password" placeholder="Confirm password" 
+                        value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
+                    </Form.Group>
+
+                    <div className="register-button">
+                        <Button variant="primary" disabled={loading} onClick={handleUpdateAccount} block>Update Info</Button>
+                    </div>
+                    <br/>
+                    <div>
+                        <Button variant="danger" disabled={loading} onClick={handleDeleteUser} block>Delete Account</Button>
+                    </div>
+
+                </Form>
+
             </div>
+
         </div>
+
+        // <div>
+        //     College: <input value={worldId} onChange={e => setWorldId(e.target.value)}/>
+        //     <br/>
+        //     Name: <input value={name} onChange={e => setName(e.target.value)}/>
+        //     <br/>
+        //     Email: <input value={email} onChange={e => setEmail(e.target.value)}/>
+        //     <br/>
+        //     Password: <input type='password' value={password} onChange={e => setPassword(e.target.value)}/>
+        //     <br/>
+        //     Confirm Password: <input type='password' value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
+        //     <br/>
+        //     <button disabled={loading} onClick={handleUpdateAccount}>Submit</button>
+        //     <div>
+        //         Back to Dashboard? <Link to='/dashboard'>Dashboard</Link>
+        //     </div>
+        // </div>
     )
 }

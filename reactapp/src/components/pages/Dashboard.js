@@ -4,6 +4,7 @@ import {UpdateForm} from '../forms/UpdateForm';
 import {ActiveDashboard} from './sub-pages/ActiveDashboard';
 import {DormantDashboard} from './sub-pages/DormantDashboard';
 import {useHistory} from 'react-router-dom';
+import {NavBar} from '../modules/NavBar';
 
 export function Dashboard(){
 
@@ -39,7 +40,7 @@ export function Dashboard(){
 
     return (
         <div>
-            <h1>Dashboard</h1>
+            <NavBar />
             {!userData.clusterId && <DormantDashboard/>}
             {userData.clusterId && <ActiveDashboard/>}
             <button disabled={loading} onClick={handleLogoutUser}>Logout</button>

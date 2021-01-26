@@ -24,3 +24,51 @@
     margin-top: 10%;
 }
 /* End Login Styling */
+
+/* Registration Styling */
+.register-container {
+    margin: auto;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    background-color: white;
+    border-radius: 15px;
+    padding: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 32%;
+}
+
+.register-header {
+    text-align: center;
+    margin-bottom: 5%;
+}
+
+.register-radio {
+    margin: 5px;
+}
+
+.register-button {
+    margin-top: 5%;
+}
+
+.radio-container {
+    margin-left: 0%;
+    margin-bottom: 10px;
+    align-items: center;
+}
+input[type="radio"]{
+    margin: 0 0px 0 60px;
+}
+
+
+/* End Registration Styling */
+
+.button-container {
+    display: block;
+    margin: auto;
+    width: fit-content;
+    background-color: white;
+    border-radius: 15px;
+    padding: 10px;
+    margin-bottom: 10%;
+}

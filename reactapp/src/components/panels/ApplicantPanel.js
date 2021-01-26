@@ -1,5 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {useAuth} from '../../contexts/AuthContext';
+import '../../styles/Dashboard.css';
+import {
+    Card,
+    Button
+} from 'react-bootstrap';
 
 export function ApplicantPanel(){
 
@@ -210,22 +215,55 @@ export function ApplicantPanel(){
     function renderPool(){
         return pool.map(business => {
             return (
-                <div>
-                    <h3>{business.name}</h3>
-                    <li>{business.features.skills}</li>
-                    <button onClick={() => handleSubmitApply(business.id)}>Apply</button>
+                <div className="single-card-container">
+                    <Card style={{width: '16rem'}}>
+                        <Card.Body>
+                            <Card.Title>{business.name}</Card.Title>
+                            <Card.Text>
+                                <p>{formatSkills(business.features.skills)}</p>
+                                <p>{formatCourses(business.features.courses)}</p>
+                            </Card.Text>
+                            <Button variant="primary" onClick={() => handleSubmitApply(business.id)}>Apply</Button>
+                        </Card.Body>
+                    </Card>
                 </div>
             )
         })
     }
 
+    function formatSkills(skills){
+        var list = "";
+        for (var i = 0; i < skills.length - 1; i++) {
+            list += skills[i] + " | ";
+        }
+        list += skills[skills.length - 1];
+
+        return list;
+    }
+
+    function formatCourses(courses){
+        var list = "";
+        for (var i = 0; i < courses.length - 1; i++) {
+            list += courses[i] + " | ";
+        }
+        list += courses[courses.length - 1];
+
+        return list;
+    }
+
     function renderApplied(){
         return applied.map(business => {
             return (
-                <div>
-                    <h3>{business.name}</h3>
-                    <li>{business.features.skills}</li>
-                    <button onClick={() => handleCancelApply(business.id)}>Cancel</button>
+                <div className="single-card-container">
+                    <Card style={{width: '14rem'}}>
+                        <Card.Body>
+                            <Card.Title>{business.name}</Card.Title>
+                            <Card.Text>
+                                {formatSkills(business.features.skills)}
+                            </Card.Text>
+                            <Button variant="danger" onClick={() => handleCancelApply(business.id)}>Cancel</Button>
+                        </Card.Body>
+                    </Card>
                 </div>
             )
         })
@@ -234,12 +272,24 @@ export function ApplicantPanel(){
     function renderReceived(){
         return received.map(business => {
             return (
-                <div>
-                    <h3>{business.name}</h3>
-                    <li>{business.features.skills}</li>
-                    <button onClick={() => handleAcceptReach(business.id)}>Accept</button>
-                    <button onClick={() => handleDeclineReach(business.id)}>Decline</button>
+                <div className="single-card-container">
+                    <Card style={{width: '14rem'}}>
+                        <Card.Body>
+                            <Card.Title>{business.name}</Card.Title>
+                            <Card.Text>
+                                {formatSkills(business.features.skills)}
+                            </Card.Text>
+                            <Button variant="primary" onClick={() => handleAcceptReach(business.id)}>Accept</Button> 
+                            <Button variant="danger" onClick={() => handleDeclineReach(business.id)}>Decline</Button>
+                        </Card.Body>
+                    </Card>
                 </div>
+                // <div>
+                //     <h3>{business.name}</h3>
+                //     <li>{business.features.skills}</li>
+                //     <button onClick={() => handleAcceptReach(business.id)}>Accept</button>
+                //     <button onClick={() => handleDeclineReach(business.id)}>Decline</button>
+                // </div>
             )
         })
     }
@@ -247,11 +297,22 @@ export function ApplicantPanel(){
     function renderInterested(){
         return interested.map(business => {
             return (
-                <div>
-                    <h3>{business.name}</h3>
-                    <li>{business.features.skills}</li>
-                    <button onClick={() => handleDeclineInterest(business.id)}>Decline</button>
+                <div className="single-card-container">
+                    <Card style={{width: '14rem'}}>
+                        <Card.Body>
+                            <Card.Title>{business.name}</Card.Title>
+                            <Card.Text>
+                                {formatSkills(business.features.skills)}
+                            </Card.Text>
+                            <Button variant="danger" onClick={() => handleDeclineInterest(business.id)}>Decline</Button>
+                        </Card.Body>
+                    </Card>
                 </div>
+                // <div>
+                //     <h3>{business.name}</h3>
+                //     <li>{business.features.skills}</li>
+                //     <button onClick={() => handleDeclineInterest(business.id)}>Decline</button>
+                // </div>
             )
         })
     }
@@ -259,12 +320,24 @@ export function ApplicantPanel(){
     function renderReviewed(){
         return reviewed.map(business => {
             return (
-                <div>
-                    <h3>{business.name}</h3>
-                    <li>{business.features.skills}</li>
-                    <button onClick={() => handleAcceptOffer(business.id)}>Accept</button>
-                    <button onClick={() => handleDeclineOffer(business.id)}>Decline</button>
+                <div className="single-card-container">
+                    <Card style={{width: '14rem'}}>
+                        <Card.Body>
+                            <Card.Title>{business.name}</Card.Title>
+                            <Card.Text>
+                                {formatSkills(business.features.skills)}
+                            </Card.Text>
+                            <Button variant="primary" onClick={() => handleAcceptOffer(business.id)}>Accept Offer</Button> 
+                            <Button variant="danger" onClick={() => handleDeclineOffer(business.id)}>Decline Offer</Button>
+                        </Card.Body>
+                    </Card>
                 </div>
+                // <div>
+                //     <h3>{business.name}</h3>
+                //     <li>{business.features.skills}</li>
+                //     <button onClick={() => handleAcceptOffer(business.id)}>Accept</button>
+                //     <button onClick={() => handleDeclineOffer(business.id)}>Decline</button>
+                // </div>
             )
         })
     }
@@ -272,28 +345,61 @@ export function ApplicantPanel(){
     function renderAccepted(){
         return accepted.map(business => {
             return (
-                <div>
-                    <h3>{business.name}</h3>
-                    <li>{business.features.skills}</li>
+                <div className="single-card-container">
+                    <Card style={{width: '14rem'}}>
+                        <Card.Body>
+                            <Card.Title>{business.name}</Card.Title>
+                            <Card.Text>
+                                {formatSkills(business.features.skills)}
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
                 </div>
+                // <div>
+                //     <h3>{business.name}</h3>
+                //     <li>{business.features.skills}</li>
+                // </div>
             )
         })
     }
 
     return (
-        <div>
-            <h2>Pool</h2>
-            {renderPool()}
-            <br/>
+        <div className="dashboard-container">
+            <h1>Dashboard</h1>
+            <hr/>
+
+            <h2>Availible Positions</h2>
+            <div className="all-cards-container">
+                {renderPool()}
+            </div>
+            <hr/>
+
             <h2>Applied</h2>
-            {renderApplied()}
+            <div className="all-cards-container">
+                {renderApplied()}
+            </div>
+            <hr/>
+
             <h2>Received</h2>
-            {renderReceived()}
+            <div className="all-cards-container">
+                {renderReceived()}
+            </div>
+            <hr/>
+
             <h2>Interested</h2>
-            {renderInterested()}
-            <h2>Reviewed</h2>
-            {renderReviewed()}
+            <div className="all-cards-container">
+                {renderInterested()}
+            </div>
+            <hr/>
+
+            <h2>Offers</h2>
+            <div className="all-cards-container">
+                {renderReviewed()}
+            </div>
+            <hr/>
+
             <h2>Accepted</h2>
+            <div className="all-cards-container"></div>
             {renderAccepted()}
         </div>
     );

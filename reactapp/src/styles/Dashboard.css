@@ -1,0 +1,21 @@
+.dashboard-container {
+    margin: auto;
+    margin-top: 5%;
+    background-color: white;
+    border-radius: 15px;
+    padding: 50px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    width: 80%;
+}
+
+.single-card-container {
+    display: inline-block;
+    margin-left: 10px;
+    width: fit-content;
+}
+
+.all-cards-container {
+    width: fit-content;
+    justify-content: left;
+}

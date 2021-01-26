@@ -1,10 +1,11 @@
 import React from 'react';
 import {AccountForm} from '../forms/AccountForm';
+import {NavBar} from '../modules/NavBar';
 
 export function AccountPage() {
     return (
         <div>
-            <h1>Account</h1>
+            <NavBar />
             <AccountForm/>
         </div>
     )

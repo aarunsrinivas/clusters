@@ -1,10 +1,11 @@
 import React from 'react';
 import {RegistrationForm} from '../forms/RegistrationForm';
+import {NavBar} from '../modules/NavBar';
 
 export function RegistrationPage() {
     return (
         <div>
-            <h1>Register</h1>
+            <NavBar />
             <RegistrationForm/>
         </div>
     )
