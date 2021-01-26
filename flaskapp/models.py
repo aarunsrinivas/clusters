@@ -907,23 +907,23 @@ class SkillCounter(Counter):
 
 
 major_world = db.Table('major_world',
-                       db.Column('world_id', db.Integer, db.ForeignKey('world.id'), primary_key=True),
+                       db.Column('world_id', db.String(50), db.ForeignKey('world.id'), primary_key=True),
                        db.Column('major_id', db.String(50), db.ForeignKey('major.id'), primary_key=True))
 
 skill_world = db.Table('skill_world',
-                       db.Column('world_id', db.Integer, db.ForeignKey('world.id'), primary_key=True),
+                       db.Column('world_id', db.String(50), db.ForeignKey('world.id'), primary_key=True),
                        db.Column('skill_id', db.String(50), db.ForeignKey('skill.id'), primary_key=True))
 
 interest_world = db.Table('interest_world',
-                          db.Column('world_id', db.Integer, db.ForeignKey('world.id'), primary_key=True),
+                          db.Column('world_id', db.String(50), db.ForeignKey('world.id'), primary_key=True),
                           db.Column('interest_id', db.String(50), db.ForeignKey('interest.id'), primary_key=True))
 
 course_world = db.Table('course_world',
-                        db.Column('world_id', db.Integer, db.ForeignKey('world.id'), primary_key=True),
+                        db.Column('world_id', db.String(50), db.ForeignKey('world.id'), primary_key=True),
                         db.Column('course_id', db.String(50), db.ForeignKey('course.id'), primary_key=True))
 
 standing_world = db.Table('standing_world',
-                          db.Column('world_id', db.Integer, db.ForeignKey('world.id'), primary_key=True),
+                          db.Column('world_id', db.String(50), db.ForeignKey('world.id'), primary_key=True),
                           db.Column('standing_id', db.String(50), db.ForeignKey('standing.id'), primary_key=True))
 
 
