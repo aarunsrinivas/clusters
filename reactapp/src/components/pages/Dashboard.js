@@ -40,7 +40,6 @@ export function Dashboard(){
 
     return (
         <div>
-            <h1>Dashboard</h1>
             <NavBar />
             {!userData.clusterId && <DormantDashboard/>}
             {userData.clusterId && <ActiveDashboard/>}
