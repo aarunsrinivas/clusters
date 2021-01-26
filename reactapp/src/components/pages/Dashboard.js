@@ -25,26 +25,12 @@ export function Dashboard(){
         setLoading(false);
     }
 
-    async function handleDeleteUser(){
-        try {
-            setError('Successfully deleted');
-            setLoading(true);
-            await deleteUser();
-            history.push('/');
-        } catch(err) {
-            setError(err);
-        }
-        setLoading(false);
-    }
-
-
     return (
         <div>
             <NavBar />
             {!userData.clusterId && <DormantDashboard/>}
             {userData.clusterId && <ActiveDashboard/>}
             <button disabled={loading} onClick={handleLogoutUser}>Logout</button>
-            <button disabled={loading} onClick={handleDeleteUser}>Delete User</button>
         </div>
     );
 }
