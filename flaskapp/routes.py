@@ -126,12 +126,48 @@ def world_serializer(world):
 	}
 
 
+def characteristic_serializer(characteristic):
+	return {
+		'id': characteristic.id
+	}
+
+
 @app.route('/worlds', methods=['GET'])
 def find_world():
 	args = request.args
 	if 'id' in args:
 		return jsonify(list(map(world_serializer, ClusterWorld.query.filter_by(id=args['id']).all())))
 	return jsonify(list(map(world_serializer, ClusterWorld.query.all())))
+
+
+@app.route('/worlds/<string:world_id>/majors', methods=['GET'])
+def get_majors(world_id):
+	world = ClusterWorld.query.get(world_id)
+	return jsonify(list(map(characteristic_serializer, world.majors)))
+
+
+@app.route('/worlds/<string:world_id>/courses', methods=['GET'])
+def get_courses(world_id):
+	world = ClusterWorld.query.get(world_id)
+	return jsonify(list(map(characteristic_serializer, world.courses)))
+
+
+@app.route('/worlds/<string:world_id>/interests', methods=['GET'])
+def get_interests(world_id):
+	world = ClusterWorld.query.get(world_id)
+	return jsonify(list(map(characteristic_serializer, world.interests)))
+
+
+@app.route('/worlds/<string:world_id>/standings', methods=['GET'])
+def get_standings(world_id):
+	world = ClusterWorld.query.get(world_id)
+	return jsonify(list(map(characteristic_serializer, world.standings)))
+
+
+@app.route('/worlds/<string:world_id>/skills', methods=['GET'])
+def get_skills(world_id):
+	world = ClusterWorld.query.get(world_id)
+	return jsonify(list(map(characteristic_serializer, world.skills)))
 
 
 @app.route('/users', methods=['GET'])
