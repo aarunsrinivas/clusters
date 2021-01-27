@@ -1,0 +1,42 @@
+.entire-chat-container {
+    display: flex;
+}
+
+
+.all-recipients-container {
+    margin-left: 17%;
+    text-align: center;
+}
+
+.single-recipient-container {
+    margin-bottom: 20px;
+}
+
+.recipient-name {
+    text-align: center;
+    margin-top: 5px;
+}
+
+.chat-container {
+    margin-left: 22%;
+    width: 35%;
+    border: 1px solid rgb(184, 174, 174);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.specific-chat-container {
+    overflow: scroll;
+    height: 200px;
+    width: 100%;
+    padding-right: 5%;
+}
+
+.sent-message {
+    text-align: right;
+    color: blue;
+}
+
+.received-message {
+    text-align: left;
+}

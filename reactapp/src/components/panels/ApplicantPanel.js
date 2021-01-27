@@ -9,6 +9,7 @@ import {
     Col,
     Nav
 } from 'react-bootstrap';
+import {ChatPanel} from '../panels/ChatPanel';
 
 export function ApplicantPanel(){
 
@@ -216,12 +217,7 @@ export function ApplicantPanel(){
         }
     }
 
-    // function countBusinesses(){
-    //     pool.business
-    // }
-
     function renderPool(){
-        console.log(pool.length);
         if (pool.length === 0) {
             return (
                 <h4>No availible positions!</h4>
@@ -404,7 +400,7 @@ export function ApplicantPanel(){
     }
 
     return (
-        <div>
+        <div className="">
             <Tab.Container defaultActiveKey="available">
                 <Row>
                     <Col sm={2}>
@@ -417,6 +413,9 @@ export function ApplicantPanel(){
                             </Nav.Item>
                             <Nav.Item>
                                 <Nav.Link eventKey="received">Received</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="chats">Chats</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
                                 <Nav.Link eventKey="offers">Offers</Nav.Link>
@@ -447,6 +446,13 @@ export function ApplicantPanel(){
                                 <hr/>
                                 <div className="all-cards-container">
                                     {renderReceived()}
+                                </div>
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="chats">
+                                <h2>Chats</h2>
+                                <hr/>
+                                <div>
+                                    <ChatPanel />
                                 </div>
                             </Tab.Pane>
                             <Tab.Pane eventKey="offers">
