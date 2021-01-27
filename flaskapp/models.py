@@ -276,6 +276,11 @@ class ClusterWorld(db.Model):
 	                           cascade='all, delete')
 	top = db.relationship('Cluster', foreign_keys='Cluster.top_id', lazy=True)
 	bottom = db.relationship('Cluster', foreign_keys='Cluster.bottom_id', lazy=True)
+	majors = db.relationship('Major', collection_class=set, secondary='major_world')
+	courses = db.relationship('Course', collection_class=set, secondary='course_world')
+	skills = db.relationship('Skill', collection_class=set, secondary='skill_world')
+	standings = db.relationship('Standing', collection_class=set, secondary='standing_world')
+	interests = db.relationship('Interest', collection_class=set, secondary='interest_world')
 
 	def __init__(self, **kwargs):
 		super(ClusterWorld, self).__init__(**kwargs)
@@ -901,6 +906,27 @@ class SkillCounter(Counter):
 	}
 
 
+major_world = db.Table('major_world',
+                       db.Column('world_id', db.String(50), db.ForeignKey('world.id'), primary_key=True),
+                       db.Column('major_id', db.String(50), db.ForeignKey('major.id'), primary_key=True))
+
+skill_world = db.Table('skill_world',
+                       db.Column('world_id', db.String(50), db.ForeignKey('world.id'), primary_key=True),
+                       db.Column('skill_id', db.String(50), db.ForeignKey('skill.id'), primary_key=True))
+
+interest_world = db.Table('interest_world',
+                          db.Column('world_id', db.String(50), db.ForeignKey('world.id'), primary_key=True),
+                          db.Column('interest_id', db.String(50), db.ForeignKey('interest.id'), primary_key=True))
+
+course_world = db.Table('course_world',
+                        db.Column('world_id', db.String(50), db.ForeignKey('world.id'), primary_key=True),
+                        db.Column('course_id', db.String(50), db.ForeignKey('course.id'), primary_key=True))
+
+standing_world = db.Table('standing_world',
+                          db.Column('world_id', db.String(50), db.ForeignKey('world.id'), primary_key=True),
+                          db.Column('standing_id', db.String(50), db.ForeignKey('standing.id'), primary_key=True))
+
+
 class Characteristic(db.Model):
 	__tablename__ = 'characteristic'
 	id = db.Column(db.String(50), primary_key=True)
@@ -916,6 +942,7 @@ class Major(Characteristic):
 	__tablename__ = 'major'
 	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
 	data = db.relationship('Data', secondary='major_table')
+	worlds = db.relationship('ClusterWorld', secondary='major_world')
 	major_counters = db.relationship('MajorCounter', lazy=True, backref='major')
 
 	__mapper_args__ = {
@@ -927,6 +954,7 @@ class Course(Characteristic):
 	__tablename__ = 'course'
 	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
 	data = db.relationship('Data', secondary='course_table')
+	worlds = db.relationship('ClusterWorld', secondary='course_world')
 	course_counters = db.relationship('CourseCounter', lazy=True, backref='course')
 	description = db.Column(db.Text)
 
@@ -939,6 +967,7 @@ class Standing(Characteristic):
 	__tablename__ = 'standing'
 	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
 	data = db.relationship('Data', secondary='standing_table')
+	worlds = db.relationship('ClusterWorld', secondary='standing_world')
 	standing_counters = db.relationship('StandingCounter', lazy=True, backref='standing')
 
 	__mapper_args__ = {
@@ -950,6 +979,7 @@ class Interest(Characteristic):
 	__tablename__ = 'interest'
 	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
 	data = db.relationship('Data', secondary='interest_table')
+	worlds = db.relationship('ClusterWorld', secondary='interest_world')
 	interest_counters = db.relationship('InterestCounter', lazy=True, backref='interest')
 	description = db.Column(db.Text)
 
@@ -962,6 +992,7 @@ class Skill(Characteristic):
 	__tablename__ = 'skill'
 	id = db.Column(db.String(50), db.ForeignKey('characteristic.id'), primary_key=True)
 	data = db.relationship('Data', secondary='skill_table')
+	worlds = db.relationship('ClusterWorld', secondary='skill_world')
 	skill_counters = db.relationship('SkillCounter', lazy=True, backref='skill')
 	description = db.Column(db.Text)
 

@@ -13,7 +13,7 @@ export function UpdateForm() {
 
     const {userData, updateFeatures} = useAuth();
     const [cap, setCap] = useState(userData.cap);
-    const [gpa, setGpa] = useState(userData.features.gpa);
+    const [gpa, setGpa] = useState(userData.features.gpa || null);
     const [majors, setMajors] = useState(userData.features.majors);
     const [standings, setStandings] = useState(userData.features.standings);
     const [skills, setSkills] = useState(userData.features.skills);
@@ -41,7 +41,6 @@ export function UpdateForm() {
         <div>
 
             <h2 className="register-header">Set User Details</h2>
-
             <Form>
                 <Form.Group controlId="cap">
                     <Form.Label>Cap</Form.Label>
@@ -54,6 +53,20 @@ export function UpdateForm() {
                     <Form.Control type="number" step="0.01" min="0.00" placeholder="Enter GPA out of 4.0" 
                     value={gpa} onChange={e => setGpa(e.target.value)} />
                 </Form.Group>
+
+                <Form>
+                    <Form.Group controlId="cap">
+                        <Form.Label>Cap</Form.Label>
+                        <Form.Control type="number" step="1" min="1" placeholder="Enter cap"
+                        value={cap} onChange={e => setCap(e.target.value)} />
+                    </Form.Group>
+
+                    <Form.Group controlId="gpa">
+                        <Form.Label>GPA</Form.Label>
+                        <Form.Control type="number" step="0.01" min="0.00" placeholder="Enter GPA out of 4.0"
+                        value={gpa} onChange={e => setGpa(e.target.value)} />
+                    </Form.Group>
+
 
                 Major(s)<TagsInput value={majors} onChange={tags => setMajors(tags)}/>
                 <br/>
@@ -74,23 +87,5 @@ export function UpdateForm() {
 
 
         </div>
-
-        // <div>
-        //     Cap: <input value={cap} onChange={e => setCap(e.target.value)}/>
-        //     <br/>
-        //     GPA: <input value={gpa} onChange={e => setGpa(e.target.value)}/>
-        //     <br/>
-        //     Major: <TagsInput value={majors} onChange={tags => setMajors(tags)}/>
-        //     <br/>
-        //     Standing: <TagsInput value={standings} onChange={tags => setStandings(tags)}/>
-        //     <br/>
-        //     Skills: <TagsInput value={skills} onChange={tags => setSkills(tags)}/>
-        //     <br/>
-        //     Interests: <TagsInput value={interests} onChange={tags => setInterests(tags)}/>
-        //     <br/>
-        //     Courses: <TagsInput value={courses} onChange={tags => setCourses(tags)}/>
-        //     <br/>
-        //     <button onClick={handleUpdateFeatures}>Submit</button>
-        // </div>
     )
 }
