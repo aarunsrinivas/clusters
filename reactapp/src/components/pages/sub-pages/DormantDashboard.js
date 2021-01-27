@@ -7,7 +7,7 @@ import '../../../styles/Dashboard.css'
 
 export function DormantDashboard(){
 
-    const {userData, joinCluster} = useAuth();
+    const {userData, joinCluster, deleteUser} = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState();
     const history = useHistory();

@@ -3,6 +3,7 @@ import {useAuth} from '../../../contexts/AuthContext';
 import {ApplicantPanel} from '../../panels/ApplicantPanel';
 import {BusinessPanel} from '../../panels/BusinessPanel';
 import {useHistory} from 'react-router-dom';
+import {Button} from 'react-bootstrap';
 
 export function ActiveDashboard(){
 
@@ -36,12 +37,13 @@ export function ActiveDashboard(){
 
 
     return (
-        <div>
+        <div className="dashboard-container">
             {userData.type === 'applicant' && <ApplicantPanel/>}
             {userData.type === 'business' && <BusinessPanel/>}
             {/* <button disabled={loading} onClick={handlePeelFromCluster}>Peel From Cluster</button> */}
-            <button disabled={loading} onClick={handleLeaveCluster}>Leave Cluster</button>
-
+            <div className="leave-button-container">
+                <Button variant="danger" disabled={loading} onClick={handleLeaveCluster} block>Leave Cluster</Button>
+            </div>
         </div>
     );
 }

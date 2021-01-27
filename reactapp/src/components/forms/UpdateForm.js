@@ -66,7 +66,7 @@ export function UpdateForm() {
                 Courses<TagsInput value={courses} onChange={tags => setCourses(tags)}/>
                 <br/>
 
-                <div className="register-button">
+                <div className="update-button">
                     <Button variant="primary" disabled={loading} onClick={handleUpdateFeatures} block>Set User Info</Button>
                 </div>
 
