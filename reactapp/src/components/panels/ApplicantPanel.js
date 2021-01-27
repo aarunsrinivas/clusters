@@ -9,6 +9,7 @@ import {
     Col,
     Nav
 } from 'react-bootstrap';
+import {ChatPanel} from '../panels/ChatPanel';
 
 export function ApplicantPanel(){
 
@@ -216,12 +217,27 @@ export function ApplicantPanel(){
         }
     }
 
-    // function countBusinesses(){
-    //     pool.business
-    // }
+    function formatSkills(skills){
+        var list = "";
+        for (var i = 0; i < skills.length - 1; i++) {
+            list += skills[i] + " | ";
+        }
+        list += skills[skills.length - 1];
+
+        return list;
+    }
+
+    function formatCourses(courses){
+        var list = "";
+        for (var i = 0; i < courses.length - 1; i++) {
+            list += courses[i] + " | ";
+        }
+        list += courses[courses.length - 1];
+
+        return list;
+    }
 
     function renderPool(){
-        console.log(pool.length);
         if (pool.length === 0) {
             return (
                 <h4>No availible positions!</h4>
@@ -244,26 +260,6 @@ export function ApplicantPanel(){
                 </div>
             )
         })
-    }
-
-    function formatSkills(skills){
-        var list = "";
-        for (var i = 0; i < skills.length - 1; i++) {
-            list += skills[i] + " | ";
-        }
-        list += skills[skills.length - 1];
-
-        return list;
-    }
-
-    function formatCourses(courses){
-        var list = "";
-        for (var i = 0; i < courses.length - 1; i++) {
-            list += courses[i] + " | ";
-        }
-        list += courses[courses.length - 1];
-
-        return list;
     }
 
     function renderApplied(){
@@ -319,33 +315,34 @@ export function ApplicantPanel(){
         })
     }
 
-    function renderInterested(){
-        if (interested.length === 0) {
-            return (
-                <h4>You haven't received any chats yet!</h4>
-            );
-        }
-        return interested.map(business => {
-            return (
-                <div className="single-card-container">
-                    <Card style={{width: '14rem'}}>
-                        <Card.Body>
-                            <Card.Title>{business.name}</Card.Title>
-                            <Card.Text>
-                                {formatSkills(business.features.skills)}
-                            </Card.Text>
-                            <Button variant="danger" onClick={() => handleDeclineInterest(business.id)}>Decline</Button>
-                        </Card.Body>
-                    </Card>
-                </div>
-                // <div>
-                //     <h3>{business.name}</h3>
-                //     <li>{business.features.skills}</li>
-                //     <button onClick={() => handleDeclineInterest(business.id)}>Decline</button>
-                // </div>
-            )
-        })
-    }
+    // *** Replaced by ChatPanel & Chat tab ***
+    // function renderInterested(){
+    //     if (interested.length === 0) {
+    //         return (
+    //             <h4>You haven't received any chats yet!</h4>
+    //         );
+    //     }
+    //     return interested.map(business => {
+    //         return (
+    //             <div className="single-card-container">
+    //                 <Card style={{width: '14rem'}}>
+    //                     <Card.Body>
+    //                         <Card.Title>{business.name}</Card.Title>
+    //                         <Card.Text>
+    //                             {formatSkills(business.features.skills)}
+    //                         </Card.Text>
+    //                         <Button variant="danger" onClick={() => handleDeclineInterest(business.id)}>Decline</Button>
+    //                     </Card.Body>
+    //                 </Card>
+    //             </div>
+    //             <div>
+    //                 <h3>{business.name}</h3>
+    //                 <li>{business.features.skills}</li>
+    //                 <button onClick={() => handleDeclineInterest(business.id)}>Decline</button>
+    //             </div>
+    //         )
+    //     })
+    // }
 
     function renderReviewed(){
         if (reviewed.length === 0) {
@@ -419,6 +416,9 @@ export function ApplicantPanel(){
                                 <Nav.Link eventKey="received">Received</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
+                                <Nav.Link eventKey="chats">Chats</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
                                 <Nav.Link eventKey="offers">Offers</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
@@ -447,6 +447,13 @@ export function ApplicantPanel(){
                                 <hr/>
                                 <div className="all-cards-container">
                                     {renderReceived()}
+                                </div>
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="chats">
+                                <h2>Chats</h2>
+                                <hr/>
+                                <div>
+                                    <ChatPanel />
                                 </div>
                             </Tab.Pane>
                             <Tab.Pane eventKey="offers">

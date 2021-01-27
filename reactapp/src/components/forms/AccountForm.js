@@ -49,6 +49,7 @@ export function AccountForm() {
             setError('Logged Out');
             setLoading(true);
             await logoutUser();
+            //history.push('/'); // causing an error for some reason
         } catch {
             setError('Failed to log out');
         }
