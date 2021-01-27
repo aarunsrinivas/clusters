@@ -52,12 +52,9 @@
 }
 
 .radio-container {
-    margin-left: 0%;
+    width: max-content;
+    margin: auto;
     margin-bottom: 10px;
-    align-items: center;
-}
-input[type="radio"]{
-    margin: 0 0px 0 60px;
 }
 
 
