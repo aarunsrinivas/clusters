@@ -9,7 +9,8 @@ export function HomePage() {
             <NavBar />
             <div className="home-container">
                 <h1 className="home-header">Clusters</h1>
-                <h3 className="home-description">An easier way to find the best fit for both students and researchers alike.</h3>
+                <hr />
+                <p className="home-description">An easier way to find the best fit for both students and researchers alike.</p>
             </div>
         </div>
     )

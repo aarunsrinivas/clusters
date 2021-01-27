@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {useAuth} from '../../contexts/AuthContext';
-import {UpdateForm} from '../forms/UpdateForm';
 import {ActiveDashboard} from './sub-pages/ActiveDashboard';
 import {DormantDashboard} from './sub-pages/DormantDashboard';
 import {useHistory} from 'react-router-dom';
