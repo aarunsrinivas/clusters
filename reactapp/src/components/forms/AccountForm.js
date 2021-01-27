@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import {Link, useHistory} from 'react-router-dom';
 import {useAuth} from '../../contexts/AuthContext';
 import {
     Form,
@@ -16,7 +15,6 @@ export function AccountForm() {
     const [worldId, setWorldId] = useState(userData.worldId);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const history = useHistory();
 
 
     async function handleUpdateAccount() {
@@ -40,7 +38,6 @@ export function AccountForm() {
             setError('Successfully deleted');
             setLoading(true);
             await deleteUser();
-            history.push('/');
         } catch(err) {
             setError(err);
         }
@@ -110,24 +107,5 @@ export function AccountForm() {
             </div>
 
         </div>
-        
-        //<button disabled={loading} onClick={handleLogoutUser}>Logout</button>
-
-        // <div>
-        //     College: <input value={worldId} onChange={e => setWorldId(e.target.value)}/>
-        //     <br/>
-        //     Name: <input value={name} onChange={e => setName(e.target.value)}/>
-        //     <br/>
-        //     Email: <input value={email} onChange={e => setEmail(e.target.value)}/>
-        //     <br/>
-        //     Password: <input type='password' value={password} onChange={e => setPassword(e.target.value)}/>
-        //     <br/>
-        //     Confirm Password: <input type='password' value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
-        //     <br/>
-        //     <button disabled={loading} onClick={handleUpdateAccount}>Submit</button>
-        //     <div>
-        //         Back to Dashboard? <Link to='/dashboard'>Dashboard</Link>
-        //     </div>
-        // </div>
     )
 }
