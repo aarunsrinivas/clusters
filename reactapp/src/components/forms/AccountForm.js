@@ -58,11 +58,8 @@ export function AccountForm() {
 
     return (
         <div>
-        
             <div className="register-container">
-
                 <h2 className="register-header">Update Account Details</h2>
-
                 <Form>
                     <Form.Group controlId="name">
                         <Form.Label>Name</Form.Label>
@@ -103,9 +100,7 @@ export function AccountForm() {
                         <Button variant="danger" disabled={loading} onClick={handleDeleteUser} block>Delete Account</Button>
                     </div>
                 </Form>
-
             </div>
-
         </div>
     )
 }

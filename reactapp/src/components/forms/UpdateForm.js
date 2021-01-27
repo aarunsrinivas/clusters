@@ -37,11 +37,10 @@ export function UpdateForm() {
     }
 
     return (
-
         <div>
-
             <h2 className="register-header">Set User Details</h2>
             <Form>
+
                 <Form.Group controlId="cap">
                     <Form.Label>Cap</Form.Label>
                     <Form.Control type="number" step="1" min="1" placeholder="Enter cap" 
@@ -60,12 +59,17 @@ export function UpdateForm() {
                     value={cap} onChange={e => setCap(e.target.value)} />
                 </Form.Group>
 
+                <Form.Group controlId="cap">
+                    <Form.Label>Cap</Form.Label>
+                    <Form.Control type="number" step="1" min="1" placeholder="Enter cap"
+                    value={cap} onChange={e => setCap(e.target.value)} />
+                </Form.Group>
+
                 <Form.Group controlId="gpa">
                     <Form.Label>GPA</Form.Label>
                     <Form.Control type="number" step="0.01" min="0.00" placeholder="Enter GPA out of 4.0"
                     value={gpa} onChange={e => setGpa(e.target.value)} />
                 </Form.Group>
-
 
                 Major(s)<TagsInput value={majors} onChange={tags => setMajors(tags)}/>
                 <br/>
@@ -83,7 +87,6 @@ export function UpdateForm() {
                 </div>
 
             </Form>
-
         </div>
     )
 }
