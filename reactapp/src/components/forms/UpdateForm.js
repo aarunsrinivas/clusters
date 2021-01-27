@@ -40,9 +40,19 @@ export function UpdateForm() {
 
         <div>
 
-            <div className="register-container">
+            <h2 className="register-header">Set User Details</h2>
+            <Form>
+                <Form.Group controlId="cap">
+                    <Form.Label>Cap</Form.Label>
+                    <Form.Control type="number" step="1" min="1" placeholder="Enter cap" 
+                    value={cap} onChange={e => setCap(e.target.value)} />
+                </Form.Group>
 
-                <h2 className="register-header">Set User Details</h2>
+                <Form.Group controlId="gpa">
+                    <Form.Label>GPA</Form.Label>
+                    <Form.Control type="number" step="0.01" min="0.00" placeholder="Enter GPA out of 4.0" 
+                    value={gpa} onChange={e => setGpa(e.target.value)} />
+                </Form.Group>
 
                 <Form>
                     <Form.Group controlId="cap">
@@ -57,24 +67,24 @@ export function UpdateForm() {
                         value={gpa} onChange={e => setGpa(e.target.value)} />
                     </Form.Group>
 
-                    Major(s)<TagsInput value={majors} onChange={tags => setMajors(tags)}/>
-                    <br/>
-                    Standing(s)<TagsInput value={standings} onChange={tags => setStandings(tags)}/>
-                    <br/>
-                    Skills<TagsInput value={skills} onChange={tags => setSkills(tags)}/>
-                    <br/>
-                    Interests<TagsInput value={interests} onChange={tags => setInterests(tags)}/>
-                    <br/>
-                    Courses<TagsInput value={courses} onChange={tags => setCourses(tags)}/>
-                    <br/>
 
-                    <div className="register-button">
-                        <Button variant="primary" disabled={loading} onClick={handleUpdateFeatures} block>Set User Info</Button>
-                    </div>
+                Major(s)<TagsInput value={majors} onChange={tags => setMajors(tags)}/>
+                <br/>
+                Standing(s)<TagsInput value={standings} onChange={tags => setStandings(tags)}/>
+                <br/>
+                Skills<TagsInput value={skills} onChange={tags => setSkills(tags)}/>
+                <br/>
+                Interests<TagsInput value={interests} onChange={tags => setInterests(tags)}/>
+                <br/>
+                Courses<TagsInput value={courses} onChange={tags => setCourses(tags)}/>
+                <br/>
 
-                </Form>
+                <div className="update-button">
+                    <Button variant="primary" disabled={loading} onClick={handleUpdateFeatures} block>Set User Info</Button>
+                </div>
 
-            </div>
+            </Form>
+
 
         </div>
     )
